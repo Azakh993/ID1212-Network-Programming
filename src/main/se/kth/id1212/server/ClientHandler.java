@@ -2,7 +2,6 @@ package main.se.kth.id1212.server;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
 
 import static main.se.kth.id1212.server.ChatServer.logExceptionToFile;
