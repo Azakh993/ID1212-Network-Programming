@@ -17,11 +17,11 @@ public class GameSession {
     }
 
     public void guess(int guess) {
-        if(guess == last_guess) {
+        if (guess == last_guess) {
             return;
         }
 
-        if(this.new_user) {
+        if (this.new_user) {
             this.new_user = false;
         }
 
@@ -48,7 +48,7 @@ public class GameSession {
     }
 
     private void increment_number_of_guesses() {
-        this.number_of_guesses +=1;
+        this.number_of_guesses += 1;
     }
 
     public void setGuess_outcome(String guess_outcome) {

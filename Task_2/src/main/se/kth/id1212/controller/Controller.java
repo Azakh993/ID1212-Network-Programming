@@ -56,7 +56,7 @@ public class Controller implements Callable<Object> {
         ArrayList<String> http_request = new ArrayList<>();
         String received_request_line;
         try {
-            if(this.input_from_client != null) {
+            if (this.input_from_client != null) {
                 while ((received_request_line = this.input_from_client.readLine()) != null) {
                     http_request.add(received_request_line);
                     if (received_request_line.isEmpty()) {
@@ -71,7 +71,7 @@ public class Controller implements Callable<Object> {
     }
 
     private boolean request_for_favorite_icon(ArrayList<String> http_request) {
-        if(!http_request.isEmpty()) {
+        if (!http_request.isEmpty()) {
             for (String line : http_request) {
                 if (line.contains("favicon.ico")) {
                     return true;
@@ -82,7 +82,7 @@ public class Controller implements Callable<Object> {
     }
 
     private String get_cookie(ArrayList<String> http_request) {
-        if(!http_request.isEmpty()) {
+        if (!http_request.isEmpty()) {
             for (String line : http_request) {
                 if (line.contains("Cookie")) {
                     return line.split("=")[1];
@@ -93,7 +93,7 @@ public class Controller implements Callable<Object> {
     }
 
     private void process_request(ArrayList<String> http_request) {
-        if(http_request == null || http_request.isEmpty()) {
+        if (http_request == null || http_request.isEmpty()) {
             return;
         }
 
@@ -115,7 +115,7 @@ public class Controller implements Callable<Object> {
     }
 
     private void start_new_game(String cookie) {
-        this.current_game_session =  new GameSession(cookie);
+        this.current_game_session = new GameSession(cookie);
         this.gameSessions.put(cookie, this.current_game_session);
     }
 
