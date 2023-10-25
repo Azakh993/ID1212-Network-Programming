@@ -19,7 +19,7 @@ public class Main {
         try {
             ServerSocket serverSocket = new ServerSocket(PORT);
 
-            while(!serverSocket.isClosed()) {
+            while (!serverSocket.isClosed()) {
                 Socket clientSocket = serverSocket.accept();
                 Callable<Object> controller = new Controller(game_sessions, clientSocket);
                 View view = new View(controller, clientSocket);

@@ -50,14 +50,14 @@ public class View implements /*GameSessionListener, */ Runnable {
         boolean new_user = current_session_state.new_user();
 
         String header;
-        if(new_user) {
+        if (new_user) {
             header = StringResourcesView.generate_HTTP_header_with_cookie(session_id);
         } else {
             header = StringResourcesView.generate_HTTP_header(session_id);
         }
 
         String html;
-        if(guess_outcome.equals("CORRECT")) {
+        if (guess_outcome.equals("CORRECT")) {
             guess_outcome = format_guess_outcome(guess_outcome);
             html = StringResourcesView.generateRestartHTML(number_of_guesses, guess_outcome);
         } else {
