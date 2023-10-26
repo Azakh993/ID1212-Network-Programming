@@ -32,7 +32,7 @@ public class View implements Runnable {
         try {
             updateView((GameSessionDTO) game_session.get());
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            ExceptionLogger.logExceptionToFile(e);
         }
     }
 
