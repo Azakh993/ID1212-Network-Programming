@@ -1,4 +1,4 @@
-package main.se.kth.id1212.model;
+package main.se.kth.id1212.server.model;
 
 public class GameSession {
     private final String session_id;

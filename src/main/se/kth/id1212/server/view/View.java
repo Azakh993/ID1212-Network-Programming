@@ -1,7 +1,7 @@
-package main.se.kth.id1212.view;
+package main.se.kth.id1212.server.view;
 
-import main.se.kth.id1212.model.GameSessionDTO;
-import main.se.kth.id1212.util.ExceptionLogger;
+import main.se.kth.id1212.server.model.GameSessionDTO;
+import main.se.kth.id1212.server.util.ExceptionLogger;
 
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
-public class View implements /*GameSessionListener, */ Runnable {
+public class View implements Runnable {
     private final Socket clientSocket;
     private final Callable<Object> controller;
     private final PrintWriter output_to_client;
@@ -32,7 +32,7 @@ public class View implements /*GameSessionListener, */ Runnable {
         try {
             updateView((GameSessionDTO) game_session.get());
         } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 

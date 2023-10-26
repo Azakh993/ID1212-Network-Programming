@@ -1,7 +1,7 @@
-package main.se.kth.id1212.controller;
+package main.se.kth.id1212.server.controller;
 
-import main.se.kth.id1212.model.GameSession;
-import main.se.kth.id1212.util.ExceptionLogger;
+import main.se.kth.id1212.server.model.GameSession;
+import main.se.kth.id1212.server.util.ExceptionLogger;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

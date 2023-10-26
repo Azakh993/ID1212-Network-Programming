@@ -1,4 +1,4 @@
-package main.se.kth.id1212.view;
+package main.se.kth.id1212.server.view;
 
 public class StringResourcesView {
 
