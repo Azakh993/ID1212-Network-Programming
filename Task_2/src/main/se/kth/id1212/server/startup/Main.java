@@ -1,9 +1,9 @@
-package main.se.kth.id1212.startup;
+package main.se.kth.id1212.server.startup;
 
-import main.se.kth.id1212.controller.Controller;
-import main.se.kth.id1212.model.GameSession;
-import main.se.kth.id1212.util.ExceptionLogger;
-import main.se.kth.id1212.view.View;
+import main.se.kth.id1212.server.controller.Controller;
+import main.se.kth.id1212.server.model.GameSession;
+import main.se.kth.id1212.server.util.ExceptionLogger;
+import main.se.kth.id1212.server.view.View;
 
 import java.net.ServerSocket;
 import java.net.Socket;
