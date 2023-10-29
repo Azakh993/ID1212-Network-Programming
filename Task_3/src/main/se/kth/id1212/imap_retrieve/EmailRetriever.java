@@ -12,20 +12,21 @@ import java.io.PrintWriter;
 public class EmailRetriever {
 
     private SSLSocket socket;
-    private UserCredentials user_credentials;
+    private final UserCredentials user_credentials;
     private int message_count = 1;
     private String current_command = "";
     private PrintWriter input_to_server;
     private BufferedReader output_from_server;
 
-    public void get_latest_email() {
+    public EmailRetriever() {
         this.user_credentials = new UserCredentials();
         setup_connection();
         login();
+    }
+
+    public void get_latest_email() {
         select_inbox();
         retrieve_latest_received_email();
-        logout();
-        close_connection();
     }
 
     private void setup_connection() {
@@ -89,21 +90,14 @@ public class EmailRetriever {
         message_count++;
     }
 
-    private void logout() {
+    public void logout() {
         String prefix = "a00" + message_count;
         current_command = "LOGOUT";
         String message = prefix + " " + current_command + "\r\n";
 
         send_command(message);
         output_response();
-    }
-
-    private void close_connection() {
-        try {
-            socket.close();
-        } catch (Exception exception) {
-            ExceptionLogger.logExceptionToFile(exception);
-        }
+        close_connection();
     }
 
     private void send_command(String message) {
@@ -127,6 +121,14 @@ public class EmailRetriever {
                     break;
                 }
             }
+        } catch (Exception exception) {
+            ExceptionLogger.logExceptionToFile(exception);
+        }
+    }
+
+    private void close_connection() {
+        try {
+            socket.close();
         } catch (Exception exception) {
             ExceptionLogger.logExceptionToFile(exception);
         }
