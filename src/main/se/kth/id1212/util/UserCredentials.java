@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class UserCredentials {
     private String username;
-    private  String password;
+    private String password;
 
     public UserCredentials() {
         String filePath = "Task_3/src/Main/se/kth/id1212/util/credentials.txt";
