@@ -34,7 +34,7 @@ public class ChatServer {
     }
 
     static void logExceptionToFile(Exception exception) {
-        String filePath = "Task_1\\src\\main\\se\\kth\\id1212\\server\\exception_log.txt";
+        String filePath = "Task_1/src/main/se/kth/id1212/server/exception_log.txt";
         try {
             PrintWriter writer = new PrintWriter(new FileWriter(filePath, true));
             exception.printStackTrace(writer);
