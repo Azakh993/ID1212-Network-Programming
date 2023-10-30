@@ -9,6 +9,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
+/**
+ * This class is responsible for retrieving the latest email from the user's inbox.
+ */
 public class EmailRetriever {
 
     private SSLSocket socket;
@@ -18,17 +21,28 @@ public class EmailRetriever {
     private PrintWriter input_to_server;
     private BufferedReader output_from_server;
 
+    /**
+     * Constructor for the EmailRetriever class.
+     */
     public EmailRetriever() {
         this.user_credentials = new UserCredentials();
         setup_connection();
         login();
     }
 
+    /**
+     * Retrieves the latest email from the user's inbox.
+     */
     public void get_latest_email() {
         select_inbox();
         retrieve_latest_received_email();
     }
 
+    /**
+     * Sets up the connection to the IMAP server. First, the socket is created using the SSLSocketFactory. Then, the
+     * socket is connected to the IMAP server. After that, the handshake is started and completed. Finally, the input
+     * and output streams are created.
+     */
     private void setup_connection() {
         try {
             SSLSocketFactory socket_factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
@@ -55,6 +69,11 @@ public class EmailRetriever {
         }
     }
 
+    /**
+     * Logs in to the IMAP server using the user's credentials. The username and password are retrieved from the
+     * UserCredentials object. The message is constructed and sent to the server. The response is then outputted.
+     * Finally, the message count is incremented.
+     */
     private void login() {
         String username = this.user_credentials.getUsername();
         String password = this.user_credentials.getPassword();
@@ -67,6 +86,10 @@ public class EmailRetriever {
         message_count++;
     }
 
+    /**
+     * Selects the user's inbox. The message is constructed and sent to the server. The response is then outputted.
+     * Finally, the message count is incremented.
+     */
     private void select_inbox() {
         String prefix = "a00" + message_count;
         current_command = "SELECT";
@@ -78,6 +101,10 @@ public class EmailRetriever {
         message_count++;
     }
 
+    /**
+     * Retrieves the latest received email from the user's inbox. The message is constructed and sent to the server.
+     * The response is then outputted. Finally, the message count is incremented.
+     */
     private void retrieve_latest_received_email() {
         String prefix = "a00" + message_count;
         current_command = "FETCH";
@@ -90,6 +117,10 @@ public class EmailRetriever {
         message_count++;
     }
 
+    /**
+     * Logs out from the IMAP server. The message is constructed and sent to the server. The response is then
+     * outputted. Finally, the connection is closed.
+     */
     public void logout() {
         String prefix = "a00" + message_count;
         current_command = "LOGOUT";
@@ -100,8 +131,13 @@ public class EmailRetriever {
         close_connection();
     }
 
+    /**
+     * Send the given message to the server. If the current command is LOGIN, the password is omitted from the message.
+     * The message is then sent to the server.
+     * @param message       The message to be sent to the server.
+     */
     private void send_command(String message) {
-        if (current_command.equals("LOGIN") || current_command.equals("LOGOUT")) {
+        if (current_command.equals("LOGIN")) {
             String password = this.user_credentials.getPassword();
             System.out.println("S: " + message.replace(password, "[OMITTED]"));
         } else {
@@ -111,6 +147,10 @@ public class EmailRetriever {
         input_to_server.flush();
     }
 
+    /**
+     * Outputs the response from the server. In the while loop, the response is read line by line and output. If the
+     * line marks the end of the response, the loop is broken.
+     */
     private void output_response() {
         String received_output;
         try {
@@ -126,6 +166,9 @@ public class EmailRetriever {
         }
     }
 
+    /**
+     * Closes the connection to the IMAP server.
+     */
     private void close_connection() {
         try {
             socket.close();
@@ -134,6 +177,13 @@ public class EmailRetriever {
         }
     }
 
+    /**
+     * Checks if the given response line marks the end of the response from the server. If the current command is
+     * an empty string and the response line starts with "* OK", return true. Also, if the response line starts with
+     * the last sent prefix followed by " OK", return true. Otherwise, return false.
+     * @param received_output      The response line from the server.
+     * @return                     True response line marks end of response, and false otherwise.
+     */
     private boolean end_of_response(String received_output) {
         if (current_command.equals("") && received_output.startsWith("* OK")) {
             return true;

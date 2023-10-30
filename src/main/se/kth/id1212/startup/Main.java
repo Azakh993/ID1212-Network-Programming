@@ -6,7 +6,18 @@ import main.se.kth.id1212.smtp_send.EmailSender;
 import java.time.LocalTime;
 import java.util.Scanner;
 
+/**
+ * Main class for the program.
+ */
 public class Main {
+
+    /**
+     * Main method for the program that starts the email retriever and email sender. In the first part of the method,
+     * the email retriever is started and the latest email is retrieved. The user is then prompted to enter an email
+     * address to send an email to. The email sender is then started and the a pre-defined message is sent to the
+     * recipient.
+     * @param args  Command line arguments, not used.
+     */
     public static void main(String[] args) {
         EmailRetriever emailRetriever = new EmailRetriever();
         emailRetriever.get_latest_email();
