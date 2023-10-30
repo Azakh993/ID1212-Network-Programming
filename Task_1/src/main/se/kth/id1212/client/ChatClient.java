@@ -52,6 +52,8 @@ public class ChatClient {
                     }
                 }
 
+            } catch (SocketException exception) {
+                System.out.println("Server closed connection.");
             } catch (IOException exception) {
                 logExceptionToFile(exception);
             }
@@ -70,10 +72,8 @@ public class ChatClient {
                     received_message = (String) incoming_message_stream.readObject();
                     System.out.println(received_message);
                 }
-            } catch (SocketException socketException) {
-                if (!socketException.getMessage().equals("Socket closed")) {
-                    logExceptionToFile(socketException);
-                }
+            } catch (EOFException exception) {
+                System.out.println("Server closed connection.");
             } catch (Exception exception) {
                 logExceptionToFile(exception);
             }
@@ -89,7 +89,7 @@ public class ChatClient {
     }
 
     private static void logExceptionToFile(Exception exception) {
-        String filePath = "Task_1\\src\\main\\se\\kth\\id1212\\client\\exception_log.txt";
+        String filePath = "Task_1/src/main/se/kth/id1212/client/exception_log.txt";
         try {
             PrintWriter writer = new PrintWriter(new FileWriter(filePath, true));
             exception.printStackTrace(writer);
