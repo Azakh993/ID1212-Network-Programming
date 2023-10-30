@@ -5,7 +5,19 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Scanner;
 
+
+/**
+ * Starts a client application.
+ */
 public class ChatClient {
+
+    /**
+     * Starts a client application instance.
+     * The application takes two command line parameters:
+     * 1. The host IP address.
+     * 2. The host port.
+     * @param args The application does not take any command line parameters.
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -18,6 +30,14 @@ public class ChatClient {
         establish_connection(host, port);
     }
 
+    /**
+     * Establishes a connection to a server.
+     * The connection is established by creating a socket. The socket is used to create two threads:
+     * 1. A thread that sends messages to the server.
+     * 2. A thread that receives messages from the server.
+     * @param host The host IP address.
+     * @param port The host port.
+     */
     private static void establish_connection(String host, int port) {
         System.out.println("Establishing connection to " + host + ":" + port);
 
@@ -33,7 +53,15 @@ public class ChatClient {
         }
     }
 
-    static void start_message_sending_thread(Socket socket) {
+    /**
+     * Starts a thread that sends messages to the server. The thread is started by creating an
+     * ObjectOutputStream that is used to send messages to the server.
+     * The thread is terminated when the user enters the command "!exit",
+     * or when the server closes the connection (which is detected by the SocketException).
+     * @param socket The socket to send messages to.
+     */
+
+    private static void start_message_sending_thread(Socket socket) {
         new Thread(() -> {
             try {
                 OutputStream outputStream = socket.getOutputStream();
@@ -61,7 +89,14 @@ public class ChatClient {
 
     }
 
-    static void message_receiving_thread(Socket socket) {
+    /**
+     * Starts a thread that receives messages from the server. The thread is started by creating an
+     * ObjectInputStream that is used to receive messages from the server.
+     * The thread is terminated when the server closes the connection (which is detected by the EOFException),
+     * or when the user enters the command "!exit" (which is detected by the SocketException).
+     * @param socket The socket to receive messages from.
+     */
+    private static void message_receiving_thread(Socket socket) {
         new Thread(() -> {
             try {
                 InputStream inputStream = socket.getInputStream();
@@ -74,12 +109,18 @@ public class ChatClient {
                 }
             } catch (EOFException exception) {
                 System.out.println("Server closed connection.");
+            } catch (SocketException exception) {
+                System.out.println("Exited chat.");
             } catch (Exception exception) {
                 logExceptionToFile(exception);
             }
         }).start();
     }
 
+    /**
+     * Closes the socket connection.
+     * @param socket The socket to close.
+     */
     private static void close_socket_connection(Socket socket) {
         try {
             socket.close();
@@ -88,6 +129,10 @@ public class ChatClient {
         }
     }
 
+    /**
+     * Logs an exception to a file.
+     * @param exception The exception to log.
+     */
     private static void logExceptionToFile(Exception exception) {
         String filePath = "Task_1/src/main/se/kth/id1212/client/exception_log.txt";
         try {
