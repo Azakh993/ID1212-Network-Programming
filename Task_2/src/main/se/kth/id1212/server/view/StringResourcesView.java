@@ -1,26 +1,42 @@
 package main.se.kth.id1212.server.view;
 
+/**
+ * This class contains all the HTML code that is sent to the client.
+ */
 public class StringResourcesView {
 
+    /**
+     * This method generates the HTTP header that is sent to the client with a cookie.
+     * @param session_id The session id that is sent to the client.
+     * @return The HTTP header.
+     */
     static String generate_HTTP_header_with_cookie(String session_id) {
-        String header =
+        return
             "HTTP/1.1 200 OK\r\n" +
             "Content-Type: text/html\r\n" +
             "Set-Cookie: session_id=" + session_id + "\r\n" +
             "\r\n";
-        return header;
     }
 
-    static String generate_HTTP_header(String session_id) {
-        String header =
+    /**
+     * This method generates the HTTP header that is sent to the client.
+     * @return The HTTP header.
+     */
+    static String generate_HTTP_header() {
+        return
                 "HTTP/1.1 200 OK\r\n" +
                 "Content-Type: text/html\r\n" +
                 "\r\n";
-        return header;
     }
 
+    /**
+     * This method generates the HTML code that is sent to the client during a game session.
+     * @param number_of_guesses The number of guesses the user has made.
+     * @param guess_outcome The outcome of the last guess.
+     * @return The HTML code.
+     */
     static String generateDefaultHTML( int number_of_guesses, String guess_outcome) {
-        String html =
+        return
             "<!DOCTYPE html>\n" +
             "<html>\n" +
                 "<head>\n" +
@@ -37,11 +53,16 @@ public class StringResourcesView {
                     "<p>" + guess_outcome + "</p>\n" +
                 "</body>\n" +
             "</html>";
-        return html;
     }
 
+    /**
+     * This method generates the HTML code that is sent to the client when the user has guessed the correct number.
+     * @param number_of_guesses The number of guesses the user has made.
+     * @param guess_outcome The outcome of the last guess.
+     * @return The HTML code.
+     */
     static String generateRestartHTML(int number_of_guesses, String guess_outcome) {
-        String html =
+        return
             "<!DOCTYPE html>\n" +
             "<html>\n" +
                 "<head>\n" +
@@ -62,6 +83,5 @@ public class StringResourcesView {
                     "</form>\n" +
                 "</body>\n" +
             "</html>";
-        return html;
     }
 }
