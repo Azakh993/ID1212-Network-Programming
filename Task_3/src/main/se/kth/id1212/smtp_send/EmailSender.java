@@ -60,7 +60,7 @@ public class EmailSender {
                 }
             }
         } catch (Exception exception) {
-            ExceptionLogger.logExceptionToFile(exception);
+            ExceptionLogger.logExceptionToFile("EmailSender", exception);
         }
     }
 
@@ -96,7 +96,7 @@ public class EmailSender {
 
             exchange_with_server("HELO " + SMTP_SERVER);
         } catch (Exception exception) {
-            ExceptionLogger.logExceptionToFile(exception);
+            ExceptionLogger.logExceptionToFile("EmailSender", exception);
         }
     }
 
