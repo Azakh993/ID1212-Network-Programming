@@ -8,7 +8,22 @@ import java.net.URL;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
+/**
+ * This class is responsible for simulating 100 game sessions of the guessing game.
+ * The average number of guesses is calculated and printed to the console.
+ */
 public class Simulator {
+
+    private static FutureTask[] gameSession;
+
+    /**
+     * This method creates 100 game sessions and calculates the average number of guesses. First, a
+     * FutureTask array is created to store the game sessions. Then, a for-loop is used to create
+     * the game sessions and start them. The game sessions are started in batches of 25 to avoid
+     * overloading the server. Finally, the average number of guesses is calculated and printed to
+     * the console.
+     * @param args     The command line arguments, not used.
+     */
     public static void main(String[] args) {
         FutureTask[] game_session = new FutureTask[100];
 
@@ -25,7 +40,15 @@ public class Simulator {
         System.out.println("Average number of guesses: " + average_number_of_guesses(game_session));
     }
 
+    /**
+     * This method calculates the average number of guesses. First, the number of guesses for each
+     * game session is extracted from the FutureTask array. Then, the average number of guesses is
+     * calculated and returned.
+     * @param game_session      The FutureTask array containing the game sessions.
+     * @return                  The average number of guesses.
+     */
     private static int average_number_of_guesses(FutureTask[] game_session) {
+        gameSession = game_session;
         int total_number_of_guesses = 0;
         for(int i = 0; i < 100; i++) {
             try {
@@ -38,6 +61,9 @@ public class Simulator {
     }
 }
 
+/**
+ * This class is responsible for simulating a game session of the guessing game.
+ */
 class SimulatorThread implements Callable<Object> {
     private HttpURLConnection connection;
     private String cookie;
@@ -47,6 +73,13 @@ class SimulatorThread implements Callable<Object> {
     private int lower_bound = 1;
     private int upper_bound = 100;
 
+    /**
+     * This method is responsible for simulating a game session of the guessing game. First, a
+     * connection to the server is established. Then, a while-loop is used to generate new guesses
+     * until the correct guess is found. The outcome of the guess is extracted from the server
+     * response and the guess parameters are adjusted accordingly.
+     * @return      The number of guesses until the correct guess was found.
+     */
     @Override
     public Object call() {
         start_game_session();
@@ -61,6 +94,10 @@ class SimulatorThread implements Callable<Object> {
         return this.guesses_until_correct;
     }
 
+    /**
+     * This method is responsible for starting a game session. First, a connection to the server is
+     * established. Then, the cookie is extracted from the server response.
+     */
     private void start_game_session() {
         try {
             URL url = new URI("http://localhost:7847/").toURL();
@@ -73,12 +110,21 @@ class SimulatorThread implements Callable<Object> {
         }
     }
 
+    /**
+     * This method is responsible for generating a new guess. First, the number of guesses until the
+     * correct guess is incremented. Then, a new guess is generated, using the lower and upper bound
+     * as parameters.
+     */
     private void generate_new_guess() {
         this.guesses_until_correct++;
         this.current_guess = (int) (Math.random() * (upper_bound - lower_bound)) + lower_bound;
 
     }
 
+    /**
+     * This method is responsible for sending the guess to the server. First, a connection to the
+     * server is established. Then, the guess is sent to the server.
+     */
     private void send_guess() {
         try {
             URL url = new URI("http://localhost:7847/?guess=" + this.current_guess).toURL();
@@ -90,6 +136,12 @@ class SimulatorThread implements Callable<Object> {
         }
     }
 
+    /**
+     * This method is responsible for extracting the outcome of the guess from the server response.
+     * First, the server response is read line by line. Then, the outcome is extracted from the
+     * server response and returned.
+     * @return      The outcome of the guess.
+     */
     private String extract_outcome_from_response() {
         try {
             BufferedReader input_from_server = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
@@ -113,6 +165,11 @@ class SimulatorThread implements Callable<Object> {
         return "invalid";
     }
 
+    /**
+     * This method is responsible for adjusting the guess parameters; the outcome of the
+     * guess is used to determine which guess parameter to adjust.
+     * @param outcome       The outcome of the guess.
+     */
     private void adjust_guess_parameters(String outcome) {
         switch (outcome) {
             case "low" -> this.lower_bound = this.current_guess;
