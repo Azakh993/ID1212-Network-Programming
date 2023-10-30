@@ -51,7 +51,7 @@ public class EmailRetriever {
 
             output_response();
         } catch (Exception exception) {
-            ExceptionLogger.logExceptionToFile(exception);
+            ExceptionLogger.logExceptionToFile("EmailRetriever", exception);
         }
     }
 
@@ -122,7 +122,7 @@ public class EmailRetriever {
                 }
             }
         } catch (Exception exception) {
-            ExceptionLogger.logExceptionToFile(exception);
+            ExceptionLogger.logExceptionToFile("EmailRetriever", exception);
         }
     }
 
@@ -130,7 +130,7 @@ public class EmailRetriever {
         try {
             socket.close();
         } catch (Exception exception) {
-            ExceptionLogger.logExceptionToFile(exception);
+            ExceptionLogger.logExceptionToFile("EmailRetriever", exception);
         }
     }
 
