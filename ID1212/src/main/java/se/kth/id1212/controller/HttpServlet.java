@@ -2,7 +2,6 @@ package se.kth.id1212.controller;
 
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -10,8 +9,8 @@ import se.kth.id1212.model.GameSession;
 
 import java.util.HashMap;
 
-@WebServlet(name = "Controller", urlPatterns = "/guess")
-public class Controller extends HttpServlet {
+@WebServlet(name = "HttpServlet", urlPatterns = "/guess")
+public class HttpServlet extends jakarta.servlet.http.HttpServlet {
     private HashMap<String, GameSession > gameSessions;
 
     @Override
