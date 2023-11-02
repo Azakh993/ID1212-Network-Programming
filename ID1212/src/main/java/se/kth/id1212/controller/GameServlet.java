@@ -9,8 +9,8 @@ import se.kth.id1212.model.GameSession;
 
 import java.util.HashMap;
 
-@WebServlet(name = "HttpServlet", urlPatterns = "/guess")
-public class HttpServlet extends jakarta.servlet.http.HttpServlet {
+@WebServlet(name = "GameServlet", urlPatterns = "/guess")
+public class GameServlet extends jakarta.servlet.http.HttpServlet {
     private HashMap<String, GameSession > gameSessions;
 
     @Override
