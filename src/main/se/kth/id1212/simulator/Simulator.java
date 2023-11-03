@@ -117,7 +117,7 @@ class SimulatorThread implements Callable<Object> {
      */
     private void generate_new_guess() {
         this.guesses_until_correct++;
-        this.current_guess = (int) (Math.random() * (upper_bound - lower_bound)) + lower_bound;
+        this.current_guess = (int) (Math.random() * ((upper_bound - lower_bound) + 1)) + lower_bound;
 
     }
 
