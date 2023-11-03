@@ -7,15 +7,15 @@ import main.se.kth.id1212.server.view.View;
 
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Starts the server and listens for incoming connections.
  */
 public class Main {
     private static final int PORT = 7847;
-    private static final HashMap<String, GameSession> game_sessions = new HashMap<>();
+    private static final ConcurrentHashMap<String, GameSession> game_sessions = new ConcurrentHashMap<>();
 
     /**
      * Starts the server and listens for incoming connections. Once a connection is established, a Callable
@@ -27,7 +27,7 @@ public class Main {
         try {
             ServerSocket serverSocket = new ServerSocket(PORT);
 
-            while (!serverSocket.isClosed()) {
+            while (true) {
                 Socket clientSocket = serverSocket.accept();
                 Callable<Object> controller = new Controller(game_sessions, clientSocket);
                 View view = new View(controller, clientSocket);

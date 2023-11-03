@@ -7,9 +7,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Handles the communication between the server and a client.
@@ -17,7 +17,7 @@ import java.util.concurrent.Callable;
 public class Controller implements Callable<Object> {
     private final Socket clientSocket;
     private final BufferedReader input_from_client;
-    private final HashMap<String, GameSession> gameSessions;
+    private final ConcurrentHashMap<String, GameSession> gameSessions;
     private GameSession current_game_session;
 
     /**
@@ -25,7 +25,7 @@ public class Controller implements Callable<Object> {
      * @param gameSessions          A list of all game sessions.
      * @param clientSocket          The socket of the client.
      */
-    public Controller(HashMap<String, GameSession> gameSessions, Socket clientSocket) {
+    public Controller(ConcurrentHashMap<String, GameSession> gameSessions, Socket clientSocket) {
         this.gameSessions = gameSessions;
         this.clientSocket = clientSocket;
         try {
