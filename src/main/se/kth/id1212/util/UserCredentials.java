@@ -8,7 +8,7 @@ public class UserCredentials {
     private String password;
 
     public UserCredentials() {
-        String filePath = "Task_3/src/Main/se/kth/id1212/util/credentials.txt";
+        String filePath = "src/main/se/kth/id1212/util/credentials.txt";
         try {
             Scanner file_content = new Scanner(new File(filePath));
             username = file_content.nextLine();
