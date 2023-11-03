@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 /**
- * This class is responsible for retrieving the latest email from the user's inbox.
+ * This class is responsible for retrieving the oldest email from the user's inbox.
  */
 public class EmailRetriever {
 
@@ -31,11 +31,11 @@ public class EmailRetriever {
     }
 
     /**
-     * Retrieves the latest email from the user's inbox.
+     * Retrieves the oldest email from the user's inbox.
      */
-    public void get_latest_email() {
+    public void get_oldest_email() {
         select_inbox();
-        retrieve_latest_received_email();
+        retrieve_oldest_received_email();
     }
 
     /**
@@ -102,10 +102,10 @@ public class EmailRetriever {
     }
 
     /**
-     * Retrieves the latest received email from the user's inbox. The message is constructed and sent to the server.
+     * Retrieves the oldest received email from the user's inbox. The message is constructed and sent to the server.
      * The response is then outputted. Finally, the message count is incremented.
      */
-    private void retrieve_latest_received_email() {
+    private void retrieve_oldest_received_email() {
         String prefix = "a00" + message_count;
         current_command = "FETCH";
         String message_number = "1";
