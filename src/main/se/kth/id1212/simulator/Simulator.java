@@ -25,19 +25,19 @@ public class Simulator {
      * @param args     The command line arguments, not used.
      */
     public static void main(String[] args) {
-        FutureTask[] game_session = new FutureTask[100];
+        FutureTask[] game_sessions = new FutureTask[100];
 
         for(int i = 0; i < 100; i++) {
-            Callable<Object> simulatorThread = new SimulatorThread();
-            game_session[i] = new FutureTask<>(simulatorThread);
-            new Thread(game_session[i]).start();
+            Callable<Object> simulatorCallable = new SimulatorCallable();
+            game_sessions[i] = new FutureTask<>(simulatorCallable);
+            new Thread(game_sessions[i]).start();
 
             if(i % 25 == 0) {
-                while(!game_session[i].isDone());
+                while(!game_sessions[i].isDone());
             }
         }
 
-        System.out.println("Average number of guesses: " + average_number_of_guesses(game_session));
+        System.out.println("Average number of guesses: " + average_number_of_guesses(game_sessions));
     }
 
     /**
@@ -64,7 +64,7 @@ public class Simulator {
 /**
  * This class is responsible for simulating a game session of the guessing game.
  */
-class SimulatorThread implements Callable<Object> {
+class SimulatorCallable implements Callable<Object> {
     private HttpURLConnection connection;
     private String cookie;
     private int current_guess;
