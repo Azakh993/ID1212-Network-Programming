@@ -13,7 +13,7 @@ public class ExceptionLogger {
      * @param exception The exception to log.
      */
     public static void logExceptionToFile(Exception exception) {
-        String filePath = "Task_2/src/main/se/kth/id1212/simulator/log.txt";
+        String filePath = "src/main/se/kth/id1212/simulator/Exception_log.txt";
         try {
             PrintWriter writer = new PrintWriter(new FileWriter(filePath, true));
             exception.printStackTrace(writer);
