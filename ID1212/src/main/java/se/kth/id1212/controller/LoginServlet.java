@@ -11,8 +11,6 @@ import se.kth.id1212.model.User;
 import se.kth.id1212.model.UserDAO;
 import se.kth.id1212.util.ExceptionLogger;
 
-import java.util.Optional;
-
 @WebServlet(name = "LoginServlet", urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
     private UserDAO userDAO;
@@ -40,7 +38,7 @@ public class LoginServlet extends HttpServlet {
 
         boolean logged_in = false;
 
-        if(username != null || password != null) {
+        if (username != null || password != null) {
             logged_in = login(session, username, password);
         }
 

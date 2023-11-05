@@ -18,9 +18,9 @@ import java.util.HashMap;
 
 @WebServlet(name = "DashboardServlet", urlPatterns = {"/dashboard"})
 public class DashboardServlet extends HttpServlet {
+    HttpSession session;
     private QuizDAO<Quiz> quizDAO;
     private ResultDAO<Result> resultDAO;
-    HttpSession session;
 
     public void init(ServletConfig config) {
         this.quizDAO = new QuizDAOImpl();
@@ -34,7 +34,7 @@ public class DashboardServlet extends HttpServlet {
 
             String userID = (String) this.session.getAttribute("USERID");
 
-            if(userID == null) {
+            if (userID == null) {
                 response.sendRedirect(request.getContextPath() + "/login");
             } else {
                 HashMap<Quiz, Integer> quizResultMap = getDashboardData(userID);
@@ -51,10 +51,10 @@ public class DashboardServlet extends HttpServlet {
         HashMap<Integer, Result> results = this.resultDAO.getAllResults(userID);
         HashMap<Quiz, Integer> quizResultMap = new HashMap<>();
 
-        for(Quiz quiz : quizzes) {
+        for (Quiz quiz : quizzes) {
             Integer quizID = quiz.id();
 
-            if(results != null && results.containsKey(quizID)) {
+            if (results != null && results.containsKey(quizID)) {
                 Result result = results.get(quizID);
                 Integer score = result.getScore();
                 quizResultMap.put(quiz, score);
