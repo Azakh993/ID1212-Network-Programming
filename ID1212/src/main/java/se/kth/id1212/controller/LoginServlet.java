@@ -56,13 +56,14 @@ public class LoginServlet extends HttpServlet {
     }
 
     private boolean login(HttpSession session, String username, String password) {
-        Optional<User> user = this.userDAO.getUser(username, password);
+        User user = this.userDAO.getUser(username, password);
 
-        if (user.isPresent()) {
-            String userID = user.get().getId().toString();
-            session.setAttribute("USERID", userID);
-            return true;
+        if (user == null) {
+            return false;
         }
-        return false;
+
+        String userID = user.id().toString();
+        session.setAttribute("USERID", userID);
+        return true;
     }
 }
