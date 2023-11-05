@@ -46,7 +46,7 @@ public class LoginServlet extends HttpServlet {
 
         try {
             if (logged_in) {
-                response.sendRedirect(request.getContextPath() + "/quizzes");
+                response.sendRedirect(request.getContextPath() + "/dashboard");
             } else {
                 response.sendError(401, "Unauthorized");
             }
