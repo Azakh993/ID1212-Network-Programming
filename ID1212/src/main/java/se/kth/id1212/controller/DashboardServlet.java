@@ -52,7 +52,7 @@ public class DashboardServlet extends HttpServlet {
         HashMap<Quiz, Integer> quizResultMap = new HashMap<>();
 
         for(Quiz quiz : quizzes) {
-            Integer quizID = quiz.getID();
+            Integer quizID = quiz.id();
 
             if(results != null && results.containsKey(quizID)) {
                 Result result = results.get(quizID);

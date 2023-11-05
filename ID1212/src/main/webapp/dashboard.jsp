@@ -33,7 +33,7 @@
             Integer result = entry.getValue();
     %>
     <tr>
-        <td><%= quiz.getSubject() %></td>
+        <td><%= quiz.subject() %></td>
         <td><%= (result != null) ? result : "Not Attempted" %></td>
     </tr>
     <%
