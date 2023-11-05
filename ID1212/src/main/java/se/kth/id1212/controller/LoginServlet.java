@@ -19,7 +19,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) {
-        userDAO = new UserDAOImpl();
+        this.userDAO = new UserDAOImpl();
     }
 
     @Override
@@ -56,7 +56,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     private boolean login(HttpSession session, String username, String password) {
-        Optional<User> user = userDAO.getUser(username, password);
+        Optional<User> user = this.userDAO.getUser(username, password);
 
         if (user.isPresent()) {
             String userID = user.get().getId().toString();
