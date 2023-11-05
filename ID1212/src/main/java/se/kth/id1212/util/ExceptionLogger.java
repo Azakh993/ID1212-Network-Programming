@@ -1,5 +1,6 @@
 package se.kth.id1212.util;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ExceptionLogger {
@@ -7,7 +8,7 @@ public class ExceptionLogger {
         try {
             Logger logger = Logger.getLogger("ExceptionLogger");
 
-            logger.info(exception_to_log.toString() + "\n");
+            logger.log(Level.SEVERE, exception_to_log.fillInStackTrace() + "\n", exception_to_log);
 
         } catch (Exception exception) {
             exception.printStackTrace();
