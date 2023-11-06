@@ -5,20 +5,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import se.kth.id1212.integration.QuizDAOImpl;
 import se.kth.id1212.integration.ResultDAOImpl;
 import se.kth.id1212.model.Quiz;
 import se.kth.id1212.model.QuizDAO;
 import se.kth.id1212.model.Result;
 import se.kth.id1212.model.ResultDAO;
-import se.kth.id1212.util.ExceptionLogger;
 
 import java.util.HashMap;
 
 @WebServlet(name = "DashboardServlet", urlPatterns = {"/dashboard"})
 public class DashboardServlet extends HttpServlet {
-    HttpSession session;
     private QuizDAO<Quiz> quizDAO;
     private ResultDAO<Result> resultDAO;
 
@@ -29,21 +26,20 @@ public class DashboardServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            this.session = request.getSession();
+        String userID = ControllerUtil.validate_login_state(request, response);
 
-            String userID = (String) this.session.getAttribute("USERID");
-
-            if (userID == null) {
-                response.sendRedirect(request.getContextPath() + "/login");
-            } else {
-                HashMap<Quiz, Integer> quizResultMap = getDashboardData(userID);
-                request.setAttribute("quizResultMap", quizResultMap);
-                request.getRequestDispatcher("/dashboard.jsp").forward(request, response);
-            }
-        } catch (Exception exception) {
-            ExceptionLogger.log(exception);
+        if(userID != null) {
+            HashMap<Quiz, Integer> quizResultMap = getDashboardData(userID);
+            request.setAttribute("quizResultMap", quizResultMap);
+            ControllerUtil.forward_request(request, response, "/dashboard.jsp");
         }
+    }
+
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        String selected_quiz = request.getParameter("quizID");
+        ControllerUtil.redirect_request(request, response, "/quiz?quizID=" + selected_quiz);
     }
 
     private HashMap<Quiz, Integer> getDashboardData(String userID) {
