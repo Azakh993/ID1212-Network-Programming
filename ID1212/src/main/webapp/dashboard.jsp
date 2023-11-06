@@ -22,7 +22,7 @@
 <table>
     <tr>
         <th>Subject</th>
-        <th>Quiz Result</th>
+        <th>Previous Result</th>
     </tr>
 
     <%
@@ -33,7 +33,7 @@
             Integer result = entry.getValue();
     %>
     <tr>
-        <td><%= quiz.subject() %></td>
+        <td><a href="quiz.jsp?quizSubject=<%= quiz.id() %>"> <%= quiz.subject() %></a></td>
         <td><%= (result != null) ? result : "Not Attempted" %></td>
     </tr>
     <%
