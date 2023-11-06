@@ -33,7 +33,13 @@
             Integer result = entry.getValue();
     %>
     <tr>
-        <td><a href="quiz.jsp?quizSubject=<%= quiz.id() %>"> <%= quiz.subject() %></a></td>
+        <td>
+            <%= quiz.subject() %>
+            <form action="" method="post">
+                <input type="hidden" name="quizID" value="<%= quiz.id() %>">
+                <input type="submit" value="Take Quiz">
+            </form>
+        </td>
         <td><%= (result != null) ? result : "Not Attempted" %></td>
     </tr>
     <%
