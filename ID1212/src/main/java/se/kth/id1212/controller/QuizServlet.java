@@ -7,12 +7,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import se.kth.id1212.integration.QuestionDAOImpl;
 import se.kth.id1212.integration.QuizDAOImpl;
-import se.kth.id1212.model.*;
+import se.kth.id1212.model.Question;
+import se.kth.id1212.model.QuestionDAO;
+import se.kth.id1212.model.Quiz;
+import se.kth.id1212.model.QuizDAO;
 
 @WebServlet(name = "QuizServlet", urlPatterns = {"/quiz"})
 public class QuizServlet extends HttpServlet {
-    private QuizDAO<Quiz> quizDAO;
-    private QuestionDAO<Question> questionDAO;
+    private QuizDAO< Quiz > quizDAO;
+    private QuestionDAO< Question > questionDAO;
 
     @Override
     public void init(ServletConfig config) {

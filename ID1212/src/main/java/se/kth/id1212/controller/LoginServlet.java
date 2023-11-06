@@ -45,7 +45,7 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        if(username != null || password != null) {
+        if (username != null || password != null) {
             User user = this.userDAO.getUser(username, password);
 
             if (user != null) {

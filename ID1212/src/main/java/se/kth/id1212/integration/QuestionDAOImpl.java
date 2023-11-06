@@ -3,11 +3,12 @@ package se.kth.id1212.integration;
 import se.kth.id1212.model.Question;
 import se.kth.id1212.model.QuestionDAO;
 
-public class QuestionDAOImpl implements QuestionDAO<Question> {
+public class QuestionDAOImpl implements QuestionDAO< Question > {
     @Override
     public Question getQuestion(Integer questionID) {
         return new Question(1, "What is the capital of Sweden?", "Stockholm", new String[]{"Stockholm", "Gothenburg", "Malmö", "Uppsala"});
     }
+
     @Override
     public Question[] getAllQuestions(Integer quizID) {
         Question[] questions = new Question[4];

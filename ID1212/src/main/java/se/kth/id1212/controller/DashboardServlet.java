@@ -16,8 +16,8 @@ import java.util.HashMap;
 
 @WebServlet(name = "DashboardServlet", urlPatterns = {"/dashboard"})
 public class DashboardServlet extends HttpServlet {
-    private QuizDAO<Quiz> quizDAO;
-    private ResultDAO<Result> resultDAO;
+    private QuizDAO< Quiz > quizDAO;
+    private ResultDAO< Result > resultDAO;
 
     public void init(ServletConfig config) {
         this.quizDAO = new QuizDAOImpl();
@@ -28,24 +28,17 @@ public class DashboardServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         String userID = ControllerUtil.validate_login_state(request, response);
 
-        if(userID != null) {
-            HashMap<Quiz, Integer> quizResultMap = getDashboardData(userID);
+        if (userID != null) {
+            HashMap< Quiz, Integer > quizResultMap = getDashboardData(userID);
             request.setAttribute("quizResultMap", quizResultMap);
             ControllerUtil.forward_request(request, response, "/dashboard.jsp");
         }
     }
 
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        String selected_quiz = request.getParameter("quizID");
-        ControllerUtil.redirect_request(request, response, "/quiz?quizID=" + selected_quiz);
-    }
-
-    private HashMap<Quiz, Integer> getDashboardData(String userID) {
+    private HashMap< Quiz, Integer > getDashboardData(String userID) {
         Quiz[] quizzes = this.quizDAO.getAllQuizzes();
-        HashMap<Integer, Result> results = this.resultDAO.getAllResults(userID);
-        HashMap<Quiz, Integer> quizResultMap = new HashMap<>();
+        HashMap< Integer, Result > results = this.resultDAO.getAllResults(userID);
+        HashMap< Quiz, Integer > quizResultMap = new HashMap<>();
 
         for (Quiz quiz : quizzes) {
             Integer quizID = quiz.id();
@@ -59,5 +52,11 @@ public class DashboardServlet extends HttpServlet {
             }
         }
         return quizResultMap;
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        String selected_quiz = request.getParameter("quizID");
+        ControllerUtil.redirect_request(request, response, "/quiz?quizID=" + selected_quiz);
     }
 }

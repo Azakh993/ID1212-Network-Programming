@@ -18,17 +18,17 @@ public class ControllerUtil {
         }
     }
 
-    public static void forward_request(HttpServletRequest request, HttpServletResponse response, String path) {
+    public static void redirect_request(HttpServletRequest request, HttpServletResponse response, String path) {
         try {
-            request.getRequestDispatcher(path).forward(request, response);
+            response.sendRedirect(request.getContextPath() + path);
         } catch (Exception exception) {
             ExceptionLogger.log(exception);
         }
     }
 
-    public static void redirect_request(HttpServletRequest request, HttpServletResponse response, String path) {
+    public static void forward_request(HttpServletRequest request, HttpServletResponse response, String path) {
         try {
-            response.sendRedirect(request.getContextPath() + path);
+            request.getRequestDispatcher(path).forward(request, response);
         } catch (Exception exception) {
             ExceptionLogger.log(exception);
         }

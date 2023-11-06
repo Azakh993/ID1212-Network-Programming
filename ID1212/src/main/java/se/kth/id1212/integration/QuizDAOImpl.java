@@ -3,7 +3,7 @@ package se.kth.id1212.integration;
 import se.kth.id1212.model.Quiz;
 import se.kth.id1212.model.QuizDAO;
 
-public class QuizDAOImpl implements QuizDAO<Quiz> {
+public class QuizDAOImpl implements QuizDAO< Quiz > {
     @Override
     public Quiz getQuiz(Integer quizID) {
         return new Quiz(1, "Test 1");
