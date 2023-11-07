@@ -8,10 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import se.kth.id1212.integration.QuestionDAOImpl;
 import se.kth.id1212.integration.QuizDAOImpl;
-import se.kth.id1212.model.Question;
-import se.kth.id1212.model.QuestionDAO;
-import se.kth.id1212.model.Quiz;
-import se.kth.id1212.model.QuizDAO;
+import se.kth.id1212.integration.ResultDAOImpl;
+import se.kth.id1212.model.*;
 
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -21,12 +19,15 @@ import java.util.Map;
 public class QuizServlet extends HttpServlet {
     private QuizDAO< Quiz > quizDAO;
     private QuestionDAO< Question > questionDAO;
+    private ResultDAO< Result > resultDAO;
     private HttpServletRequest request;
+    private Integer acquiredPoints;
 
     @Override
     public void init(ServletConfig config) {
         this.quizDAO = new QuizDAOImpl();
         this.questionDAO = new QuestionDAOImpl();
+        this.resultDAO = new ResultDAOImpl();
     }
 
     @Override
@@ -69,6 +70,7 @@ public class QuizServlet extends HttpServlet {
             this.request = request;
             if (requestContainsQuestionIDs()) {
                 correctQuizAttempt();
+                updateResultsInDB(userID);
                 getQuizPageData();
                 ControllerUtil.forward_request(request, response, "/quiz.jsp");
             } else if (requestContainsExit()) {
@@ -98,7 +100,7 @@ public class QuizServlet extends HttpServlet {
 
         Map< String, String[] > parameter_map = request.getParameterMap();
         HashMap< Integer, Integer > questionIDs_to_points = new HashMap<>();
-        Integer acquiredPoints = 0;
+        this.acquiredPoints = 0;
 
         for (Map.Entry< String, String[] > entry : parameter_map.entrySet()) {
             String parameterName = entry.getKey();
@@ -112,15 +114,25 @@ public class QuizServlet extends HttpServlet {
                 int points = 0;
 
                 if (selected_option.equals(correct_answer)) {
-                    acquiredPoints++;
+                    this.acquiredPoints++;
                     points = 1;
                 }
                 questionIDs_to_points.put(questionID, points);
             }
         }
 
-        this.request.setAttribute("acquiredPoints", acquiredPoints.toString());
+        this.request.setAttribute("acquiredPoints", this.acquiredPoints.toString());
         this.request.setAttribute("questionIDs_to_points", questionIDs_to_points);
+    }
+
+    private void updateResultsInDB(String userID_string) {
+        HttpSession session = this.request.getSession();
+        String quizID_string = (String) session.getAttribute("quizID");
+
+        Integer userID = Integer.valueOf(userID_string);
+        Integer quizID = Integer.valueOf(quizID_string);
+
+        this.resultDAO.addResult(userID, quizID, this.acquiredPoints);
     }
 
     private boolean requestContainsExit() {
