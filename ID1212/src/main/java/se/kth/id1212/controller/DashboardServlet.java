@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import se.kth.id1212.integration.QuizDAOImpl;
 import se.kth.id1212.integration.ResultDAOImpl;
 import se.kth.id1212.model.Quiz;
@@ -56,7 +57,8 @@ public class DashboardServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        String selected_quiz = request.getParameter("quizID");
-        ControllerUtil.redirect_request(request, response, "/quiz?quizID=" + selected_quiz);
+        HttpSession session = request.getSession();
+        session.setAttribute("quizID", request.getParameter("quizID"));
+        ControllerUtil.redirect_request(request, response, "/quiz");
     }
 }
