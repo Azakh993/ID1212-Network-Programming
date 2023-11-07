@@ -17,12 +17,7 @@ public class ResultDAOImpl implements ResultDAO< Result > {
     }
 
     @Override
-    public void updateResult(Integer userID, Integer quizId) {
-
-    }
-
-    @Override
-    public void addResult(Integer userID, Integer quizId) {
+    public void addResult(Integer userId, Integer quizId, Integer points) {
 
     }
 }
