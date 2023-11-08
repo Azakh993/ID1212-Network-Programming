@@ -1,5 +1,7 @@
 package se.kth.id1212.integration;
 
+import se.kth.id1212.util.ExceptionLogger;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,8 +25,8 @@ public class DatabaseHandler {
             try {
                 Class.forName("org.sqlite.JDBC");
                 connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile.getAbsolutePath());
-            } catch (ClassNotFoundException | SQLException e) {
-                e.printStackTrace();
+            } catch (ClassNotFoundException | SQLException exception) {
+                ExceptionLogger.log(exception);
             }
         } else {
             connection = createNewDatabase(databaseFile);
@@ -44,8 +46,8 @@ public class DatabaseHandler {
             String scriptContent = new String(Files.readAllBytes(Paths.get(scriptPath)));
             executeSqlScript(connection, scriptContent);
 
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException | SQLException exception) {
+            ExceptionLogger.log(exception);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
