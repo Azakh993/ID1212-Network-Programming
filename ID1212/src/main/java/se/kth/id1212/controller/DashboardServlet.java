@@ -46,7 +46,7 @@ public class DashboardServlet extends HttpServlet {
 
             if (results != null && results.containsKey(quizID)) {
                 Result result = results.get(quizID);
-                Integer score = result.getScore();
+                Integer score = result.score();
                 quizResultMap.put(quiz, score);
             } else {
                 quizResultMap.put(quiz, null);
