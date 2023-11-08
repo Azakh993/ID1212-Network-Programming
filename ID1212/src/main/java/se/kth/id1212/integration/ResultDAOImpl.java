@@ -2,6 +2,7 @@ package se.kth.id1212.integration;
 
 import se.kth.id1212.model.Result;
 import se.kth.id1212.model.ResultDAO;
+import se.kth.id1212.util.ExceptionLogger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +11,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class ResultDAOImpl implements ResultDAO< Result > {
-    private Connection connection = DatabaseHandler.connect();
+    private final Connection connection = DatabaseHandler.connect();
 
     @Override
     public HashMap< Integer, Result > getAllResults(Integer userID) {
@@ -27,8 +28,8 @@ public class ResultDAOImpl implements ResultDAO< Result > {
                 Result result = new Result(userID, quizId, score);
                 results.put(quizId, result);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException exception) {
+            ExceptionLogger.log(exception);
         }
 
         return results;
@@ -58,8 +59,8 @@ public class ResultDAOImpl implements ResultDAO< Result > {
                 insertStatement.setInt(3, points);
                 insertStatement.executeUpdate();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException exception) {
+            ExceptionLogger.log(exception);
         }
     }
 }
