@@ -11,7 +11,8 @@ public class ExceptionLogger {
             logger.log(Level.SEVERE, exception_to_log.fillInStackTrace() + "\n", exception_to_log);
 
         } catch (Exception exception) {
-            exception.printStackTrace();
+            ExceptionLogger.log(exception);
+
         }
     }
 }
