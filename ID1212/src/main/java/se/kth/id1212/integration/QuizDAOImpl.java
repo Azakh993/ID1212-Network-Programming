@@ -2,6 +2,7 @@ package se.kth.id1212.integration;
 
 import se.kth.id1212.model.Quiz;
 import se.kth.id1212.model.QuizDAO;
+import se.kth.id1212.util.ExceptionLogger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QuizDAOImpl implements QuizDAO< Quiz > {
-    private Connection connection = DatabaseHandler.connect();
+    private final Connection connection = DatabaseHandler.connect();
 
     @Override
     public Quiz getQuiz(Integer quizID) {
@@ -28,8 +29,8 @@ public class QuizDAOImpl implements QuizDAO< Quiz > {
                     quiz = new Quiz(id, subject);
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException exception) {
+            ExceptionLogger.log(exception);
         }
 
         return quiz;
@@ -48,8 +49,8 @@ public class QuizDAOImpl implements QuizDAO< Quiz > {
                 Quiz quiz = new Quiz(id, subject);
                 quizzes.add(quiz);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException exception) {
+            ExceptionLogger.log(exception);
         }
 
         return quizzes.toArray(new Quiz[0]);
