@@ -20,14 +20,16 @@
     <title>Quiz Page</title>
 </head>
 <body>
-<h1>Quiz:<%= quizSubject %></h1>
+<h1>Quiz:<%= quizSubject %>
+</h1>
 <% if (acquiredPoints != null) { %>
-    <%= "<h2> Your score is: " + acquiredPoints + " points.</h2>" %>
+<%= "<h2> Your score is: " + acquiredPoints + " points.</h2>" %>
 <% } %>
 <form action="" method="post">
-    <% for (int i=0; i < questions.length; i++) { %>
+    <% for (int i = 0; i < questions.length; i++) { %>
     <div class="question">
-        <p><strong>Question <%= i+1 %>:</strong> <%= questions[i].questionText() %></p>
+        <p><strong>Question <%= i + 1 %>:</strong> <%= questions[i].questionText() %>
+        </p>
         <ul class="answers">
             <% for (String option : questions[i].options()) { %>
             <li>

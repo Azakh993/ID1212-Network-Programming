@@ -26,9 +26,9 @@
     </tr>
 
     <%
-        HashMap<Quiz, Integer> quizResultMap = (HashMap<Quiz, Integer>) request.getAttribute("quizResultMap");
+        HashMap< Quiz, Integer > quizResultMap = (HashMap< Quiz, Integer >) request.getAttribute("quizResultMap");
 
-        for (Map.Entry<Quiz, Integer> entry : quizResultMap.entrySet()) {
+        for (Map.Entry< Quiz, Integer > entry : quizResultMap.entrySet()) {
             Quiz quiz = entry.getKey();
             Integer result = entry.getValue();
     %>
@@ -40,7 +40,8 @@
                 <input type="submit" value="Take Quiz">
             </form>
         </td>
-        <td><%= (result != null) ? result : "Not Attempted" %></td>
+        <td><%= (result != null) ? result : "Not Attempted" %>
+        </td>
     </tr>
     <%
         }
