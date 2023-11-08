@@ -9,7 +9,11 @@ import java.nio.file.Paths;
 
 public class Main {
 
-    public static void main(String[] args) throws LifecycleException {
+    public static void main(String[] args) {
+        start_tomcat();
+    }
+
+    private static void start_tomcat() {
         Tomcat tomcat = new Tomcat();
         tomcat.setPort(8080);
 
@@ -17,12 +21,16 @@ public class Main {
         connector.setPort(8080);
         tomcat.getService().addConnector(connector);
 
-        String absolutePathToWebApp = Paths.get("ID1212","src","main","webapp").toFile().getAbsolutePath();
+        String absolutePathToWebApp = Paths.get("ID1212", "src", "main", "webapp").toFile().getAbsolutePath();
         Context context = tomcat.addWebapp("", absolutePathToWebApp);
         context.setPath("");
 
-        tomcat.start();
+        try {
+            tomcat.start();
+        } catch (LifecycleException exception) {
+            exception.printStackTrace();
+        }
+
         tomcat.getServer().await();
     }
-
 }
