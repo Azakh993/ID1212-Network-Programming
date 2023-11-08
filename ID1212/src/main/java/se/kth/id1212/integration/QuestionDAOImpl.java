@@ -3,24 +3,60 @@ package se.kth.id1212.integration;
 import se.kth.id1212.model.Question;
 import se.kth.id1212.model.QuestionDAO;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class QuestionDAOImpl implements QuestionDAO< Question > {
+    private Connection connection = DatabaseHandler.connect();
+
     @Override
     public Question getQuestion(Integer questionID) {
-        Question[] questions = new Question[4];
-        questions[0] = new Question(1, "What is the capital of Sweden?", "Stockholm", new String[]{"Stockholm", "Gothenburg", "Malmö", "Uppsala"});
-        questions[1] = new Question(2, "What is the capital of France?", "Paris", new String[]{"Paris", "Lyon", "Marseille", "Toulouse"});
-        questions[2] = new Question(3, "What is the capital of Germany?", "Berlin", new String[]{"Berlin", "Hamburg", "Munich", "Cologne"});
-        questions[3] = new Question(4, "What is the capital of Italy?", "Rome", new String[]{"Rome", "Milan", "Naples", "Turin"});
-        return questions[questionID - 1];
+        try {
+            String query = "SELECT * FROM QUESTIONS WHERE ID = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, questionID);
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                String text = resultSet.getString("TEXT");
+                String options = resultSet.getString("OPTIONS");
+                String answer = resultSet.getString("ANSWER");
+
+                return new Question(questionID, text, answer, options.split(","));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public Question[] getAllQuestions(Integer quizID) {
-        Question[] questions = new Question[4];
-        questions[0] = new Question(1, "What is the capital of Sweden?", "Stockholm", new String[]{"Stockholm", "Gothenburg", "Malmö", "Uppsala"});
-        questions[1] = new Question(2, "What is the capital of France?", "Paris", new String[]{"Paris", "Lyon", "Marseille", "Toulouse"});
-        questions[2] = new Question(3, "What is the capital of Germany?", "Berlin", new String[]{"Berlin", "Hamburg", "Munich", "Cologne"});
-        questions[3] = new Question(4, "What is the capital of Italy?", "Rome", new String[]{"Rome", "Milan", "Naples", "Turin"});
-        return questions;
+        List< Question > questions = new ArrayList<>();
+        try {
+            String query = "SELECT Q.ID, Q.TEXT, Q.OPTIONS, Q.ANSWER FROM QUESTIONS Q " +
+                    "INNER JOIN SELECTOR S ON Q.ID = S.QUESTION_ID " +
+                    "WHERE S.QUIZ_ID = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, quizID);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int questionID = resultSet.getInt("ID");
+                String text = resultSet.getString("TEXT");
+                String options = resultSet.getString("OPTIONS");
+                String answer = resultSet.getString("ANSWER");
+
+                Question question = new Question(questionID, text, answer, options.split(","));
+                questions.add(question);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return questions.toArray(new Question[0]);
     }
 }
