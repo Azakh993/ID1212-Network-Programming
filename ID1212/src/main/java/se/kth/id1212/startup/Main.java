@@ -5,6 +5,8 @@ import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
 
+import java.nio.file.Paths;
+
 public class Main {
 
     public static void main(String[] args) throws LifecycleException {
@@ -15,8 +17,8 @@ public class Main {
         connector.setPort(8080);
         tomcat.getService().addConnector(connector);
 
-        Context context = tomcat.addWebapp("",
-                "/Users/khz/Library/CloudStorage/OneDrive-Personal/Dokument/1. Personal/1. Education/TIDAB - HT21/ID1212/Task_4-P2/ID1212/src/main/webapp");
+        String absolutePathToWebApp = Paths.get("ID1212","src","main","webapp").toFile().getAbsolutePath();
+        Context context = tomcat.addWebapp("", absolutePathToWebApp);
         context.setPath("");
 
         tomcat.start();
