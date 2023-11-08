@@ -20,7 +20,7 @@
     <title>Quiz Page</title>
 </head>
 <body>
-<h1>Quiz:<%= quizSubject %>
+<h1><%= quizSubject %>
 </h1>
 <% if (acquiredPoints != null) { %>
 <%= "<h2> Your score is: " + acquiredPoints + " points.</h2>" %>
@@ -43,8 +43,7 @@
     <% } %>
     <input type="submit" value="Submit Quiz">
     <form action="" method="get">
-        <input type="hidden" name="exit" value="true">
-        <input type="submit" value="Return to Dashboard">
+        <input type="submit" name="exit" value="Return to Dashboard">
     </form>
 </form>
 </body>
