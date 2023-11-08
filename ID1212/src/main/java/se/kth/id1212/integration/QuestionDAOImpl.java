@@ -2,6 +2,7 @@ package se.kth.id1212.integration;
 
 import se.kth.id1212.model.Question;
 import se.kth.id1212.model.QuestionDAO;
+import se.kth.id1212.util.ExceptionLogger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QuestionDAOImpl implements QuestionDAO< Question > {
-    private Connection connection = DatabaseHandler.connect();
+    private final Connection connection = DatabaseHandler.connect();
 
     @Override
     public Question getQuestion(Integer questionID) {
@@ -28,8 +29,8 @@ public class QuestionDAOImpl implements QuestionDAO< Question > {
 
                 return new Question(questionID, text, answer, options.split(","));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException exception) {
+            ExceptionLogger.log(exception);
         }
         return null;
     }
@@ -54,8 +55,8 @@ public class QuestionDAOImpl implements QuestionDAO< Question > {
                 Question question = new Question(questionID, text, answer, options.split(","));
                 questions.add(question);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException exception) {
+            ExceptionLogger.log(exception);
         }
         return questions.toArray(new Question[0]);
     }
