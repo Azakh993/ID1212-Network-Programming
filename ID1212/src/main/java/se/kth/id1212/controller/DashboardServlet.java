@@ -30,13 +30,13 @@ public class DashboardServlet extends HttpServlet {
         String userID = ControllerUtil.validate_login_state(request, response);
 
         if (userID != null) {
-            HashMap< Quiz, Integer > quizResultMap = getDashboardData(userID);
+            HashMap< Quiz, Integer > quizResultMap = getDashboardData(Integer.valueOf(userID));
             request.setAttribute("quizResultMap", quizResultMap);
             ControllerUtil.forward_request(request, response, "/dashboard.jsp");
         }
     }
 
-    private HashMap< Quiz, Integer > getDashboardData(String userID) {
+    private HashMap< Quiz, Integer > getDashboardData(Integer userID) {
         Quiz[] quizzes = this.quizDAO.getAllQuizzes();
         HashMap< Integer, Result > results = this.resultDAO.getAllResults(userID);
         HashMap< Quiz, Integer > quizResultMap = new HashMap<>();
