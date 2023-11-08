@@ -4,6 +4,7 @@ import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
+import se.kth.id1212.util.ExceptionLogger;
 
 import java.nio.file.Paths;
 
@@ -28,7 +29,7 @@ public class Main {
         try {
             tomcat.start();
         } catch (LifecycleException exception) {
-            exception.printStackTrace();
+            ExceptionLogger.log(exception);
         }
 
         tomcat.getServer().await();
