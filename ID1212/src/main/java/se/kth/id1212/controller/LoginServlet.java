@@ -50,8 +50,7 @@ public class LoginServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        login(request);
-        String userID = ControllerUtil.validate_login_state(request, response);
+        String userID = login(request);
 
         if (userID != null) {
             ControllerUtil.redirect_request(request, response, "/dashboard");
@@ -70,7 +69,7 @@ public class LoginServlet extends HttpServlet {
      *
      * @param request The HttpServletRequest object containing user credentials.
      */
-    private void login(HttpServletRequest request) {
+    private String login(HttpServletRequest request) {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
@@ -81,7 +80,9 @@ public class LoginServlet extends HttpServlet {
                 String userID = user.id().toString();
                 HttpSession session = request.getSession();
                 session.setAttribute("USERID", userID);
+                return userID;
             }
         }
+        return null;
     }
 }
