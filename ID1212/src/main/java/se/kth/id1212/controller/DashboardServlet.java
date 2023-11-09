@@ -15,16 +15,32 @@ import se.kth.id1212.model.ResultDAO;
 
 import java.util.HashMap;
 
+/**
+ * This class is responsible for managing user requests related to the dashboard,
+ * including displaying quiz results and redirecting users to the quiz page.
+ */
 @WebServlet(name = "DashboardServlet", urlPatterns = {"/dashboard"})
 public class DashboardServlet extends HttpServlet {
     private QuizDAO< Quiz > quizDAO;
     private ResultDAO< Result > resultDAO;
 
+    /**
+     * Initializes the servlet during which it creates instances of QuizDAO and ResultDAO.
+     *
+     * @param config The ServletConfig object containing configuration information.
+     */
     public void init(ServletConfig config) {
         this.quizDAO = new QuizDAOImpl();
         this.resultDAO = new ResultDAOImpl();
     }
 
+    /**
+     * Handles GET requests to the dashboard, validates user login state,
+     * retrieves quiz and result data, and forwards the request to the dashboard view.
+     *
+     * @param request  The HttpServletRequest object.
+     * @param response The HttpServletResponse object.
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         String userID = ControllerUtil.validate_login_state(request, response);
@@ -36,6 +52,13 @@ public class DashboardServlet extends HttpServlet {
         }
     }
 
+
+    /**
+     * Retrieves quiz and result data for the user's dashboard.
+     *
+     * @param userID The unique identifier of the user.
+     * @return A HashMap mapping Quiz objects to their corresponding scores.
+     */
     private HashMap< Quiz, Integer > getDashboardData(Integer userID) {
         Quiz[] quizzes = this.quizDAO.getAllQuizzes();
         HashMap< Integer, Result > results = this.resultDAO.getAllResults(userID);
@@ -55,6 +78,13 @@ public class DashboardServlet extends HttpServlet {
         return quizResultMap;
     }
 
+    /**
+     * Handles POST requests to the dashboard, sets the selected quiz ID in the session,
+     * and redirects the user to the quiz page.
+     *
+     * @param request  The HttpServletRequest object.
+     * @param response The HttpServletResponse object.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();

@@ -1,4 +1,5 @@
 <%--
+  JSP file for displaying the dashboard page.
   Created by IntelliJ IDEA.
   User: khz
   Date: 2023-11-02

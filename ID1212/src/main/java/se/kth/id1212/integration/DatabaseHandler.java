@@ -5,6 +5,7 @@ import se.kth.id1212.util.ExceptionLogger;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,7 +16,8 @@ public class DatabaseHandler {
     private static Connection connection = null;
 
     public static Connection connect() {
-        File databaseFile = new File("/Users/khz/Library/CloudStorage/OneDrive-Personal/Dokument/1. Personal/1. Education/TIDAB - HT21/ID1212/Task_4-P2/ID1212/src/main/database/Guess.db");
+        Path filePath = Paths.get("ID1212", "src", "main", "database", "Guess.db");
+        File databaseFile = new File(String.valueOf(filePath.toAbsolutePath()));
 
         if (connection != null) {
             return connection;
@@ -24,7 +26,7 @@ public class DatabaseHandler {
         if (databaseFile.exists()) {
             try {
                 Class.forName("org.sqlite.JDBC");
-                connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile.getAbsolutePath());
+                connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile);
             } catch (ClassNotFoundException | SQLException exception) {
                 ExceptionLogger.log(exception);
             }
@@ -42,8 +44,9 @@ public class DatabaseHandler {
 
             connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile.getAbsolutePath());
 
-            String scriptPath = "/Users/khz/Library/CloudStorage/OneDrive-Personal/Dokument/1. Personal/1. Education/TIDAB - HT21/ID1212/Task_4-P2/ID1212/src/main/resources/PopulateDB.sql";
-            String scriptContent = new String(Files.readAllBytes(Paths.get(scriptPath)));
+            Path scriptPath = Paths.get("ID1212", "src", "main", "resources", "PopulateDB.sql").toAbsolutePath();
+
+            String scriptContent = new String(Files.readAllBytes(scriptPath));
             executeSqlScript(connection, scriptContent);
 
         } catch (ClassNotFoundException | SQLException exception) {

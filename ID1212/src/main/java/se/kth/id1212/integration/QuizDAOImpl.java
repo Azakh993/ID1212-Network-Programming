@@ -11,9 +11,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class provides methods to retrieve individual quizzes
+ * and all quizzes from the database.
+ */
 public class QuizDAOImpl implements QuizDAO< Quiz > {
     private final Connection connection = DatabaseHandler.connect();
 
+    /**
+     * Retrieves a specific quiz based on its unique identifier from the database.
+     *
+     * @param quizID The unique identifier of the quiz to retrieve.
+     * @return The Quiz object associated with the given identifier, or null if not found.
+     */
     @Override
     public Quiz getQuiz(Integer quizID) {
         Quiz quiz = null;
@@ -36,6 +46,11 @@ public class QuizDAOImpl implements QuizDAO< Quiz > {
         return quiz;
     }
 
+    /**
+     * Retrieves all quizzes from the database.
+     *
+     * @return An array of Quiz objects representing all quizzes in the database.
+     */
     @Override
     public Quiz[] getAllQuizzes() {
         List< Quiz > quizzes = new ArrayList<>();

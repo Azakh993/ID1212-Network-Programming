@@ -9,9 +9,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * This class provides a method to retrieve a user from the database
+ * based on a given username and password.
+ */
 public class UserDAOImpl implements UserDAO {
     private final Connection connection = DatabaseHandler.connect();
 
+    /**
+     * Retrieves a user from the database based on the provided username and password.
+     *
+     * @param username The username of the user to retrieve.
+     * @param password The password associated with the username.
+     * @return The User object associated with the given username and password, or null if not found.
+     */
     @Override
     public User getUser(String username, String password) {
         User user = null;
