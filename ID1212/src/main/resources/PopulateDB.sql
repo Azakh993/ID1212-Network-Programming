@@ -44,9 +44,9 @@ CREATE TABLE RESULTS
 
 -- Populate the USERS table with demo data
 INSERT INTO USERS (USERNAME, PASSWORD)
-VALUES ('user1', 'password1'),
-       ('user2', 'password2'),
-       ('user3', 'password3');
+VALUES ('aaak@kth.se', 'password1'),
+       ('ebeshir@kth.se', 'password2'),
+       ('test@kth.se', 'password3');
 
 -- Populate the QUIZZES table with demo data
 INSERT INTO QUIZZES (SUBJECT)
