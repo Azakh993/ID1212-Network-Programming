@@ -21,9 +21,7 @@ public interface ResultDAO<Result> {
     /**
      * Adds a new result for a user's performance in a quiz.
      *
-     * @param userId  The unique identifier of the user.
-     * @param quizId  The unique identifier of the quiz.
-     * @param points  The points or score achieved by the user in the quiz.
+     * @param result The Result object to add.
      */
-    void addResult(Integer userId, Integer quizId, Integer points);
+    void addResult(Result result);
 }

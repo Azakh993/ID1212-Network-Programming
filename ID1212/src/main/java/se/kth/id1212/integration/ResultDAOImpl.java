@@ -49,12 +49,14 @@ public class ResultDAOImpl implements ResultDAO< Result > {
     /**
      * Adds or updates quiz results for a specific user in the database.
      *
-     * @param userId The unique identifier of the user.
-     * @param quizId The unique identifier of the quiz.
-     * @param points The score achieved in the quiz.
+     * @param result The Result object containing the quiz results to add or update.
      */
     @Override
-    public void addResult(Integer userId, Integer quizId, Integer points) {
+    public void addResult(Result result) {
+        Integer userId = result.userID();
+        Integer quizId = result.quizID();
+        Integer points = result.score();
+
         try {
             String checkQuery = "SELECT ID FROM RESULTS WHERE USER_ID = ? AND QUIZ_ID = ?";
             PreparedStatement checkStatement = connection.prepareStatement(checkQuery);

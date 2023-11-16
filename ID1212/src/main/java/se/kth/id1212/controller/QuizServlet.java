@@ -202,7 +202,9 @@ public class QuizServlet extends HttpServlet {
         Integer userID = Integer.valueOf(userID_string);
         Integer quizID = Integer.valueOf(quizID_string);
 
-        this.resultDAO.addResult(userID, quizID, this.acquiredPoints);
+        Result latestResult = new Result(userID, quizID, this.acquiredPoints);
+
+        this.resultDAO.addResult(latestResult);
     }
 
     /**
