@@ -43,9 +43,9 @@
     </div>
     <% } %>
     <input type="submit" value="Submit Quiz">
-    <form action="" method="get">
-        <input type="submit" name="exit" value="Return to Dashboard">
-    </form>
+</form>
+<form action="" method="post">
+    <input type="submit" name="exit" value="Return to Dashboard">
 </form>
 </body>
 </html>
