@@ -7,3 +7,4 @@ Repository for the assignments of the Network Programming (ID1212) course offere
 * [Task 3](https://github.com/Azakh993/ID1212/tree/Task_3)
 * [Task 4.1](https://github.com/Azakh993/ID1212/tree/Task_4-P1)
 * [Task 4.2](https://github.com/Azakh993/ID1212/tree/Task_4-P2)
+* [Task 4.2E](https://github.com/Azakh993/ID1212/tree/Task_4-P2E)
