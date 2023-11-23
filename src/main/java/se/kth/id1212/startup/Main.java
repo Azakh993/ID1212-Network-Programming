@@ -34,7 +34,7 @@ public class Main {
         connector.setPort(8080);
         tomcat.getService().addConnector(connector);
 
-        String absolutePathToWebApp = Paths.get("ID1212", "src", "main", "webapp").toFile().getAbsolutePath();
+        String absolutePathToWebApp = Paths.get("src", "main", "webapp").toFile().getAbsolutePath();
         Context context = tomcat.addWebapp("", absolutePathToWebApp);
         context.setPath("");
 

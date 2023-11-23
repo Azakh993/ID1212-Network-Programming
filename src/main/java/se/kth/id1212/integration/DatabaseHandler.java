@@ -16,7 +16,7 @@ public class DatabaseHandler {
     private static Connection connection = null;
 
     public static Connection connect() {
-        Path filePath = Paths.get("ID1212", "src", "main", "database", "Guess.db");
+        Path filePath = Paths.get("src", "main", "database", "Quiz.db");
         File databaseFile = new File(String.valueOf(filePath.toAbsolutePath()));
 
         if (connection != null) {
@@ -44,7 +44,7 @@ public class DatabaseHandler {
 
             connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile.getAbsolutePath());
 
-            Path scriptPath = Paths.get("ID1212", "src", "main", "resources", "PopulateDB.sql").toAbsolutePath();
+            Path scriptPath = Paths.get("src", "main", "resources", "PopulateDB.sql").toAbsolutePath();
 
             String scriptContent = new String(Files.readAllBytes(scriptPath));
             executeSqlScript(connection, scriptContent);
