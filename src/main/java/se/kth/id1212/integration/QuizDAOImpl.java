@@ -15,7 +15,7 @@ import java.util.List;
  * This class provides methods to retrieve individual quizzes
  * and all quizzes from the database.
  */
-public class QuizDAOImpl implements QuizDAO< Quiz > {
+public class QuizDAOImpl implements QuizDAO<Quiz> {
     private final Connection connection = DatabaseHandler.connect();
 
     /**
@@ -53,7 +53,7 @@ public class QuizDAOImpl implements QuizDAO< Quiz > {
      */
     @Override
     public Quiz[] getAllQuizzes() {
-        List< Quiz > quizzes = new ArrayList<>();
+        List<Quiz> quizzes = new ArrayList<>();
         String sql = "SELECT * FROM QUIZZES";
 
         try (PreparedStatement statement = connection.prepareStatement(sql);

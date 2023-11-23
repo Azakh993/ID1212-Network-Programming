@@ -22,9 +22,9 @@ import java.util.Map;
  */
 @WebServlet(name = "QuizServlet", urlPatterns = {"/quiz"})
 public class QuizServlet extends HttpServlet {
-    private QuizDAO< Quiz > quizDAO;
-    private QuestionDAO< Question > questionDAO;
-    private ResultDAO< Result > resultDAO;
+    private QuizDAO<Quiz> quizDAO;
+    private QuestionDAO<Question> questionDAO;
+    private ResultDAO<Result> resultDAO;
     private HttpServletRequest request;
     private Integer acquiredPoints;
 
@@ -124,7 +124,7 @@ public class QuizServlet extends HttpServlet {
      * @return True if the request contains question IDs, false otherwise.
      */
     private boolean requestContainsQuestionIDs() {
-        Enumeration< String > parameterNames = this.request.getParameterNames();
+        Enumeration<String> parameterNames = this.request.getParameterNames();
         while (parameterNames.hasMoreElements()) {
             String parameterName = parameterNames.nextElement();
             if (parameterName.startsWith("question")) {
@@ -139,15 +139,15 @@ public class QuizServlet extends HttpServlet {
      * question, and accumulates the total acquired points for the entire quiz attempt.
      */
     private void correctQuizAttempt() {
-        if(irrelevantRequest()) {
+        if (irrelevantRequest()) {
             return;
         }
 
-        Map< String, String[] > parameter_map = request.getParameterMap();
-        HashMap< Integer, Integer > questionIDs_to_points = new HashMap<>();
+        Map<String, String[]> parameter_map = request.getParameterMap();
+        HashMap<Integer, Integer> questionIDs_to_points = new HashMap<>();
         this.acquiredPoints = 0;
 
-        for (Map.Entry< String, String[] > entry : parameter_map.entrySet()) {
+        for (Map.Entry<String, String[]> entry : parameter_map.entrySet()) {
             String parameterName = entry.getKey();
             String selected_option = entry.getValue()[0];
             mapQuestionIDToPoints(questionIDs_to_points, parameterName, selected_option);
@@ -171,10 +171,10 @@ public class QuizServlet extends HttpServlet {
      * Maps question IDs to points based on the selected options and correct answers.
      *
      * @param questionIDs_to_points A HashMap to store question IDs and corresponding points.
-     * @param parameterName       The parameter name representing a question.
-     * @param selected_option      The selected option for the question.
+     * @param parameterName         The parameter name representing a question.
+     * @param selected_option       The selected option for the question.
      */
-    private void mapQuestionIDToPoints(HashMap< Integer, Integer > questionIDs_to_points, String parameterName, String selected_option) {
+    private void mapQuestionIDToPoints(HashMap<Integer, Integer> questionIDs_to_points, String parameterName, String selected_option) {
         if (parameterName != null && parameterName.startsWith("question")) {
             String questionID_string = parameterName.substring(8);
             Integer questionID = Integer.valueOf(questionID_string);
@@ -213,7 +213,7 @@ public class QuizServlet extends HttpServlet {
      * @return True if the request contains an exit parameter, false otherwise.
      */
     private boolean requestContainsExit() {
-        Enumeration< String > parameterNames = request.getParameterNames();
+        Enumeration<String> parameterNames = request.getParameterNames();
         while (parameterNames.hasMoreElements()) {
             String parameterName = parameterNames.nextElement();
             if (parameterName.equals("exit")) {

@@ -15,7 +15,7 @@ import java.util.List;
  * This class provides methods to retrieve individual questions
  * and all questions associated with a specific quiz from the database.
  */
-public class QuestionDAOImpl implements QuestionDAO< Question > {
+public class QuestionDAOImpl implements QuestionDAO<Question> {
     private final Connection connection = DatabaseHandler.connect();
 
     /**
@@ -53,7 +53,7 @@ public class QuestionDAOImpl implements QuestionDAO< Question > {
      */
     @Override
     public Question[] getAllQuestions(Integer quizID) {
-        List< Question > questions = new ArrayList<>();
+        List<Question> questions = new ArrayList<>();
         try {
             String query = "SELECT Q.ID, Q.TEXT, Q.OPTIONS, Q.ANSWER FROM QUESTIONS Q " +
                     "INNER JOIN SELECTOR S ON Q.ID = S.QUESTION_ID " +

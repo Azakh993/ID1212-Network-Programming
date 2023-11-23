@@ -7,7 +7,7 @@ package se.kth.id1212.model;
  *
  * @param <Questions> The type representing a collection of questions.
  */
-public interface QuestionDAO< Questions > {
+public interface QuestionDAO<Questions> {
 
     /**
      * Retrieves a specific question based on its unique identifier.

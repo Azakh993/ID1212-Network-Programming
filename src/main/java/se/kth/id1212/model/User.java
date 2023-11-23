@@ -7,5 +7,5 @@ package se.kth.id1212.model;
  * @param username The username used for authentication.
  * @param password The password associated with the user's account.
  */
-public record User( Integer id, String username, String password ) {
+public record User(Integer id, String username, String password) {
 }
