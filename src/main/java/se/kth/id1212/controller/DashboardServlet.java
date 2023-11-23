@@ -21,8 +21,8 @@ import java.util.HashMap;
  */
 @WebServlet(name = "DashboardServlet", urlPatterns = {"/dashboard"})
 public class DashboardServlet extends HttpServlet {
-    private QuizDAO< Quiz > quizDAO;
-    private ResultDAO< Result > resultDAO;
+    private QuizDAO<Quiz> quizDAO;
+    private ResultDAO<Result> resultDAO;
 
     /**
      * Initializes the servlet during which it creates instances of QuizDAO and ResultDAO.
@@ -46,7 +46,7 @@ public class DashboardServlet extends HttpServlet {
         String userID = ControllerUtil.validate_login_state(request, response);
 
         if (userID != null) {
-            HashMap< Quiz, Integer > quizResultMap = getDashboardData(Integer.valueOf(userID));
+            HashMap<Quiz, Integer> quizResultMap = getDashboardData(Integer.valueOf(userID));
             request.setAttribute("quizResultMap", quizResultMap);
             ControllerUtil.forward_request(request, response, "/dashboard.jsp");
         }
@@ -59,17 +59,17 @@ public class DashboardServlet extends HttpServlet {
      * @param userID The unique identifier of the user.
      * @return A HashMap mapping Quiz objects to their corresponding scores.
      */
-    private HashMap< Quiz, Integer > getDashboardData(Integer userID) {
+    private HashMap<Quiz, Integer> getDashboardData(Integer userID) {
         Quiz[] quizzes = this.quizDAO.getAllQuizzes();
-        HashMap< Integer, Result > results = this.resultDAO.getAllResults(userID);
-        HashMap< Quiz, Integer > quizResultMap = new HashMap<>();
+        HashMap<Integer, Result> results = this.resultDAO.getAllResults(userID);
+        HashMap<Quiz, Integer> quizResultMap = new HashMap<>();
 
         for (Quiz quiz : quizzes) {
             Integer quizID = quiz.id();
 
             if (results != null && results.containsKey(quizID)) {
                 Result result = results.get(quizID);
-                Integer score = result.score();
+                Integer score = result.getScore();
                 quizResultMap.put(quiz, score);
             } else {
                 quizResultMap.put(quiz, null);
