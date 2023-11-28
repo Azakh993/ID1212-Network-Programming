@@ -6,7 +6,7 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
-import se.kth.id1212.springquiz.config.DatabaseInitializer;
+import se.kth.id1212.springquiz.config.DataSourceConfig;
 import se.kth.id1212.springquiz.model.Quiz;
 import se.kth.id1212.springquiz.model.Result;
 import se.kth.id1212.springquiz.dao.ResultDAO;
@@ -21,7 +21,7 @@ public class ResultDAOImpl implements ResultDAO< Result > {
 
     @Override
     public HashMap< Integer, Result > getAllResults(Integer userID) {
-        this.entityManager = DatabaseInitializer.getEntityManager();
+        this.entityManager = DataSourceConfig.getEntityManager();
         HashMap< Integer, Result > results = new HashMap<>();
 
         try {
@@ -43,7 +43,7 @@ public class ResultDAOImpl implements ResultDAO< Result > {
 
     @Transactional
     public void addResult(Integer userID, Integer quizID, Integer points) {
-        this.entityManager = DatabaseInitializer.getEntityManager();
+        this.entityManager = DataSourceConfig.getEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
         String query = "SELECT r FROM Result r WHERE r.user.id = :userId AND r.quiz.id = :quizId";
