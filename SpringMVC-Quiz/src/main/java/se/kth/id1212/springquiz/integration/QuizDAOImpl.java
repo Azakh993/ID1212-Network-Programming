@@ -10,7 +10,7 @@ import se.kth.id1212.springquiz.model.QuizDAO;
 import java.util.List;
 
 @Repository
-public class QuizDAOImpl implements QuizDAO<Quiz> {
+public class QuizDAOImpl implements QuizDAO< Quiz > {
     private EntityManager entityManager;
 
     @Override
@@ -24,7 +24,7 @@ public class QuizDAOImpl implements QuizDAO<Quiz> {
         this.entityManager = DatabaseInitializer.getEntityManager();
         String jpql = "SELECT q FROM Quiz q";
         Query query = entityManager.createQuery(jpql, Quiz.class);
-        List<Quiz> quizList = query.getResultList();
+        List< Quiz > quizList = query.getResultList();
 
         return quizList.toArray(new Quiz[0]);
     }

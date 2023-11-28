@@ -22,7 +22,7 @@ public class Question {
     private String answer;
 
     @OneToMany(mappedBy = "question")
-    private List<Selector> selectors;
+    private List< Selector > selectors;
 
 
     public Question() {

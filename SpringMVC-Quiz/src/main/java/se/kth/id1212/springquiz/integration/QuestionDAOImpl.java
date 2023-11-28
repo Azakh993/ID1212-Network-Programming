@@ -11,7 +11,7 @@ import se.kth.id1212.springquiz.util.ExceptionLogger;
 import java.util.List;
 
 @Repository
-public class QuestionDAOImpl implements QuestionDAO<Question> {
+public class QuestionDAOImpl implements QuestionDAO< Question > {
     private EntityManager entityManager;
 
     @Override
@@ -31,10 +31,10 @@ public class QuestionDAOImpl implements QuestionDAO<Question> {
 
         String jpql = "SELECT q FROM Question q JOIN q.selectors s WHERE s.quiz.id = :quizId";
         try {
-            TypedQuery<Question> query = entityManager.createQuery(jpql, Question.class);
+            TypedQuery< Question > query = entityManager.createQuery(jpql, Question.class);
             query.setParameter("quizId", quizID);
 
-            List<Question> questions = query.getResultList();
+            List< Question > questions = query.getResultList();
             return questions.toArray(new Question[0]);
         } catch (Exception e) {
             ExceptionLogger.log(e);

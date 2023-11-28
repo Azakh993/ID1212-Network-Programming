@@ -18,15 +18,15 @@ import java.util.Map;
 @RequestMapping("/quiz")
 @SessionAttributes({"USER_ID", "QUIZ_ID"})
 public class QuizController {
-    private final QuizDAO<Quiz> quizDAO;
-    private final QuestionDAO<Question> questionDAO;
-    private final ResultDAO<Result> resultDAO;
+    private final QuizDAO< Quiz > quizDAO;
+    private final QuestionDAO< Question > questionDAO;
+    private final ResultDAO< Result > resultDAO;
     private Model model;
     private HttpServletRequest request;
     private Integer acquiredPoints;
 
     @Autowired
-    public QuizController(QuizDAO<Quiz> quizDAO, QuestionDAO<Question> questionDAO, ResultDAO<Result> resultDAO) {
+    public QuizController(QuizDAO< Quiz > quizDAO, QuestionDAO< Question > questionDAO, ResultDAO< Result > resultDAO) {
         this.quizDAO = quizDAO;
         this.questionDAO = questionDAO;
         this.resultDAO = resultDAO;
@@ -87,7 +87,7 @@ public class QuizController {
     }
 
     private boolean requestContainsQuestionIDs() {
-        Enumeration<String> parameterNames = this.request.getParameterNames();
+        Enumeration< String > parameterNames = this.request.getParameterNames();
         while (parameterNames.hasMoreElements()) {
             String parameterName = parameterNames.nextElement();
             if (parameterName.startsWith("question")) {
@@ -102,11 +102,11 @@ public class QuizController {
             return;
         }
 
-        Map<String, String[]> parameter_map = request.getParameterMap();
-        HashMap<Integer, Integer> questionIDs_to_points = new HashMap<>();
+        Map< String, String[] > parameter_map = request.getParameterMap();
+        HashMap< Integer, Integer > questionIDs_to_points = new HashMap<>();
         this.acquiredPoints = 0;
 
-        for (Map.Entry<String, String[]> entry : parameter_map.entrySet()) {
+        for (Map.Entry< String, String[] > entry : parameter_map.entrySet()) {
             String parameterName = entry.getKey();
             String selected_option = entry.getValue()[0];
             mapQuestionIDToPoints(questionIDs_to_points, parameterName, selected_option);
@@ -116,12 +116,32 @@ public class QuizController {
         this.model.addAttribute("questionIDs_to_points", questionIDs_to_points);
     }
 
+    private void updateResultsInDB(String userID_string) {
+        String quizID_string = (String) model.getAttribute("QUIZ_ID");
+
+        Integer userID = Integer.valueOf(userID_string);
+        Integer quizID = Integer.valueOf(quizID_string);
+
+        this.resultDAO.addResult(userID, quizID, this.acquiredPoints);
+    }
+
+    private boolean requestContainsExit() {
+        Enumeration< String > parameterNames = request.getParameterNames();
+        while (parameterNames.hasMoreElements()) {
+            String parameterName = parameterNames.nextElement();
+            if (parameterName.equals("exit")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean irrelevantRequest() {
         int response_content_length = this.request.getContentLength();
         return response_content_length == -1 || !requestContainsQuestionIDs();
     }
 
-    private void mapQuestionIDToPoints(HashMap<Integer, Integer> questionIDs_to_points, String parameterName, String selected_option) {
+    private void mapQuestionIDToPoints(HashMap< Integer, Integer > questionIDs_to_points, String parameterName, String selected_option) {
         if (parameterName != null && parameterName.startsWith("question")) {
             String questionID_string = parameterName.substring(8);
             Integer questionID = Integer.valueOf(questionID_string);
@@ -135,26 +155,6 @@ public class QuizController {
             }
             questionIDs_to_points.put(questionID, points);
         }
-    }
-
-    private void updateResultsInDB(String userID_string) {
-        String quizID_string = (String) model.getAttribute("QUIZ_ID");
-
-        Integer userID = Integer.valueOf(userID_string);
-        Integer quizID = Integer.valueOf(quizID_string);
-
-        this.resultDAO.addResult(userID, quizID, this.acquiredPoints);
-    }
-
-    private boolean requestContainsExit() {
-        Enumeration<String> parameterNames = request.getParameterNames();
-        while (parameterNames.hasMoreElements()) {
-            String parameterName = parameterNames.nextElement();
-            if (parameterName.equals("exit")) {
-                return true;
-            }
-        }
-        return false;
     }
 }
 

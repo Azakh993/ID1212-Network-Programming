@@ -17,8 +17,8 @@ import java.util.HashMap;
 @RequestMapping("/dashboard")
 @SessionAttributes({"USER_ID", "QUIZ_ID"})
 public class DashboardController {
-    private final QuizDAO<Quiz> quizDAO;
-    private final ResultDAO<Result> resultDAO;
+    private final QuizDAO< Quiz > quizDAO;
+    private final ResultDAO< Result > resultDAO;
 
     public DashboardController() {
         this.quizDAO = new QuizDAOImpl();
@@ -32,16 +32,16 @@ public class DashboardController {
         if (userID == null) {
             return "redirect:/login";
         } else {
-            HashMap<Quiz, Integer> quizResultMap = getDashboardData(Integer.valueOf(userID));
+            HashMap< Quiz, Integer > quizResultMap = getDashboardData(Integer.valueOf(userID));
             model.addAttribute("quizResultMap", quizResultMap);
             return "dashboard";
         }
     }
 
-    private HashMap<Quiz, Integer> getDashboardData(Integer userID) {
+    private HashMap< Quiz, Integer > getDashboardData(Integer userID) {
         Quiz[] quizzes = this.quizDAO.getAllQuizzes();
-        HashMap<Integer, Result> results = this.resultDAO.getAllResults(userID);
-        HashMap<Quiz, Integer> quizResultMap = new HashMap<>();
+        HashMap< Integer, Result > results = this.resultDAO.getAllResults(userID);
+        HashMap< Quiz, Integer > quizResultMap = new HashMap<>();
 
         for (Quiz quiz : quizzes) {
             Integer quizID = quiz.getId();
