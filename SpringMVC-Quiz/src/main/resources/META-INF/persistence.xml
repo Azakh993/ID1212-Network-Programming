@@ -16,7 +16,7 @@
 
             <!-- JDBC Database connection settings for Derby -->
             <property name="jakarta.persistence.jdbc.url"
-                      value="jdbc:derby:C:/Users/Azmee/OneDrive/Dokument/1. Personal/1. Education/TIDAB - HT21/ID1212/Task_5/SpringMVC-Quiz/src/main/database;create=true"/>
+                      value="jdbc:derby:SpringMVC-Quiz/src/main/database"/>
             <property name="jakarta.persistence.jdbc.driver" value="org.apache.derby.iapi.jdbc.AutoloadedDriver"/>
         </properties>
     </persistence-unit>
