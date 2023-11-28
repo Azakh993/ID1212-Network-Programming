@@ -18,14 +18,14 @@ public class User {
     public User() {
     }
 
-    public User(Integer id, String username) {
-        this.id = id;
-        this.username = username;
-    }
-
     public User(Integer id, String username, String password) {
         this(id, username);
         this.password = password;
+    }
+
+    public User(Integer id, String username) {
+        this.id = id;
+        this.username = username;
     }
 
     public Integer getId() {
