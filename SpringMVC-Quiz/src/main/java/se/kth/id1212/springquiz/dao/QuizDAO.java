@@ -1,4 +1,4 @@
-package se.kth.id1212.springquiz.model;
+package se.kth.id1212.springquiz.dao;
 
 public interface QuizDAO< Quiz > {
 

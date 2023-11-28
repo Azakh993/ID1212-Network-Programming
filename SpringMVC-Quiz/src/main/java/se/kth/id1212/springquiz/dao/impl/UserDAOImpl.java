@@ -1,4 +1,4 @@
-package se.kth.id1212.springquiz.integration;
+package se.kth.id1212.springquiz.dao.impl;
 
 
 import jakarta.persistence.EntityManager;
@@ -6,7 +6,7 @@ import jakarta.persistence.Query;
 import org.springframework.stereotype.Repository;
 import se.kth.id1212.springquiz.config.DatabaseInitializer;
 import se.kth.id1212.springquiz.model.User;
-import se.kth.id1212.springquiz.model.UserDAO;
+import se.kth.id1212.springquiz.dao.UserDAO;
 
 @Repository
 public class UserDAOImpl implements UserDAO {

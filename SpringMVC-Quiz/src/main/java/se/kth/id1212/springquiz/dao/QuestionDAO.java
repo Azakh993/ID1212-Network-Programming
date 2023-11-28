@@ -1,4 +1,6 @@
-package se.kth.id1212.springquiz.model;
+package se.kth.id1212.springquiz.dao;
+
+import se.kth.id1212.springquiz.model.Question;
 
 public interface QuestionDAO< Questions > {
 

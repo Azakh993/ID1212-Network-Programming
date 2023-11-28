@@ -4,12 +4,12 @@ package se.kth.id1212.springquiz.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import se.kth.id1212.springquiz.integration.QuizDAOImpl;
-import se.kth.id1212.springquiz.integration.ResultDAOImpl;
+import se.kth.id1212.springquiz.dao.impl.QuizDAOImpl;
+import se.kth.id1212.springquiz.dao.impl.ResultDAOImpl;
 import se.kth.id1212.springquiz.model.Quiz;
-import se.kth.id1212.springquiz.model.QuizDAO;
+import se.kth.id1212.springquiz.dao.QuizDAO;
 import se.kth.id1212.springquiz.model.Result;
-import se.kth.id1212.springquiz.model.ResultDAO;
+import se.kth.id1212.springquiz.dao.ResultDAO;
 
 import java.util.HashMap;
 

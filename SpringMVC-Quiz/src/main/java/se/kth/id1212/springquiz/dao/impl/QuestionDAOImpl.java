@@ -1,11 +1,11 @@
-package se.kth.id1212.springquiz.integration;
+package se.kth.id1212.springquiz.dao.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import se.kth.id1212.springquiz.config.DatabaseInitializer;
 import se.kth.id1212.springquiz.model.Question;
-import se.kth.id1212.springquiz.model.QuestionDAO;
+import se.kth.id1212.springquiz.dao.QuestionDAO;
 import se.kth.id1212.springquiz.util.ExceptionLogger;
 
 import java.util.List;

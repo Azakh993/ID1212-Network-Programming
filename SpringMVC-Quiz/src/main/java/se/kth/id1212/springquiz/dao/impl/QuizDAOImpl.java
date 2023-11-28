@@ -1,11 +1,11 @@
-package se.kth.id1212.springquiz.integration;
+package se.kth.id1212.springquiz.dao.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.springframework.stereotype.Repository;
 import se.kth.id1212.springquiz.config.DatabaseInitializer;
 import se.kth.id1212.springquiz.model.Quiz;
-import se.kth.id1212.springquiz.model.QuizDAO;
+import se.kth.id1212.springquiz.dao.QuizDAO;
 
 import java.util.List;
 

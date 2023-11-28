@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import se.kth.id1212.springquiz.dao.QuestionDAO;
+import se.kth.id1212.springquiz.dao.QuizDAO;
+import se.kth.id1212.springquiz.dao.ResultDAO;
 import se.kth.id1212.springquiz.model.*;
 
 import java.util.Enumeration;

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import se.kth.id1212.springquiz.model.User;
-import se.kth.id1212.springquiz.model.UserDAO;
+import se.kth.id1212.springquiz.dao.UserDAO;
 import se.kth.id1212.springquiz.util.UnauthorizedException;
 
 @Controller
