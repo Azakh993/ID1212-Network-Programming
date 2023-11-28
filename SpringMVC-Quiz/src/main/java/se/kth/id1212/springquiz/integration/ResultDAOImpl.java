@@ -16,20 +16,20 @@ import java.util.HashMap;
 import java.util.List;
 
 @Repository
-public class ResultDAOImpl implements ResultDAO<Result> {
+public class ResultDAOImpl implements ResultDAO< Result > {
     EntityManager entityManager;
 
     @Override
-    public HashMap<Integer, Result> getAllResults(Integer userID) {
+    public HashMap< Integer, Result > getAllResults(Integer userID) {
         this.entityManager = DatabaseInitializer.getEntityManager();
-        HashMap<Integer, Result> results = new HashMap<>();
+        HashMap< Integer, Result > results = new HashMap<>();
 
         try {
             String jpql = "SELECT r FROM Result r WHERE r.user.id = :userId";
             Query query = entityManager.createQuery(jpql, Result.class);
             query.setParameter("userId", userID);
 
-            List<Result> resultList = query.getResultList();
+            List< Result > resultList = query.getResultList();
 
             for (Result result : resultList) {
                 results.put(result.getQuiz().getId(), result);
