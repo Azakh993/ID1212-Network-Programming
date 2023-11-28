@@ -3,7 +3,7 @@
              xmlns="http://xmlns.jcp.org/xml/ns/persistence"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
              version="2.1">
-    <persistence-unit name="ResultsPU" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="QuizPersistenceUnit" transaction-type="RESOURCE_LOCAL">
         <class>se.kth.id1212.springquiz.model.Result</class>
         <class>se.kth.id1212.springquiz.model.User</class>
         <class>se.kth.id1212.springquiz.model.Quiz</class>

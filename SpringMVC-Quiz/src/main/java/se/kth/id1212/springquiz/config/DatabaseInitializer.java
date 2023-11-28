@@ -17,7 +17,7 @@ import java.sql.Statement;
 
 public class DatabaseInitializer {
     private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(
-            "ResultsPU");
+            "QuizPersistenceUnit");
 
     public static EntityManager getEntityManager() {
         return entityManagerFactory.createEntityManager();
