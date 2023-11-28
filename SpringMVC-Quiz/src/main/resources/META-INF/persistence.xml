@@ -16,8 +16,11 @@
 
             <!-- JDBC Database connection settings for Derby -->
             <property name="jakarta.persistence.jdbc.url"
-                      value="jdbc:derby:SpringMVC-Quiz/src/main/database"/>
-            <property name="jakarta.persistence.jdbc.driver" value="org.apache.derby.iapi.jdbc.AutoloadedDriver"/>
+                      value="jdbc:derby://localhost:1527/Databases/QuizDB"/>
+            <property name="jakarta.persistence.jdbc.driver" value="org.apache.derby.client.ClientAutoloadedDriver"/>
+            <property name="jakarta.persistence.jdbc.user" value="adm1n"/>
+            <property name="jakarta.persistence.jdbc.password" value="dr0wssa9"/>
+
         </properties>
     </persistence-unit>
 </persistence>
