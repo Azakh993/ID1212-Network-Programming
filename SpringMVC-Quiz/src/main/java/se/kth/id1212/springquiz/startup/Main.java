@@ -4,7 +4,6 @@ import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
-import se.kth.id1212.springquiz.config.DatabaseInitializer;
 import se.kth.id1212.springquiz.util.ExceptionLogger;
 
 import java.nio.file.Paths;
@@ -20,7 +19,6 @@ public class Main {
      * @param args Command-line arguments (not used in this application).
      */
     public static void main(String[] args) {
-        DatabaseInitializer.initializeDatabase();
         start_tomcat();
     }
 
