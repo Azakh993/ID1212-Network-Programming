@@ -49,7 +49,7 @@ public class DatabaseInitializer {
             Class.forName("org.apache.derby.iapi.jdbc.AutoloadedDriver");
 
             Connection connection = DriverManager.getConnection("jdbc:derby:" + dbDirectory.getAbsolutePath()
-                    + "create=true");
+                    + ";create=true");
 
             Path scriptPath =
                     Paths.get("SpringMVC-Quiz", "src", "main", "resources", "sql", "PopulateDB.sql").toAbsolutePath();
