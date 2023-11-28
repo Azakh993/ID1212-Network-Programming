@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+    <persistence-unit name="ResultsPU" transaction-type="RESOURCE_LOCAL">
+        <class>se.kth.id1212.springquiz.model.Result</class>
+        <class>se.kth.id1212.springquiz.model.User</class>
+        <class>se.kth.id1212.springquiz.model.Quiz</class>
+        <class>se.kth.id1212.springquiz.model.Question</class>
+        <class>se.kth.id1212.springquiz.model.Selector</class>
+
+        <properties>
+            <!-- Specify the JPA provider -->
+            <property name="jakarta.persistence.provider" value="org.apache.derby.jpa.EmbeddedDriver"/>
+
+            <!-- JDBC Database connection settings for Derby -->
+            <property name="jakarta.persistence.jdbc.url"
+                      value="jdbc:derby:C:/Users/Azmee/OneDrive/Dokument/1. Personal/1. Education/TIDAB - HT21/ID1212/Task_5/SpringMVC-Quiz/src/main/database;create=true"/>
+            <property name="jakarta.persistence.jdbc.driver" value="org.apache.derby.iapi.jdbc.AutoloadedDriver"/>
+        </properties>
+    </persistence-unit>
+</persistence>
