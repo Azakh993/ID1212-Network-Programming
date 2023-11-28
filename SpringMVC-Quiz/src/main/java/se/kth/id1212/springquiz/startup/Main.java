@@ -21,8 +21,8 @@ public class Main {
      * @param args Command-line arguments (not used in this application).
      */
     public static void main(String[] args) throws ClassNotFoundException {
-        start_tomcat();
         DatabaseInitializer.initializeDatabase();
+        start_tomcat();
     }
 
     /**
