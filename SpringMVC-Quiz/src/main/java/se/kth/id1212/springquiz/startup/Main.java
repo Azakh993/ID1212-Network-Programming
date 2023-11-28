@@ -17,10 +17,9 @@ public class Main {
 
     /**
      * The main entry point for the application. Calls the method to start the Tomcat server.
-     *
      * @param args Command-line arguments (not used in this application).
      */
-    public static void main(String[] args) throws ClassNotFoundException {
+    public static void main(String[] args) {
         DatabaseInitializer.initializeDatabase();
         start_tomcat();
     }
