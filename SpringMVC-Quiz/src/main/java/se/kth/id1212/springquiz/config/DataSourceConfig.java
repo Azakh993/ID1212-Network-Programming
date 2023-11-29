@@ -24,6 +24,10 @@ public class DataSourceConfig {
     }
 
     public static EntityManager getEntityManager() {
-        return entityManagerFactory.createEntityManager();
+        try {
+            return entityManagerFactory.createEntityManager();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to connect to Database");
+        }
     }
 }
