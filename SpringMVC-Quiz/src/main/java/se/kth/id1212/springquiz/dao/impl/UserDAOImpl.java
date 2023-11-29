@@ -11,16 +11,25 @@ import se.kth.id1212.springquiz.model.User;
 import se.kth.id1212.springquiz.util.ExceptionLogger;
 
 @Repository
-public class UserDAOImpl implements UserDAO {
+public class UserDAOImpl implements UserDAO< User > {
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     @Transactional
-    public User getUser(String username) {
+    public User getUserByUsername(String username) {
         String jpql = "SELECT u FROM User u WHERE u.username = :username";
+        return getUser(jpql, "username", username);
+    }
+
+    private User getUser(String jpql, String parameterName, String parameterValue) {
         Query query = entityManager.createQuery(jpql, User.class);
-        query.setParameter("username", username);
+
+        if (parameterName.equals("userID")) {
+            query.setParameter(parameterName, Integer.parseInt(parameterValue));
+        } else {
+            query.setParameter(parameterName, parameterValue);
+        }
 
         User user = null;
         try {
@@ -29,5 +38,13 @@ public class UserDAOImpl implements UserDAO {
             ExceptionLogger.log(exception);
         }
         return user;
+
+    }
+
+    @Override
+    @Transactional
+    public User getUserByUserID(String userID) {
+        String jpql = "SELECT u FROM User u WHERE u.id = :userID";
+        return getUser(jpql, "userID", userID);
     }
 }
