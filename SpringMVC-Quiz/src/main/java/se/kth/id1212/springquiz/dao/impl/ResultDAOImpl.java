@@ -1,15 +1,14 @@
 package se.kth.id1212.springquiz.dao.impl;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
-import se.kth.id1212.springquiz.config.DataSourceConfig;
+import se.kth.id1212.springquiz.dao.ResultDAO;
 import se.kth.id1212.springquiz.model.Quiz;
 import se.kth.id1212.springquiz.model.Result;
-import se.kth.id1212.springquiz.dao.ResultDAO;
 import se.kth.id1212.springquiz.model.User;
 
 import java.util.HashMap;
@@ -17,25 +16,22 @@ import java.util.List;
 
 @Repository
 public class ResultDAOImpl implements ResultDAO< Result > {
+    @PersistenceContext
     EntityManager entityManager;
 
     @Override
+    @Transactional
     public HashMap< Integer, Result > getAllResults(Integer userID) {
-        this.entityManager = DataSourceConfig.getEntityManager();
         HashMap< Integer, Result > results = new HashMap<>();
 
-        try {
-            String jpql = "SELECT r FROM Result r WHERE r.user.id = :userId";
-            Query query = entityManager.createQuery(jpql, Result.class);
-            query.setParameter("userId", userID);
+        String jpql = "SELECT r FROM Result r WHERE r.user.id = :userId";
+        Query query = entityManager.createQuery(jpql, Result.class);
+        query.setParameter("userId", userID);
 
-            List< Result > resultList = query.getResultList();
+        List< Result > resultList = query.getResultList();
 
-            for (Result result : resultList) {
-                results.put(result.getQuiz().getId(), result);
-            }
-        } finally {
-            entityManager.close();
+        for (Result result : resultList) {
+            results.put(result.getQuiz().getId(), result);
         }
 
         return results;
@@ -43,9 +39,6 @@ public class ResultDAOImpl implements ResultDAO< Result > {
 
     @Transactional
     public void addResult(Integer userID, Integer quizID, Integer points) {
-        this.entityManager = DataSourceConfig.getEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-
         String query = "SELECT r FROM Result r WHERE r.user.id = :userId AND r.quiz.id = :quizId";
         Query checkQuery = entityManager.createQuery(query, Result.class);
         checkQuery.setParameter("userId", userID);
@@ -54,7 +47,6 @@ public class ResultDAOImpl implements ResultDAO< Result > {
 
         Result existingResult;
         try {
-            transaction.begin();
             existingResult = (Result) checkQuery.getSingleResult();
         } catch (NoResultException e) {
             existingResult = null;
@@ -65,8 +57,6 @@ public class ResultDAOImpl implements ResultDAO< Result > {
         } else {
             insertResult(userID, quizID, points);
         }
-        transaction.commit();
-        this.entityManager.close();
     }
 
     @Transactional
