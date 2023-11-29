@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import se.kth.id1212.springquiz.dao.QuestionDAO;
 import se.kth.id1212.springquiz.dao.QuizDAO;
 import se.kth.id1212.springquiz.dao.ResultDAO;
+import se.kth.id1212.springquiz.dao.UserDAO;
 import se.kth.id1212.springquiz.model.Question;
 import se.kth.id1212.springquiz.model.Quiz;
 import se.kth.id1212.springquiz.model.Result;
+import se.kth.id1212.springquiz.model.User;
+import se.kth.id1212.springquiz.service.EmailService;
 
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -26,15 +29,20 @@ public class QuizController {
     private final QuizDAO< Quiz > quizDAO;
     private final QuestionDAO< Question > questionDAO;
     private final ResultDAO< Result > resultDAO;
+    private final UserDAO< User > userDAO;
+    private final EmailService emailService;
     private Model model;
     private HttpServletRequest request;
     private Integer acquiredPoints;
 
     @Autowired
-    public QuizController(QuizDAO< Quiz > quizDAO, QuestionDAO< Question > questionDAO, ResultDAO< Result > resultDAO) {
+    public QuizController(QuizDAO< Quiz > quizDAO, QuestionDAO< Question > questionDAO, ResultDAO< Result > resultDAO,
+                          UserDAO< User > userDAO, EmailService emailService) {
         this.quizDAO = quizDAO;
         this.questionDAO = questionDAO;
         this.resultDAO = resultDAO;
+        this.userDAO = userDAO;
+        this.emailService = emailService;
     }
 
     @GetMapping
@@ -79,6 +87,7 @@ public class QuizController {
             if (requestContainsQuestionIDs()) {
                 correctQuizAttempt();
                 updateResultsInDB(userID);
+                emailResults(userID);
                 getQuizPageData();
                 return "quiz";
             } else if (requestContainsExit()) {
@@ -130,6 +139,22 @@ public class QuizController {
         this.resultDAO.addResult(userID, quizID, this.acquiredPoints);
     }
 
+    private void emailResults(String userID) {
+        String email = this.userDAO.getUser(userID).getUsername();
+        String quizSubject = this.quizDAO.getQuiz(Integer.valueOf((String) model.getAttribute("QUIZ_ID"))).getSubject();
+        String message = "You have completed the " + quizSubject + " quiz and acquired " + this.acquiredPoints + " points.";
+        emailService.sendEmail(email, message);
+    }
+
+    private String generateEmailMessage(String userID) {
+        String quizID_string = (String) model.getAttribute("QUIZ_ID");
+        Integer quizID = Integer.valueOf(quizID_string);
+        String quizSubject = this.quizDAO.getQuiz(quizID).getSubject();
+
+        String email = this.userDAO.getEmail(userID);
+        String message = "You have completed the " + quizSubject + " quiz and acquired " + this.acquiredPoints + " points.";
+        return message;
+    }
     private boolean requestContainsExit() {
         Enumeration< String > parameterNames = request.getParameterNames();
         while (parameterNames.hasMoreElements()) {
