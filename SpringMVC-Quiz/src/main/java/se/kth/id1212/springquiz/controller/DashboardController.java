@@ -1,15 +1,14 @@
 package se.kth.id1212.springquiz.controller;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import se.kth.id1212.springquiz.dao.impl.QuizDAOImpl;
-import se.kth.id1212.springquiz.dao.impl.ResultDAOImpl;
-import se.kth.id1212.springquiz.model.Quiz;
 import se.kth.id1212.springquiz.dao.QuizDAO;
-import se.kth.id1212.springquiz.model.Result;
 import se.kth.id1212.springquiz.dao.ResultDAO;
+import se.kth.id1212.springquiz.model.Quiz;
+import se.kth.id1212.springquiz.model.Result;
 
 import java.util.HashMap;
 
@@ -20,9 +19,10 @@ public class DashboardController {
     private final QuizDAO< Quiz > quizDAO;
     private final ResultDAO< Result > resultDAO;
 
-    public DashboardController() {
-        this.quizDAO = new QuizDAOImpl();
-        this.resultDAO = new ResultDAOImpl();
+    @Autowired
+    public DashboardController(QuizDAO quizDAO, ResultDAO resultDAO) {
+        this.quizDAO = quizDAO;
+        this.resultDAO = resultDAO;
     }
 
     @GetMapping
