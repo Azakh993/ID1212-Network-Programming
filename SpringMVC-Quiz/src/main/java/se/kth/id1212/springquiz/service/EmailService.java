@@ -26,17 +26,9 @@ public class EmailService {
     private String password;
 
     public void sendEmail(String to, String subject, String body) {
-        Properties properties = new Properties();
-        properties.put("mail.smtp.host", smtpHost);
-        properties.put("mail.smtp.port", smtpPort);
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-
-        Session session = Session.getInstance(properties, new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
-            }
-        });
+        setCertificates();
+        Properties properties = generateProperties();
+        Session session = establishMailSession(properties);
 
         Message message = new MimeMessage(session);
         try {
@@ -54,12 +46,30 @@ public class EmailService {
     private void setCertificates() {
         String filePath = "SpringMVC-Quiz/src/main/resources/credentials.txt";
         try {
-            Scanner file_content = new Scanner(new File(filePath));
-            username = file_content.nextLine();
-            password = file_content.nextLine();
-            file_content.close();
+            Scanner fileContent = new Scanner(new File(filePath));
+            this.username = fileContent.nextLine();
+            this.password = fileContent.nextLine();
+            fileContent.close();
         } catch (Exception ioException) {
-            ioException.printStackTrace();
+            ExceptionLogger.log(ioException);
         }
+    }
+
+    private Session establishMailSession(Properties properties) {
+        return Session.getInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
+    }
+
+    private Properties generateProperties() {
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", smtpHost);
+        properties.put("mail.smtp.port", smtpPort);
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        return properties;
     }
 }
