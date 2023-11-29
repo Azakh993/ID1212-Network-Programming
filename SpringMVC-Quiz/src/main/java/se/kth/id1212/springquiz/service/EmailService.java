@@ -8,7 +8,9 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import se.kth.id1212.springquiz.util.ExceptionLogger;
 
+import java.io.File;
 import java.util.Properties;
+import java.util.Scanner;
 
 @Service
 @PropertySource("classpath:email.properties")
@@ -20,10 +22,7 @@ public class EmailService {
     @Value("${mail.smtp.port}")
     private String smtpPort;
 
-    @Value("${mail.smtp.username}")
     private String username;
-
-    @Value("${mail.smtp.password}")
     private String password;
 
     public void sendEmail(String to, String subject, String body) {
@@ -49,6 +48,18 @@ public class EmailService {
             Transport.send(message);
         } catch (MessagingException exception) {
             ExceptionLogger.log(exception);
+        }
+    }
+
+    private void setCertificates() {
+        String filePath = "SpringMVC-Quiz/src/main/resources/credentials.txt";
+        try {
+            Scanner file_content = new Scanner(new File(filePath));
+            username = file_content.nextLine();
+            password = file_content.nextLine();
+            file_content.close();
+        } catch (Exception ioException) {
+            ioException.printStackTrace();
         }
     }
 }
