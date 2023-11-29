@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import se.kth.id1212.springquiz.dao.QuestionDAO;
 import se.kth.id1212.springquiz.dao.QuizDAO;
 import se.kth.id1212.springquiz.dao.ResultDAO;
-import se.kth.id1212.springquiz.model.*;
+import se.kth.id1212.springquiz.model.Question;
+import se.kth.id1212.springquiz.model.Quiz;
+import se.kth.id1212.springquiz.model.Result;
 
 import java.util.Enumeration;
 import java.util.HashMap;
