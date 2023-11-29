@@ -1,12 +1,12 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.kth.id1221.springquiz</groupId>
     <artifactId>SpringMVC-Quiz</artifactId>
     <packaging>war</packaging>
     <version>1.0</version>
     <name>SpringMVC-Quiz Maven Webapp</name>
-    <url>http://maven.apache.org</url>
+    <url>https://maven.apache.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -15,11 +15,13 @@
         <spring.version>6.0.11</spring.version>
         <servlet.version>6.0.0</servlet.version>
         <jstl.version>3.0.0</jstl.version>
+        <jsp.jstl.version>3.0.1</jsp.jstl.version>
         <tomcat.version>10.1.15</tomcat.version>
         <derby.version>10.17.1.0</derby.version>
         <eclipselink.version>4.0.2</eclipselink.version>
         <jakarta.transaction.version>2.0.1</jakarta.transaction.version>
         <junit.version>5.9.2</junit.version>
+        <jakarta.mail.version>2.1.2</jakarta.mail.version>
     </properties>
 
     <dependencies>
@@ -71,9 +73,8 @@
         <dependency>
             <groupId>org.glassfish.web</groupId>
             <artifactId>jakarta.servlet.jsp.jstl</artifactId>
-            <version>3.0.1</version>
+            <version>${jsp.jstl.version}</version>
         </dependency>
-
 
         <!-- Tomcat dependencies -->
         <dependency>
@@ -116,8 +117,14 @@
             <version>${jakarta.transaction.version}</version>
         </dependency>
 
-    </dependencies>
+        <!-- JavaMail dependencies -->
+        <dependency>
+            <groupId>jakarta.mail</groupId>
+            <artifactId>jakarta.mail-api</artifactId>
+            <version>${jakarta.mail.version}</version>
+        </dependency>
 
+    </dependencies>
 
     <build>
         <finalName>SpringMVC-Quiz</finalName>
