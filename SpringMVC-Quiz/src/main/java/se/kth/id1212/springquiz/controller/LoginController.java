@@ -12,10 +12,10 @@ import se.kth.id1212.springquiz.util.UnauthorizedException;
 @RequestMapping("/login")
 @SessionAttributes("USER_ID")
 public class LoginController {
-    private final UserDAO < User > userDAO;
+    private final UserDAO< User > userDAO;
 
     @Autowired
-    public LoginController(UserDAO < User > userDAO) {
+    public LoginController(UserDAO< User > userDAO) {
         this.userDAO = userDAO;
     }
 
@@ -39,7 +39,7 @@ public class LoginController {
     }
 
     private String login(String username, String password) {
-        User user = (User) userDAO.getUser(username);
+        User user = userDAO.getUserByUsername(username);
         if (user != null && user.getPassword().equals(password)) {
             return user.getId().toString();
         }
