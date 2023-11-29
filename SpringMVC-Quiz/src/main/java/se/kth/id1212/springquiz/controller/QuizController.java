@@ -140,21 +140,18 @@ public class QuizController {
     }
 
     private void emailResults(String userID) {
-        String email = this.userDAO.getUser(userID).getUsername();
-        String quizSubject = this.quizDAO.getQuiz(Integer.valueOf((String) model.getAttribute("QUIZ_ID"))).getSubject();
-        String message = "You have completed the " + quizSubject + " quiz and acquired " + this.acquiredPoints + " points.";
-        emailService.sendEmail(email, message);
-    }
+        String email = this.userDAO.getUserByUserID(userID).getUsername();
 
-    private String generateEmailMessage(String userID) {
         String quizID_string = (String) model.getAttribute("QUIZ_ID");
         Integer quizID = Integer.valueOf(quizID_string);
         String quizSubject = this.quizDAO.getQuiz(quizID).getSubject();
+        String mailSubject = "Quiz results" + " - " + quizSubject;
 
-        String email = this.userDAO.getEmail(userID);
-        String message = "You have completed the " + quizSubject + " quiz and acquired " + this.acquiredPoints + " points.";
-        return message;
+        String mailBody = "You have completed the " + quizSubject + " quiz and acquired " + this.acquiredPoints + " " +
+                "points.";
+        emailService.sendEmail(email, mailSubject, mailBody);
     }
+
     private boolean requestContainsExit() {
         Enumeration< String > parameterNames = request.getParameterNames();
         while (parameterNames.hasMoreElements()) {
