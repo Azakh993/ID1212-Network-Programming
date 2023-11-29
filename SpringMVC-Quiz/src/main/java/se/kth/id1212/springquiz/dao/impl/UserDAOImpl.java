@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 import se.kth.id1212.springquiz.dao.UserDAO;
 import se.kth.id1212.springquiz.model.User;
+import se.kth.id1212.springquiz.util.ExceptionLogger;
 
 @Repository
 public class UserDAOImpl implements UserDAO {
@@ -16,17 +17,16 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     @Transactional
-    public User getUser(String username, String password) {
-        String jpql = "SELECT u FROM User u WHERE u.username = :username AND u.password = :password";
+    public User getUser(String username) {
+        String jpql = "SELECT u FROM User u WHERE u.username = :username";
         Query query = entityManager.createQuery(jpql, User.class);
         query.setParameter("username", username);
-        query.setParameter("password", password);
 
         User user = null;
         try {
             user = (User) query.getSingleResult();
-        } catch (Exception ignored) {
-            // Handle NoResultException or other exceptions if needed
+        } catch (Exception exception) {
+            ExceptionLogger.log(exception);
         }
         return user;
     }

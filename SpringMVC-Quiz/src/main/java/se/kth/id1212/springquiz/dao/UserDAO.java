@@ -1,8 +1,6 @@
 package se.kth.id1212.springquiz.dao;
 
-import se.kth.id1212.springquiz.model.User;
+public interface UserDAO < User > {
 
-public interface UserDAO {
-
-    User getUser(String username, String password);
+    User getUser(String username);
 }
