@@ -20,7 +20,7 @@ public class DashboardController {
     private final ResultDAO< Result > resultDAO;
 
     @Autowired
-    public DashboardController(QuizDAO quizDAO, ResultDAO resultDAO) {
+    public DashboardController(QuizDAO < Quiz > quizDAO, ResultDAO < Result > resultDAO) {
         this.quizDAO = quizDAO;
         this.resultDAO = resultDAO;
     }
