@@ -45,11 +45,9 @@ public class EmailService {
 
     private void setCertificates() {
         String filePath = "SpringMVC-Quiz/src/main/resources/credentials.txt";
-        try {
-            Scanner fileContent = new Scanner(new File(filePath));
+        try (Scanner fileContent = new Scanner(new File(filePath));){
             this.username = fileContent.nextLine();
             this.password = fileContent.nextLine();
-            fileContent.close();
         } catch (Exception ioException) {
             ExceptionLogger.log(ioException);
         }
