@@ -1,6 +1,7 @@
-from flask import Flask, redirect, url_for, session, request, jsonify, make_response
+from flask import Flask, request, jsonify, make_response
+
 from config.config import SECRET_KEY
-from controllers import login
+from controllers import auth, user
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
@@ -17,13 +18,11 @@ def course_code_is_valid(course_code):
 def login_page(course_code):
     if course_code_is_valid(course_code):
         if request.method == "GET":
-            return login.show_login_page()
+            return auth.show_login_page(course_code)
         elif request.method == "POST":
             username = request.form['username']
             password = request.form['password']
-            return login.authenticate(username, password)
-    return redirect(url_for('login_page', course_code=course_code))
-
+            return auth.authenticate(course_code, username, password)
 
 
 if __name__ == '__main__':
