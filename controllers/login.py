@@ -7,7 +7,7 @@ def show_login_page(course_code):
     return render_template("login.html")
 
 
-def login(username, password):
+def authenticate(username, password):
     user = authenticate_user(username, password)
 
     if user is None:
