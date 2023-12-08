@@ -2,8 +2,7 @@ from flask import render_template, session, jsonify, make_response
 from services.auth import authenticate_user
 
 
-def show_login_page(course_code):
-    session["course_code"] = course_code
+def show_login_page():
     return render_template("login.html")
 
 
