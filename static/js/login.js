@@ -12,7 +12,14 @@ document.getElementById("login-form").addEventListener("submit", function (event
             headers: {"Content-Type": "application/x-www-form-urlencoded",
             },
         })
-        .then((response) => response.json())
+        .then((response) => {
+        if (response.status === 200) {
+            return response.json();
+        } else {
+            errorMessage.innerHTML = "<p>Invalid username or password</p>";
+            throw new Error("Authentication failed");
+        }
+    })
         .then((data) => {
             if (data.error) {
                 errorMessage.innerHTML = `<p>${data.error}</p>`;
