@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, session
+from flask import Flask, redirect, url_for, session, request
 from config.config import SECRET_KEY
 from controllers import login_controller
 
@@ -18,16 +18,16 @@ def set_course(course_code):
     return redirect(url_for('show_login_page', course_code=course_code))
 
 
-@app.route("/<course_code>/login", methods=["GET"])
+@app.route("/<course_code>/login", methods=["GET", "POST"])
 def show_login_page(course_code):
     if course_code_set(course_code):
-        return login_controller.show_login_page()
-
-
-@app.route("/<course_code>/login", methods=["POST"])
-def login(course_code):
-    if course_code_set(course_code):
-        return login_controller.login()
+        if request.method == "GET":
+            return login_controller.show_login_page(course_code)
+        elif request.method == "POST":
+            username = request.form['username']
+            password = request.form['password']
+            return login_controller.login(username, password)
+    return redirect(url_for('show_login_page', course_code=course_code))
 
 
 if __name__ == '__main__':
