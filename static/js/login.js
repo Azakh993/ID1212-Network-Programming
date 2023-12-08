@@ -24,7 +24,7 @@ document.getElementById("login-form").addEventListener("submit", function (event
             if (data.error) {
                 errorMessage.innerHTML = `<p>${data.error}</p>`;
             } else if (data.success) {
-                window.location.href = "{{ url_for('show_login_page', course_code=courseCode) }}";
+                window.location.href = `/${courseCode}/booking-lists`;
             }
         })
         .catch((error) => {
