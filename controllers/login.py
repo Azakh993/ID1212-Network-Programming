@@ -1,5 +1,5 @@
 from flask import render_template, session, jsonify, make_response
-from services.authentication_service import authenticate_user
+from services.auth import authenticate_user
 
 
 def show_login_page(course_code):

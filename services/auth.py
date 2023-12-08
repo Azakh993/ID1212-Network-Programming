@@ -1,4 +1,4 @@
-from repositories.user_repository import get_user_by_username
+from repositories.user import get_user_by_username
 
 
 def authenticate_user(username, password):
