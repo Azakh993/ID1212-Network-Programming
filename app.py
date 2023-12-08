@@ -15,19 +15,20 @@ def course_code_set(course_code):
 @app.route("/<course_code>/set_course", methods=["GET"])
 def set_course(course_code):
     session['course_code'] = course_code
-    return redirect(url_for('show_login_page', course_code=course_code))
+    return redirect(url_for('login_page', course_code=course_code))
 
 
 @app.route("/<course_code>/login", methods=["GET", "POST"])
-def show_login_page(course_code):
+def login_page(course_code):
     if course_code_set(course_code):
         if request.method == "GET":
             return login.show_login_page(course_code)
         elif request.method == "POST":
             username = request.form['username']
             password = request.form['password']
-            return login.login(username, password)
-    return redirect(url_for('show_login_page', course_code=course_code))
+            return login.authenticate(username, password)
+    return redirect(url_for('login_page', course_code=course_code))
+
 
 
 if __name__ == '__main__':
