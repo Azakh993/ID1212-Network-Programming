@@ -1,4 +1,4 @@
-from flask import render_template, session, jsonify
+from flask import render_template, session, jsonify, make_response
 from services.authentication_service import authenticate_user
 
 
@@ -11,7 +11,9 @@ def login(username, password):
     user = authenticate_user(username, password)
 
     if user is None:
-        return jsonify({"error": "Invalid username or password"})
+        error_response = jsonify({"error": "Invalid username or password"})
+        return make_response(error_response, 401)
 
     session['user_id'] = user.id
-    return jsonify({"success": True})
+    success_response = jsonify({"success": True})
+    return make_response(success_response, 200)
