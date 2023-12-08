@@ -1,7 +1,7 @@
 document.getElementById("login-form").addEventListener("submit", function (event) {
         event.preventDefault();
 
-        const courseCode = "{{ session.get('course_code') }}";
+        const courseCode = course_code
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
         const errorMessage = document.getElementById("error-message");
