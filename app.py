@@ -7,9 +7,9 @@ app.secret_key = SECRET_KEY
 
 
 def course_code_set(course_code):
-    current_repo = session.get('current_repo')
-    if current_repo != course_code:
-        return "Invalid repo. Please set the repo first."
+    session_course_code = session.get('current_repo')
+    if session_course_code != course_code:
+        return "Invalid course_code. Please set the course_code first."
 
 
 @app.route("/<course_code>/set_course", methods=["GET"])
