@@ -1,7 +1,8 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify, make_response, session, redirect, url_for
 
 from config.config import SECRET_KEY
-from controllers import auth, user
+from controllers.auth_controller import authenticate, show_login_page
+from controllers.booking_list_controller import show_lists_page
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
@@ -14,15 +15,30 @@ def course_code_is_valid(course_code):
     return True
 
 
+def login_is_invalid(user_id):
+    return user_id is None
+
+
 @app.route("/<course_code>/login", methods=["GET", "POST"])
 def login_page(course_code):
     if course_code_is_valid(course_code):
         if request.method == "GET":
-            return auth.show_login_page(course_code)
+            return show_login_page(course_code)
         elif request.method == "POST":
             username = request.form['username']
             password = request.form['password']
-            return auth.authenticate(course_code, username, password)
+            return authenticate(course_code, username, password)
+
+
+@app.route("/<course_code>/booking-lists", methods=["GET", "POST", "PUT", "DELETE"])
+def list_page(course_code):
+    user_id = session.get("user_id")
+    if course_code_is_valid(course_code):
+        if login_is_invalid(user_id):
+            return redirect(url_for('login_page', course_code=course_code))
+
+        if request.method == "GET":
+            return show_lists_page(course_code, user_id)
 
 
 if __name__ == '__main__':
