@@ -9,3 +9,13 @@ def retrieve_booking_lists(course_code):
         print(f'Error: {str(exception)}')
         session.rollback()
         raise
+
+
+def insert_booking_list(new_booking_list):
+    try:
+        session.add(new_booking_list)
+        session.commit()
+    except Exception as exception:
+        print(f'Error: {str(exception)}')
+        session.rollback()
+        raise
