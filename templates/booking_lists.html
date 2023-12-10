@@ -14,11 +14,12 @@
 <table id="bookingTable">
     <thead>
     <tr>
-        <th style="width: 5%;"></th>
+        <th></th>
         <th style="width: 15%;">Time</th>
-        <th style="width: 30%;">Description</th>
+        <th style="width: 45%;">Description</th>
         <th style="width: 20%;">Location</th>
         <th style="width: 10%;">Length</th>
+        <th style="width: 10%;">Slots</th>
     </tr>
     </thead>
     <tbody>
@@ -29,14 +30,20 @@
             <td>{{ booking.description }}</td>
             <td>{{ booking.location }}</td>
             <td>{{ booking.interval }} min</td>
+            <td style="text-align: center;">{{ booking.max_slots }}</td>
+
         </tr>
     {% endfor %}
     <tr id="newBookingRow" style="display: none;">
-        <td></td>
+        <td>
+            <button id="newBookingRowSubmitBtn" style="width: 100%;">+</button>
+        </td>
         <td><input type="text" id="inputTime" placeholder="Time" style="width: 100%;"></td>
         <td><input type="text" id="inputDescription" placeholder="Description" style="width: 100%;"></td>
         <td><input type="text" id="inputLocation" placeholder="Location" style="width: 100%;"></td>
         <td><input type="text" id="inputLength" placeholder="Minutes" style="width: 80%;"></td>
+        <td><input type="text" id="inputSlots" placeholder="# Slots" style="width: 80%;"></td>
+
     </tr>
     </tbody>
 </table>
@@ -45,7 +52,9 @@
 <button id="showMyBookingsBtn">Show My Bookings</button>
 {% if user_privileges %}
     <button id="addBookingListBtn">Add Booking List</button>
+    <button id="removeBookingListBtn">Remove Booking List</button>
 {% endif %}
+<script> const course_code = "{{ course_code }}"; </script>
 <script src="{{ url_for('static', filename='js/booking_lists.js') }}"></script>
 </body>
 </html>
