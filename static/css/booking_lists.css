@@ -40,6 +40,7 @@ h1 {
     border: 1px solid #ddd; /* Light gray border */
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Light shadow */
+    margin-bottom: 10px;
 }
 
 /* Apply custom widths to the first and second columns */
@@ -65,8 +66,7 @@ button {
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 10px 20px;
-    margin: 10px;
+    padding: 5px 5px 5px 5px;
     cursor: pointer;
 }
 
