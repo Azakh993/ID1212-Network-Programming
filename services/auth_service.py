@@ -11,5 +11,5 @@ def authenticate_user(course_code, username, password):
     return None
 
 
-def get_user_privileges(course_code, username):
-    return retrieve_user_privileges(course_code, username)
+def get_user_privileges(course_code, user_id):
+    return retrieve_user_privileges(course_code, user_id)
