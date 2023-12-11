@@ -1,7 +1,9 @@
 import copy
 
 from models.booking_list import BookingList
-from repositories.booking_list_repository import retrieve_booking_lists, insert_booking_list, delete_booking_list
+from repositories.booking_list_repository import retrieve_booking_lists, insert_booking_list, delete_booking_list, \
+    retrieve_booking_list
+from repositories.reservation_repository import retrieve_reservations
 
 
 def get_booking_lists(course_code):
@@ -10,18 +12,38 @@ def get_booking_lists(course_code):
     if booking_lists is None:
         return []
 
-    booking_lists_without_seconds = remove_seconds_from_booking_lists(booking_lists)
+    processed_lists = process_time_and_slots(booking_lists)
+    return processed_lists
 
-    return booking_lists_without_seconds
+
+def get_booking_list(booking_id):
+    booking_list = retrieve_booking_list(booking_id)
+
+    if booking_list is None:
+        return []
+
+    processed_list = process_time_and_slots([booking_list])[0]
+
+    return processed_list
 
 
-def remove_seconds_from_booking_lists(booking_lists):
+def process_time_and_slots(booking_lists):
     booking_lists_without_seconds = []
     for booking_list in booking_lists:
         list_copy = copy.deepcopy(booking_list)
-        list_copy.time = list_copy.time.strftime('%Y-%m-%d %H:%M')
+        remove_seconds_from_booking_list(list_copy)
+        calculate_available_slots(list_copy)
         booking_lists_without_seconds.append(list_copy)
     return booking_lists_without_seconds
+
+
+def remove_seconds_from_booking_list(booking_list):
+    booking_list.time = booking_list.time.strftime('%Y-%m-%d %H:%M')
+
+
+def calculate_available_slots(booking_list):
+    reservations = retrieve_reservations(booking_list.id)
+    booking_list.available_slots = booking_list.max_slots - len(reservations)
 
 
 def add_booking_list(course_code, booking_list_dto):
@@ -31,7 +53,7 @@ def add_booking_list(course_code, booking_list_dto):
         location=booking_list_dto.location,
         time=booking_list_dto.time,
         interval=booking_list_dto.interval,
-        max_slots=booking_list_dto.max_slots
+        max_slots=booking_list_dto.max_slots,
     )
 
     try:
@@ -52,7 +74,7 @@ def is_invalid_booking_list(booking_list_dto):
     ))
 
 
-def generate_json_booking_lists(course_code):
+def generate_json_ready_booking_lists(course_code):
     booking_lists = get_booking_lists(course_code)
     json_booking_lists = [{
         "id": booking_list.id,
@@ -60,7 +82,7 @@ def generate_json_booking_lists(course_code):
         "location": booking_list.location,
         "time": booking_list.time,
         "interval": booking_list.interval,
-        "max_slots": booking_list.max_slots
+        "available_slots": booking_list.available_slots
     } for booking_list in booking_lists]
 
     return json_booking_lists
