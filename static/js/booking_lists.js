@@ -71,6 +71,7 @@ function showMyBookings() {
 function removeBookingList() {
     const courseCode = course_code;
     const selectedBooking = document.querySelector('input[name="selectedBooking"]:checked');
+    const selectedBookingID = selectedBooking.value;
 
     if (!selectedBooking) {
         alert("No booking selected.");
@@ -79,11 +80,10 @@ function removeBookingList() {
 
     const requestOptions = {
         method: "DELETE",
-        body: JSON.stringify({bookingID: selectedBooking.value}),
         headers: {"Content-Type": "application/json"}
     };
 
-    fetch(`/courses/${courseCode}/booking-lists`, requestOptions)
+    fetch(`/courses/${courseCode}/booking-lists/${selectedBookingID}`, requestOptions)
         .then(handleResponse)
         .catch(handleError);
 }
