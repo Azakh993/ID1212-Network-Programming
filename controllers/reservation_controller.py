@@ -1,7 +1,7 @@
 from flask import request, render_template, make_response, jsonify
 
 from services.auth_service import get_user_privileges
-from services.available_slots_service import generate_available_slots, generate_json_ready_available_slots
+from services.reservations_service import generate_available_slots, generate_json_ready_available_slots
 from services.booking_list_service import get_booking_list
 
 
