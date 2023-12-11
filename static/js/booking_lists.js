@@ -3,11 +3,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function setupEventListeners() {
-    document.getElementById("addBookingListBtn").addEventListener("click", toggleNewBookingRow);
-    document.getElementById("newBookingRowSubmitBtn").addEventListener("click", submitNewBooking);
+    if (admin === true) {
+        document.getElementById("addBookingListBtn").addEventListener("click", toggleNewBookingRow);
+        document.getElementById("newBookingRowSubmitBtn").addEventListener("click", submitNewBooking);
+        document.getElementById("removeBookingListBtn").addEventListener("click", removeBookingList);
+    }
     document.getElementById("selectBookingBtn").addEventListener("click", selectBooking);
     document.getElementById("showMyBookingsBtn").addEventListener("click", showMyBookings);
-    document.getElementById("removeBookingListBtn").addEventListener("click", removeBookingList);
 }
 
 function toggleNewBookingRow() {
@@ -51,8 +53,24 @@ function isFormDataValid(data) {
 }
 
 function selectBooking() {
+    const courseCode = course_code;
     const selectedBooking = document.querySelector("input[name='selectedBooking']:checked");
-    alert(selectedBooking ? `Selected booking ID: ${selectedBooking.value}` : "Please select a booking.");
+    if (!selectedBooking) {
+        alert("No booking selected.");
+        return;
+    }
+    const requestOptions = {
+        method: "POST",
+        body: JSON.stringify({bookingID: selectedBooking.value}),
+        headers: {"Content-Type": "application/json"}
+    };
+
+    fetch(`/${courseCode}/booking-lists`, requestOptions)
+        .then(handleResponse)
+        .then(() => {
+            window.location.href = `/${courseCode}/bookable-slots`;
+        })
+        .catch(handleError);
 }
 
 function showMyBookings() {
@@ -113,7 +131,7 @@ function createBookingRow(booking) {
         <td>${booking.description}</td>
         <td>${booking.location}</td>
         <td>${booking.interval} min</td>
-        <td style="text-align: center;">${booking.max_slots}</td>
+        <td style="text-align: center;">${booking.available_slots}</td>
     `;
 
     return newRow;
@@ -124,9 +142,9 @@ function fetchLatestBookingListData(courseCode) {
         method: "GET",
         headers: {"Content-Type": "application/json", "Accept": "application/json"}
     })
-    .then(handleResponse)
-    .then(updateBookingListUI)
-    .catch(handleError);
+        .then(handleResponse)
+        .then(updateBookingListUI)
+        .catch(handleError);
 }
 
 function handleError(error) {
