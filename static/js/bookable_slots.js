@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function setupEventListeners() {
     document.getElementById("bookBtn").addEventListener("click", bookSelectedSlot);
+    document.getElementById("backBtn").addEventListener("click", backToBookingList);
+
 }
 
 function bookSelectedSlot() {
@@ -38,6 +40,11 @@ function bookSelectedSlot() {
             alert("Slot booked successfully.");
         })
         .catch(handleError);
+}
+
+function backToBookingList() {
+    const courseCode = course_code;
+    window.location.href = `/courses/${courseCode}/booking-lists`;
 }
 
 function handleResponse(response) {
