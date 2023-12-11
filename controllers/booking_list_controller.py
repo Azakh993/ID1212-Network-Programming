@@ -38,12 +38,10 @@ def add_new_list(course_code, user_id):
         return send_error_response()
 
 
-def delete_list(course_code, user_id):
+def delete_list(course_code, user_id, booking_list_id):
     check_privileges(course_code, user_id)
 
-    booking_id = request.get_json().get("bookingID")
-
-    successful_removal = remove_booking_list(course_code, booking_id)
+    successful_removal = remove_booking_list(course_code, booking_list_id)
 
     if successful_removal:
         return make_response(jsonify({}), 204)
