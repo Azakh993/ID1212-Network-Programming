@@ -1,7 +1,7 @@
 import copy
 
 from models.booking_list import BookingList
-from repositories.booking_list_repository import retrieve_booking_lists, insert_booking_list
+from repositories.booking_list_repository import retrieve_booking_lists, insert_booking_list, delete_booking_list
 
 
 def get_booking_lists(course_code):
@@ -55,6 +55,7 @@ def is_invalid_booking_list(booking_list_dto):
 def generate_json_booking_lists(course_code):
     booking_lists = get_booking_lists(course_code)
     json_booking_lists = [{
+        "id": booking_list.id,
         "description": booking_list.description,
         "location": booking_list.location,
         "time": booking_list.time,
@@ -63,3 +64,12 @@ def generate_json_booking_lists(course_code):
     } for booking_list in booking_lists]
 
     return json_booking_lists
+
+
+def remove_booking_list(course_code, booking_id):
+    try:
+        delete_booking_list(course_code, booking_id)
+    except Exception as exception:
+        print(f'Error: {str(exception)}')
+        return False
+    return True
