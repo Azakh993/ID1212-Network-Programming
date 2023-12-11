@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bookable Slots</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bookable_slots.css') }}">
+</head>
+<body>
+<h1>{{ course_code.upper() }} - Bookable Slots</h1>
+
+<div id="details">
+    <p>Description: {{ booking_list.description }}</p>
+    <p>Location: {{ booking_list.location }}</p>
+    <p>Length: {{ booking_list.interval }} minutes</p>
+</div>
+
+<div id="instructions">
+    <p>Instructions go here...</p>
+</div>
+
+<table id="slotsTable">
+    <thead>
+    <tr>
+        <th>Select</th>
+        <th>Time</th>
+        {% if admin %}
+            <td>Username</td>
+        {% endif %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for available_slot in available_slots %}
+        <tr>
+            <td><input type="radio" name="selectedSlot" value="{{ available_slot.sequence_id }}"></td>
+            <td>{{ available_slot.start_time }}</td>
+            {% if admin %}
+                <td>{{ available_slot.user_id }}</td> /* Form shoud be here */
+            {% endif %}
+
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<button id="bookBtn">Book</button>
+<button id="backBtn">Go Back</button>
+
+<script> const course_code = "{{ course_code }}"; </script>
+<script src="{{ url_for('static', filename='js/bookable_slots.js') }}"></script>
+</body>
+</html>
