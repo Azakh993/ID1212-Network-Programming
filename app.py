@@ -1,8 +1,9 @@
 from flask import Flask, request, session, redirect, url_for, jsonify
+
 from config.config import SECRET_KEY
 from controllers.auth_controller import authenticate, show_login_page
-from controllers.reservation_controller import show_slots_page
 from controllers.booking_list_controller import show_lists_page, add_new_list, delete_list
+from controllers.reservation_controller import show_slots_page, book_slot
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
@@ -63,7 +64,8 @@ def bookable_slots(course_code, booking_list_id):
         return show_slots_page(course_code, session.get("user_id"), booking_list_id)
 
     if request.method == "PUT":
-        return jsonify(message="POST request received")
+        slot_sequence_id = request.get_json().get("slot_sequence_id")
+        return book_slot(course_code, session.get("user_id"), booking_list_id, slot_sequence_id)
 
     if request.method == "DELETE":
         return jsonify(message="DELETE request received")
