@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, make_response, session, redirect, url
 
 from config.config import SECRET_KEY
 from controllers.auth_controller import authenticate, show_login_page
+from controllers.available_slots_controller import show_slots_page
 from controllers.booking_list_controller import show_lists_page, add_new_list, delete_list
 
 app = Flask(__name__)
@@ -45,6 +46,26 @@ def list_page(course_code):
 
         if request.method == "DELETE":
             return delete_list(course_code, user_id)
+
+        if request.method == "POST":
+            booking_id = request.get_json().get("bookingID")
+            session["booking_id"] = booking_id
+            return slots_page(course_code)
+
+
+@app.route("/<course_code>/bookable-slots", methods=["GET", "POST"])
+def slots_page(course_code):
+    user_id = session.get("user_id")
+    booking_id = session.get("booking_id")
+    if course_code_is_valid(course_code):
+        if login_is_invalid(user_id):
+            return redirect(url_for('login_page', course_code=course_code))
+
+        if request.method == "GET":
+            return show_slots_page(course_code, user_id, booking_id)
+
+        if request.method == "POST":
+            return show_slots_page(course_code, user_id, booking_id)
 
 
 if __name__ == '__main__':
