@@ -40,7 +40,7 @@
             <td>{{ booking.description }}</td>
             <td>{{ booking.location }}</td>
             <td>{{ booking.interval }} min</td>
-            <td style="text-align: center;">{{ booking.max_slots }}</td>
+            <td style="text-align: center;">{{ booking.available_slots }}</td>
 
         </tr>
     {% endfor %}
@@ -53,7 +53,8 @@
     <button id="addBookingListBtn">Add Booking List</button>
     <button id="removeBookingListBtn">Remove Booking List</button>
 {% endif %}
-<script> const course_code = "{{ course_code }}"; </script>
+<script> const course_code = "{{ course_code }}";
+const admin = "{{ user_privileges }}"; </script>
 <script src="{{ url_for('static', filename='js/booking_lists.js') }}"></script>
 </body>
 </html>
