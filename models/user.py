@@ -12,3 +12,4 @@ class User(Base):
     password = Column(VARCHAR, unique=False, nullable=False)
 
     registrations = relationship('UserCourseRegistration', back_populates='user')
+    reservations = relationship('Reservation', back_populates='user')

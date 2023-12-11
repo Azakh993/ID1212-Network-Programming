@@ -16,3 +16,4 @@ class BookingList(Base):
     max_slots = Column(INTEGER, nullable=False)
 
     course = relationship('Course', back_populates='booking_lists')
+    reservations = relationship('Reservation', back_populates='booking_list')
