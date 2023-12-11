@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function setupEventListeners() {
-    if (admin === true) {
+    if (admin === "True") {
         document.getElementById("addBookingListBtn").addEventListener("click", toggleNewBookingRow);
         document.getElementById("newBookingRowSubmitBtn").addEventListener("click", submitNewBooking);
         document.getElementById("removeBookingListBtn").addEventListener("click", removeBookingList);
@@ -32,9 +32,8 @@ function submitNewBooking() {
         headers: {"Content-Type": "application/json"}
     };
 
-    fetch(`/${courseCode}/booking-lists`, requestOptions)
+    fetch(`/courses/${courseCode}/booking-lists`, requestOptions)
         .then(handleResponse)
-        .then(updateBookingListUI)
         .catch(handleError);
 }
 
@@ -54,23 +53,15 @@ function isFormDataValid(data) {
 
 function selectBooking() {
     const courseCode = course_code;
-    const selectedBooking = document.querySelector("input[name='selectedBooking']:checked");
-    if (!selectedBooking) {
+    const selectedBookingList = document.querySelector("input[name='selectedBooking']:checked");
+    const selectedBookingListID = selectedBookingList.value;
+
+    if (!selectedBookingList) {
         alert("No booking selected.");
         return;
     }
-    const requestOptions = {
-        method: "POST",
-        body: JSON.stringify({bookingID: selectedBooking.value}),
-        headers: {"Content-Type": "application/json"}
-    };
 
-    fetch(`/${courseCode}/booking-lists`, requestOptions)
-        .then(handleResponse)
-        .then(() => {
-            window.location.href = `/${courseCode}/bookable-slots`;
-        })
-        .catch(handleError);
+    window.location.href = `/courses/${courseCode}/booking-lists/${selectedBookingListID}/bookable-slots`;
 }
 
 function showMyBookings() {
@@ -92,22 +83,22 @@ function removeBookingList() {
         headers: {"Content-Type": "application/json"}
     };
 
-    fetch(`/${courseCode}/booking-lists`, requestOptions)
+    fetch(`/courses/${courseCode}/booking-lists`, requestOptions)
         .then(handleResponse)
         .catch(handleError);
 }
 
 function handleResponse(response) {
     const courseCode = course_code;
-    if (response.status === 201 || response.status === 200) {
+    if (response.status === 200) {
         return response.json();
     }
 
-    if (response.status === 204) {
+    if (response.status === 204 || response.status === 201) {
         return fetchLatestBookingListData(courseCode)
     }
 
-    throw new Error('Network response was not ok.');
+    throw new Error("Request failed: " + response.status);
 }
 
 function updateBookingListUI(jsonData) {
@@ -138,9 +129,9 @@ function createBookingRow(booking) {
 }
 
 function fetchLatestBookingListData(courseCode) {
-    fetch(`/${courseCode}/booking-lists`, {
+    fetch(`/courses/${courseCode}/booking-lists`, {
         method: "GET",
-        headers: {"Content-Type": "application/json", "Accept": "application/json"}
+        headers: {"Accept": "application/json"}
     })
         .then(handleResponse)
         .then(updateBookingListUI)
