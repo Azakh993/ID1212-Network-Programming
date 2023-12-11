@@ -12,4 +12,4 @@ def get_user_by_username(course_code, username):
 
 
 def get_user_by_user_id(user_id):
-    get_first_from_database(session.query(User).filter_by(id=user_id))
+    return get_first_from_database(session.query(User).filter_by(id=user_id))
