@@ -1,33 +1,23 @@
 from models.booking_list import BookingList
 from repositories import session
+from repositories.repository_util import get_all_from_database, get_first_from_database, add_to_database, \
+    delete_from_database
 
 
 def retrieve_booking_lists(course_code):
-    try:
-        return session.query(BookingList).filter(BookingList.course_id == course_code.upper()).all()
-    except Exception as exception:
-        print(f'Error: {str(exception)}')
-        session.rollback()
-        raise
+    return get_all_from_database(session.query(BookingList)
+                                 .filter(BookingList.course_id == course_code.upper()))
+
+
+def retrieve_booking_list(booking_list_id):
+    return get_first_from_database(session.query(BookingList)
+                                   .filter(BookingList.id == booking_list_id))
 
 
 def insert_booking_list(new_booking_list):
-    try:
-        session.add(new_booking_list)
-        session.commit()
-    except Exception as exception:
-        print(f'Error: {str(exception)}')
-        session.rollback()
-        raise
+    add_to_database(new_booking_list)
 
 
 def delete_booking_list(course_code, booking_id):
-    try:
-        (session.query(BookingList)
-         .filter(BookingList.course_id == course_code.upper(), BookingList.id == booking_id)
-         .delete())
-        session.commit()
-    except Exception as exception:
-        print(f'Error: {str(exception)}')
-        session.rollback()
-        raise
+    delete_from_database(session.query(BookingList)
+                         .filter(BookingList.course_id == course_code.upper(), BookingList.id == booking_id))
