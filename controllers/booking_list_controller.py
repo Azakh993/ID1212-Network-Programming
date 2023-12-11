@@ -2,7 +2,7 @@ from flask import render_template, request, jsonify, make_response
 
 from services.auth_service import get_user_privileges
 from services.booking_list_service import get_booking_lists, add_booking_list, is_invalid_booking_list, \
-    generate_json_booking_lists, remove_booking_list
+    generate_json_ready_booking_lists, remove_booking_list
 
 
 def show_lists_page(course_code, user_id):
@@ -56,7 +56,7 @@ def check_privileges(course_code, user_id):
 
 
 def send_success_response(course_code, status_code):
-    updated_booking_lists = generate_json_booking_lists(course_code)
+    updated_booking_lists = generate_json_ready_booking_lists(course_code)
     response_data = {"success": "Operation successful", "booking_lists": updated_booking_lists}
     return make_response(jsonify(response_data), status_code)
 
