@@ -60,8 +60,8 @@ def add_booking_list(course_code, booking_list_dto):
         insert_booking_list(new_booking_list)
     except Exception as exception:
         print(f'Error: {str(exception)}')
-        return False
-    return True
+        return None
+    return new_booking_list
 
 
 def is_invalid_booking_list(booking_list_dto):
@@ -86,6 +86,18 @@ def generate_json_ready_booking_lists(course_code):
     } for booking_list in booking_lists]
 
     return json_booking_lists
+
+
+def generate_json_ready_booking_list(booking_list):
+    json_booking_list = {
+        "id": booking_list.id,
+        "description": booking_list.description,
+        "location": booking_list.location,
+        "time": booking_list.time,
+        "interval": booking_list.interval,
+        "available_slots": booking_list.max_slots
+    }
+    return json_booking_list
 
 
 def remove_booking_list(course_code, booking_id):
