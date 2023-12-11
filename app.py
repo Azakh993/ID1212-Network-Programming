@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, make_response, session, redirect, url
 
 from config.config import SECRET_KEY
 from controllers.auth_controller import authenticate, show_login_page
-from controllers.booking_list_controller import show_lists_page, add_new_list
+from controllers.booking_list_controller import show_lists_page, add_new_list, delete_list
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
@@ -42,6 +42,9 @@ def list_page(course_code):
 
         if request.method == "PUT":
             return add_new_list(course_code, user_id)
+
+        if request.method == "DELETE":
+            return delete_list(course_code, user_id)
 
 
 if __name__ == '__main__':
