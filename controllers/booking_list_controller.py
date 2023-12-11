@@ -2,7 +2,7 @@ from flask import render_template, request, jsonify, make_response
 
 from services.auth_service import get_user_privileges
 from services.booking_list_service import get_booking_lists, add_booking_list, is_invalid_booking_list, \
-    generate_json_ready_booking_lists, remove_booking_list
+    generate_json_ready_booking_lists, remove_booking_list, generate_json_ready_booking_list
 
 
 def show_lists_page(course_code, user_id):
@@ -27,10 +27,13 @@ def add_new_list(course_code, user_id):
         error_message = jsonify({"error": "Invalid booking data"})
         return make_response(error_message, 400)
 
-    successful_entry = add_booking_list(course_code, booking_list_dto)
+    added_booking_list = add_booking_list(course_code, booking_list_dto)
 
-    if successful_entry:
-        return send_success_response(course_code, 201)
+    if added_booking_list:
+        json_ready_booking_list = generate_json_ready_booking_list(added_booking_list)
+        response_data = {"newBookingList": json_ready_booking_list}
+        print(response_data)
+        return make_response(jsonify(response_data), 201)
     else:
         return send_error_response()
 
@@ -57,7 +60,7 @@ def check_privileges(course_code, user_id):
 
 def send_success_response(course_code, status_code):
     updated_booking_lists = generate_json_ready_booking_lists(course_code)
-    response_data = {"success": "Operation successful", "booking_lists": updated_booking_lists}
+    response_data = {"booking_lists": updated_booking_lists}
     return make_response(jsonify(response_data), status_code)
 
 
