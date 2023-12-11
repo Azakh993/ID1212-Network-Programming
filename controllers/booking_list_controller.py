@@ -1,5 +1,6 @@
 from flask import render_template, request, jsonify, make_response
 
+from controllers.controller_util import check_privileges
 from services.auth_service import get_user_privileges
 from services.booking_list_service import get_booking_lists, add_booking_list, is_invalid_booking_list, \
     generate_json_ready_booking_lists, remove_booking_list, generate_json_ready_booking_list
@@ -32,7 +33,6 @@ def add_new_list(course_code, user_id):
     if added_booking_list:
         json_ready_booking_list = generate_json_ready_booking_list(added_booking_list)
         response_data = {"newBookingList": json_ready_booking_list}
-        print(response_data)
         return make_response(jsonify(response_data), 201)
     else:
         return send_error_response()
@@ -47,13 +47,6 @@ def delete_list(course_code, user_id, booking_list_id):
         return make_response(jsonify({}), 204)
     else:
         return send_error_response()
-
-
-def check_privileges(course_code, user_id):
-    admin_privileges = get_user_privileges(course_code, user_id)
-
-    if not admin_privileges:
-        raise Exception("User is not an admin!")
 
 
 def send_success_response(course_code, status_code):
