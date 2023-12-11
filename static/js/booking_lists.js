@@ -1,76 +1,135 @@
-document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("addBookingListBtn").addEventListener("click", function () {
-        const newBookingRow = document.getElementById("newBookingRow");
-        if (newBookingRow.style.display === "none") {
-            newBookingRow.style.display = "table-row";
-        } else {
-            newBookingRow.style.display = "none";
-        }
-    });
-
-    document.getElementById("newBookingRowSubmitBtn").addEventListener("click", function () {
-        const courseCode = course_code
-        const time = document.getElementById("inputTime").value;
-        const description = document.getElementById("inputDescription").value;
-        const location = document.getElementById("inputLocation").value;
-        const length = document.getElementById("inputLength").value;
-        const slots = document.getElementById("inputSlots").value;
-
-        function updateBookingListUI(json_data) {
-            const tableBody = document.querySelector("#bookingTable tbody");
-            tableBody.innerHTML = "";
-
-            json_data.booking_lists.forEach((booking) => {
-                const newRow = document.createElement("tr");
-                newRow.innerHTML = `
-                        <td><input type="radio" name="selectedBooking" value="${booking.id}"></td>
-                        <td>${booking.time}</td>
-                        <td>${booking.description}</td>
-                        <td>${booking.location}</td>
-                        <td>${booking.interval} min</td>
-                        <td style="text-align: center;">${booking.slots}</td>
-                    `;
-                tableBody.appendChild(newRow);
-            });
-        }
-
-        fetch(`/${courseCode}/booking-lists`, {
-            method: "PUT",
-            body: JSON.stringify({time, description, location, length, slots}),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then((response) => {
-                if (response.status === 201) {
-                    return response.json();
-                } else {
-                    alert("Failed to create booking list");
-                }
-            }).then((json_data) => {
-            updateBookingListUI(json_data);
-        })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    });
-
-
-    document.getElementById("selectBookingBtn").addEventListener("click", function () {
-        const selectedBooking = document.querySelector("input[name='selectedBooking']:checked");
-        if (selectedBooking) {
-            var selectedBookingId = selectedBooking.value;
-            alert("Selected booking ID: " + selectedBookingId);
-        } else {
-            alert("Please select a booking.");
-        }
-    });
-
-    document.getElementById("showMyBookingsBtn").addEventListener("click", function () {
-        // Handle showing user's bookings here
-    });
-
-    document.getElementById("removeBookingListBtn").addEventListener("click", function () {
-        // Handle showing user's bookings here
-    });
+document.addEventListener("DOMContentLoaded", () => {
+    setupEventListeners();
 });
+
+function setupEventListeners() {
+    document.getElementById("addBookingListBtn").addEventListener("click", toggleNewBookingRow);
+    document.getElementById("newBookingRowSubmitBtn").addEventListener("click", submitNewBooking);
+    document.getElementById("selectBookingBtn").addEventListener("click", selectBooking);
+    document.getElementById("showMyBookingsBtn").addEventListener("click", showMyBookings);
+    document.getElementById("removeBookingListBtn").addEventListener("click", removeBookingList);
+}
+
+function toggleNewBookingRow() {
+    const newBookingRow = document.getElementById("newBookingRow");
+    newBookingRow.style.display = newBookingRow.style.display === "none" ? "table-row" : "none";
+}
+
+function submitNewBooking() {
+    const courseCode = course_code;
+    const bookingData = getBookingFormData();
+
+    if (!isFormDataValid(bookingData)) {
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    const requestOptions = {
+        method: "PUT",
+        body: JSON.stringify(bookingData),
+        headers: {"Content-Type": "application/json"}
+    };
+
+    fetch(`/${courseCode}/booking-lists`, requestOptions)
+        .then(handleResponse)
+        .then(updateBookingListUI)
+        .catch(handleError);
+}
+
+function getBookingFormData() {
+    return {
+        time: document.getElementById("inputTime").value,
+        description: document.getElementById("inputDescription").value,
+        location: document.getElementById("inputLocation").value,
+        length: document.getElementById("inputLength").value,
+        slots: document.getElementById("inputSlots").value
+    };
+}
+
+function isFormDataValid(data) {
+    return Object.values(data).every(value => value);
+}
+
+function selectBooking() {
+    const selectedBooking = document.querySelector("input[name='selectedBooking']:checked");
+    alert(selectedBooking ? `Selected booking ID: ${selectedBooking.value}` : "Please select a booking.");
+}
+
+function showMyBookings() {
+    // Logic for showing user's bookings
+}
+
+function removeBookingList() {
+    const courseCode = course_code;
+    const selectedBooking = document.querySelector('input[name="selectedBooking"]:checked');
+
+    if (!selectedBooking) {
+        alert("No booking selected.");
+        return;
+    }
+
+    const requestOptions = {
+        method: "DELETE",
+        body: JSON.stringify({bookingID: selectedBooking.value}),
+        headers: {"Content-Type": "application/json"}
+    };
+
+    fetch(`/${courseCode}/booking-lists`, requestOptions)
+        .then(handleResponse)
+        .catch(handleError);
+}
+
+function handleResponse(response) {
+    const courseCode = course_code;
+    if (response.status === 201 || response.status === 200) {
+        return response.json();
+    }
+
+    if (response.status === 204) {
+        return fetchLatestBookingListData(courseCode)
+    }
+
+    throw new Error('Network response was not ok.');
+}
+
+function updateBookingListUI(jsonData) {
+    const tableBody = document.querySelector("#bookingTable tbody");
+
+    const existingRows = tableBody.querySelectorAll("tr:not(#newBookingRow)");
+    existingRows.forEach(row => tableBody.removeChild(row));
+
+    jsonData.booking_lists.forEach(booking => {
+        const newRow = createBookingRow(booking);
+        tableBody.appendChild(newRow);
+    });
+}
+
+function createBookingRow(booking) {
+    const newRow = document.createElement("tr");
+
+    newRow.innerHTML = `
+        <td><input type="radio" name="selectedBooking" value="${booking.id}"></td>
+        <td>${booking.time}</td>
+        <td>${booking.description}</td>
+        <td>${booking.location}</td>
+        <td>${booking.interval} min</td>
+        <td style="text-align: center;">${booking.max_slots}</td>
+    `;
+
+    return newRow;
+}
+
+function fetchLatestBookingListData(courseCode) {
+    fetch(`/${courseCode}/booking-lists`, {
+        method: "GET",
+        headers: {"Content-Type": "application/json", "Accept": "application/json"}
+    })
+    .then(handleResponse)
+    .then(updateBookingListUI)
+    .catch(handleError);
+}
+
+function handleError(error) {
+    console.error("Error:", error);
+    alert("An error occurred, please try again.");
+}

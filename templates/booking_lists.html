@@ -23,6 +23,16 @@
     </tr>
     </thead>
     <tbody>
+    <tr id="newBookingRow" style="display: none;">
+        <td>
+            <button id="newBookingRowSubmitBtn" style="width: 100%;">+</button>
+        </td>
+        <td><input type="text" id="inputTime" placeholder="Time" style="width: 100%;"></td>
+        <td><input type="text" id="inputDescription" placeholder="Description" style="width: 100%;"></td>
+        <td><input type="text" id="inputLocation" placeholder="Location" style="width: 100%;"></td>
+        <td><input type="text" id="inputLength" placeholder="Minutes" style="width: 80%;"></td>
+        <td><input type="text" id="inputSlots" placeholder="# Slots" style="width: 80%;"></td>
+    </tr>
     {% for booking in booking_lists %}
         <tr>
             <td><input type="radio" name="selectedBooking" value="{{ booking.id }}"></td>
@@ -34,17 +44,6 @@
 
         </tr>
     {% endfor %}
-    <tr id="newBookingRow" style="display: none;">
-        <td>
-            <button id="newBookingRowSubmitBtn" style="width: 100%;">+</button>
-        </td>
-        <td><input type="text" id="inputTime" placeholder="Time" style="width: 100%;"></td>
-        <td><input type="text" id="inputDescription" placeholder="Description" style="width: 100%;"></td>
-        <td><input type="text" id="inputLocation" placeholder="Location" style="width: 100%;"></td>
-        <td><input type="text" id="inputLength" placeholder="Minutes" style="width: 80%;"></td>
-        <td><input type="text" id="inputSlots" placeholder="# Slots" style="width: 80%;"></td>
-
-    </tr>
     </tbody>
 </table>
 
