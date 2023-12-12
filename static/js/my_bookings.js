@@ -40,15 +40,16 @@ function backToBookingList() {
 
 function handleResponse(response) {
     const courseCode = course_code;
-    if (response.status === 200) {
-        return response.json();
+    switch(response.status) {
+        case 200:
+            return response.json()
+        case 201:
+            return fetchLatestReservationsListData(courseCode)
+        case 204:
+            return fetchLatestReservationsListData(courseCode)
+        default:
+            throw new Error("Request failed: " + response.status)
     }
-
-    if (response.status === 204 || response.status === 201) {
-        return fetchLatestReservationsListData(courseCode)
-    }
-
-    throw new Error("Request failed: " + response.status);
 }
 
 function updateReservationsListUI(jsonData) {
