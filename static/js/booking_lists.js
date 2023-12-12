@@ -65,7 +65,8 @@ function selectBooking() {
 }
 
 function showMyBookings() {
-    // Logic for showing user's bookings
+    const courseCode = course_code;
+    window.location.href = `/courses/${courseCode}/my-bookings`;
 }
 
 function removeBookingList() {
