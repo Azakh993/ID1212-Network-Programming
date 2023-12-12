@@ -3,7 +3,8 @@ from flask import Flask, request, session, redirect, url_for, jsonify
 from config.config import SECRET_KEY
 from controllers.auth_controller import authenticate, show_login_page
 from controllers.booking_list_controller import show_lists_page, add_new_list, delete_list
-from controllers.reservation_controller import show_slots_page, book_slot
+from controllers.booking_slots_controller import show_slots_page, book_slot
+from controllers.reservations_controller import show_reservations_page, remove_reservation
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
@@ -69,6 +70,19 @@ def bookable_slots(course_code, booking_list_id):
 
     if request.method == "DELETE":
         return jsonify(message="DELETE request received")
+
+
+@app.route("/courses/<course_code>/my-bookings", methods=["GET", "DELETE"])
+def user_reservations(course_code):
+    if not validate_user_login(course_code):
+        return redirect(url_for('login', course_code=course_code))
+
+    if request.method == "GET":
+        return show_reservations_page(course_code, session.get("user_id"))
+
+    if request.method == "DELETE":
+        reservation_id = request.get_json().get("reservation_id")
+        return remove_reservation(reservation_id)
 
 
 if __name__ == '__main__':
