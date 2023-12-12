@@ -27,7 +27,7 @@ function submitNewBooking() {
     }
 
     const requestOptions = {
-        method: "PUT",
+        method: "POST",
         body: JSON.stringify(bookingData),
         headers: {"Content-Type": "application/json"}
     };
@@ -91,15 +91,19 @@ function removeBookingList() {
 
 function handleResponse(response) {
     const courseCode = course_code;
-    if (response.status === 200) {
-        return response.json();
+    switch(response.status) {
+        case 200:
+            return response.json()
+        case 201:
+            return fetchLatestBookingListData(courseCode)
+        case 204:
+            return fetchLatestBookingListData(courseCode)
+        case 422:
+            alert("There are booked slots in the list. Please remove them first.")
+            return
+        default:
+            throw new Error("Request failed: " + response.status);
     }
-
-    if (response.status === 204 || response.status === 201) {
-        return fetchLatestBookingListData(courseCode)
-    }
-
-    throw new Error("Request failed: " + response.status);
 }
 
 function updateBookingListUI(jsonData) {
