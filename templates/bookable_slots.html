@@ -7,11 +7,20 @@
 <body>
 <h1>{{ course_code.upper() }} - Bookable Slots</h1>
 
-<div id="details">
-    <p>Description: {{ booking_list.description }}</p>
-    <p>Location: {{ booking_list.location }}</p>
-    <p>Length: {{ booking_list.interval }} minutes</p>
-</div>
+<table id="detailsTable">
+    <thead>
+    <tr>
+        <th style="width: 33%; text-align: center">Description</th>
+        <th style="width: 33%; text-align: center">Location</th>
+        <th style="width: 33%; text-align: center">Time</th>
+    </tr>
+    </thead>
+    <tbody>
+    <td style="text-align: center">{{ booking_list.description }}</td>
+    <td style="text-align: center">{{ booking_list.location }}</td>
+    <td style="text-align: center">{{ booking_list.interval }}</td>
+    </tbody>
+</table>
 
 <div id="instructions">
     <p>Instructions go here...</p>
@@ -24,7 +33,6 @@
         <th style="width: 25%; text-align: left">Time</th>
         <th style="width: 20%; text-align: left">Availability</th>
         {% if admin %}
-            <th style="width: 40%;">Booked by</th>
             <th style="width: 40%;">Username</th>
         {% endif %}
     </tr>
@@ -41,17 +49,25 @@
                 <td>Available</td>
             {% endif %}
             {% if admin %}
-                <td>{{ available_slot.username }}</td>
-                <td><input type="text" id="inputUsername" placeholder="Username" style="width: 100%;"></td>
+                <td {% if not available_slot.username %}
+                    style="display: none" {% endif %}>{{ available_slot.username }}</td>
+                <td {% if available_slot.username %} style="display: none" {% endif %}><input type="text"
+                                                                                              id="inputUsername{{ available_slot.sequence_id }}"
+                                                                                              placeholder="Username"
+                                                                                              style="width: 50%;"></td>
             {% endif %}
         </tr>
     {% endfor %}
     </tbody>
 </table>
-
-<button id="bookBtn">Book</button>
-<button id="backBtn">Go Back</button>
-
+<div>
+    <button id="bookBtn">Book</button>
+    {% if admin %}
+    <button id="bookForStudentBtn">Book for student</button>
+    <button id="removeBookingBtn">Remove booking</button>
+    {% endif %}
+    <button id="backBtn">Go Back</button>
+</div>
 <script> const course_code = "{{ course_code }}"; </script>
 <script> const admin = "{{ admin }}"; </script>
 <script> const booking_list_id = "{{ booking_list.id }}"; </script>
