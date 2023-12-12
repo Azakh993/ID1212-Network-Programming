@@ -83,7 +83,7 @@ function createSlotRow(slot) {
         <td>${slot.start_time}</td>
         <td>${slot.user_id ? 'Booked' : 'Available'}</td>
         ${admin ? `
-            <td>${slot.username}</td>
+            <td>${slot.username ? slot.username : "None"}</td>
             <td><input type="text" id="inputUsername" placeholder="Username" style="width: 100%;"></td>
         ` : ''}
     `;
