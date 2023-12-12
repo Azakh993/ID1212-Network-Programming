@@ -1,0 +1,66 @@
+body {
+    background-color: #f7f7f7;
+    font-family: Arial, sans-serif;
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 60px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 60px;
+}
+
+h1 {
+    background-color: #007BFF;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+#instructions {
+    background-color: #fff;
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+
+#myReservationsTable {
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+
+#myReservationsTable th:nth-child(1),
+#myReservationsTable td:nth-child(1) {
+    width: 5%;
+}
+
+#bookingTable th:nth-child(2),
+#bookingTable td:nth-child(2) {
+    width: 20%;
+}
+
+#myReservationsTable th,
+#myReservationsTable td {
+    padding: 10px;
+    text-align: left;
+}
+
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 5px 5px 5px;
+    cursor: pointer;
+}
