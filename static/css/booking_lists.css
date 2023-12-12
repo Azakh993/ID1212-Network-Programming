@@ -60,13 +60,14 @@ h1 {
     text-align: left; /* Left-align text */
 }
 
-/* Style the buttons */
 button {
+    width: 150px;
     background-color: #007BFF;
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 5px 5px 5px 5px;
+    padding: 7px 7px 7px 7px;
+    margin: 10px 10px 10px 10px;
     cursor: pointer;
 }
 
