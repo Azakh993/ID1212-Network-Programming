@@ -103,7 +103,6 @@ def generate_json_ready_booking_list(booking_list):
 def remove_booking_list(course_code, booking_id):
     try:
         delete_booking_list(course_code, booking_id)
-    except Exception as exception:
-        print(f'Error: {str(exception)}')
-        return False
+    except Exception:
+        raise
     return True
