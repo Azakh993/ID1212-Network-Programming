@@ -1,4 +1,5 @@
 from flask import render_template, request, jsonify, make_response
+from sqlalchemy.exc import IntegrityError
 
 from controllers.controller_util import check_privileges
 from services.auth_service import get_user_privileges
@@ -35,18 +36,22 @@ def add_new_list(course_code, user_id):
         response_data = {"newBookingList": json_ready_booking_list}
         return make_response(jsonify(response_data), 201)
     else:
-        return send_error_response()
+        return send_error_response(400)
 
 
 def delete_list(course_code, user_id, booking_list_id):
     check_privileges(course_code, user_id)
 
-    successful_removal = remove_booking_list(course_code, booking_list_id)
+    try:
+        successful_removal = remove_booking_list(course_code, booking_list_id)
 
-    if successful_removal:
-        return make_response(jsonify({}), 204)
-    else:
-        return send_error_response()
+        if successful_removal:
+            return make_response(jsonify({}), 204)
+        else:
+            return send_error_response(400)
+
+    except IntegrityError as exception:
+        return send_error_response(422)
 
 
 def send_success_response(course_code, status_code):
@@ -55,9 +60,9 @@ def send_success_response(course_code, status_code):
     return make_response(jsonify(response_data), status_code)
 
 
-def send_error_response():
+def send_error_response(status_code):
     error_message = {"error": "Invalid booking data"}
-    return make_response(jsonify(error_message), 400)
+    return make_response(jsonify(error_message), status_code)
 
 
 class BookingListDTO:
