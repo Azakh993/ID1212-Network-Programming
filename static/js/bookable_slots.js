@@ -3,42 +3,103 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function setupEventListeners() {
-    document.getElementById("bookBtn").addEventListener("click", bookSelectedSlot);
+    if (admin === 'True') {
+        document.getElementById("bookForStudentBtn").addEventListener("click", () => {
+            const bookForStudent = true
+            bookSelectedSlot(bookForStudent)
+        });
+        document.getElementById("removeBookingBtn").addEventListener("click", removeBooking);
+    }
+    document.getElementById("bookBtn").addEventListener("click", () => {
+        const bookForStudent = false
+        bookSelectedSlot(bookForStudent)
+    });
     document.getElementById("backBtn").addEventListener("click", backToBookingList);
 
 }
 
-function bookSelectedSlot() {
+function bookSelectedSlot(bookForStudent) {
+    const courseCode = course_code
     const selectedBookingListID = booking_list_id;
+    const selectedSlotSequenceID = getSelectedSlotSequenceID()
+    const available = verifySlotAvailability(selectedSlotSequenceID)
+
+    if (!available) {
+        alert("This slot is not available.");
+        return;
+    }
+    const method = "POST"
+    let body;
+
+    if (bookForStudent) {
+        const username = document.getElementById("inputUsername" + selectedSlotSequenceID).value;
+
+        if (username === null || username.length === 0) {
+            alert("Please provide a valid username.")
+            return;
+        }
+        body = JSON.stringify({username: username})
+    } else {
+        body = JSON.stringify({})
+    }
+
+    const requestOptions = setRequestOptions(method, body)
+
+    const URI = `/courses/${courseCode}/booking-lists/${selectedBookingListID}/bookable-slots/${selectedSlotSequenceID}`
+
+    sendRequest(URI, requestOptions)
+}
+
+function removeBooking() {
+    const courseCode = course_code
+    const selectedBookingListID = booking_list_id;
+    const selectedSlotSequenceID = getSelectedSlotSequenceID()
+
+    const available = verifySlotAvailability(selectedSlotSequenceID)
+    if (available) {
+        alert("This slot is not booked.");
+        return;
+    }
+
+    const method = "DELETE"
+    const body = JSON.stringify({})
+    const requestOptions = setRequestOptions(method, body)
+
+    const URI = `/courses/${courseCode}/booking-lists/${selectedBookingListID}/bookable-slots/${selectedSlotSequenceID}`
+
+    sendRequest(URI, requestOptions)
+}
+
+function getSelectedSlotSequenceID() {
     const selectedSlot = document.querySelector("input[name='selectedSlot']:checked");
+
     if (!selectedSlot) {
         alert("Please select a slot.");
         return;
     }
 
-    const selectedSlotSequenceID = selectedSlot.value;
-    const courseCode = course_code;
+    return selectedSlot.value;
+}
 
+function verifySlotAvailability(selectedSlotSequenceID) {
     const slotAvailability = document.querySelector(
         `input[name='selectedSlot'][value='${selectedSlotSequenceID}']`
     ).getAttribute('data-availability');
 
-    if (slotAvailability === "Booked") {
-        alert("This slot is not available.");
-        return;
-    }
+    return slotAvailability !== "Booked";
+}
 
-    const requestOptions = {
-        method: "PUT",
-        body: JSON.stringify({slot_sequence_id: selectedSlotSequenceID}),
+function setRequestOptions(method, requestBody) {
+    return {
+        method: method,
+        body: requestBody,
         headers: {"Content-Type": "application/json"}
     };
+}
 
-    fetch(`/courses/${courseCode}/booking-lists/${selectedBookingListID}/bookable-slots`, requestOptions)
+function sendRequest(URI, requestOptions) {
+    fetch(URI, requestOptions)
         .then(handleResponse)
-        .then(() => {
-            alert("Slot booked successfully.");
-        })
         .catch(handleError);
 }
 
@@ -49,15 +110,27 @@ function backToBookingList() {
 
 function handleResponse(response) {
     const courseCode = course_code;
-    if (response.status === 200) {
-        return response.json();
+    switch (response.status) {
+        case 200:
+            return response.json();
+        case 201:
+            alert("Reservation made successfully!");
+            return fetchLatestSlotsListData(courseCode)
+        case 204:
+            alert("Reservation removed successfully!");
+            return fetchLatestSlotsListData(courseCode)
+        case 400:
+            alert("Invalid request.");
+            return
+        case 403:
+            alert("You can only book one slot per booking list!");
+            return
+        case 404:
+            alert("Provided username is not registered in course.");
+            return
+        default:
+            throw new Error("Request failed: " + response.status);
     }
-
-    if (response.status === 204 || response.status === 201) {
-        return fetchLatestSlotsListData(courseCode)
-    }
-
-    throw new Error("Request failed: " + response.status);
 }
 
 function updateSlotsListUI(jsonData) {
@@ -65,9 +138,6 @@ function updateSlotsListUI(jsonData) {
 
     const existingRows = tableBody.querySelectorAll("tr");
     existingRows.forEach(row => tableBody.removeChild(row));
-
-    console.log(jsonData)
-
 
     jsonData.available_slots.forEach(slot => {
         const newRow = createSlotRow(slot);
@@ -82,9 +152,9 @@ function createSlotRow(slot) {
         <td><input type="radio" name="selectedSlot" value="${slot.sequence_id}" data-availability="${slot.user_id ? 'Booked' : 'Available'}"></td>
         <td>${slot.start_time}</td>
         <td>${slot.user_id ? 'Booked' : 'Available'}</td>
-        ${admin ? `
-            <td>${slot.username ? slot.username : "None"}</td>
-            <td><input type="text" id="inputUsername" placeholder="Username" style="width: 100%;"></td>
+        ${admin === 'True' ? `
+            <td ${!slot.username ? 'style="display: none"' : ''}>${slot.username || 'None'}</td>
+            <td ${slot.username ? 'style="display: none"' : ''}><input type="text" id="inputUsername${slot.sequence_id}" placeholder="Username" style="width: 50%;"></td>
         ` : ''}
     `;
 
