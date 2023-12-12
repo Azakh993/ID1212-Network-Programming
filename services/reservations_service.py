@@ -3,7 +3,8 @@ from datetime import datetime, timedelta
 from models import Reservation
 from repositories.booking_list_repository import retrieve_booking_list
 from repositories.reservation_repository import (retrieve_reservations, insert_reservation, retrieve_user_reservations,
-                                                 delete_reservation)
+                                                 delete_reservation, delete_slot_reservation,
+                                                 retrieve_user_reservations_by_booking_list_id)
 from repositories.user_repository import get_user_by_user_id
 
 
@@ -90,7 +91,11 @@ def generate_user_reservation_entries(course_code, user_id):
     return user_reservation_entries
 
 
-def remove_user_reservation(reservation_id):
+def format_datetime(datetime_to_format):
+    return datetime_to_format.strftime("%Y-%m-%d %H:%M")
+
+
+def remove_reservation(reservation_id):
     try:
         delete_reservation(reservation_id)
     except Exception as exception:
@@ -99,8 +104,17 @@ def remove_user_reservation(reservation_id):
     return True
 
 
-def format_datetime(datetime_to_format):
-    return datetime_to_format.strftime("%Y-%m-%d %H:%M")
+def remove_slot_reservation(booking_list_id, slot_sequence_id):
+    try:
+        delete_slot_reservation(booking_list_id, slot_sequence_id)
+    except Exception as exception:
+        print(f'Error: {str(exception)}')
+        return False
+    return True
+
+
+def get_user_reservations_for_booking_list(user_id, booking_list_id):
+    return retrieve_user_reservations_by_booking_list_id(user_id, booking_list_id)
 
 
 class AvailableSlotDTO:
