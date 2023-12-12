@@ -13,3 +13,7 @@ def authenticate_user(course_code, username, password):
 
 def get_user_privileges(course_code, user_id):
     return retrieve_user_privileges(course_code, user_id)
+
+
+def retrieve_user_by_username(course_code, username):
+    return get_user_by_username(course_code, username)
