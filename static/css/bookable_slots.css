@@ -29,7 +29,7 @@ h1 {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-#slotsTable {
+#slotsTable, #detailsTable {
     width: 100%;
     background-color: #fff;
     border: 1px solid #ddd;
@@ -55,10 +55,12 @@ h1 {
 }
 
 button {
+    width: 150px;
     background-color: #007BFF;
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 5px 5px 5px 5px;
+    padding: 7px 7px 7px 7px;
+    margin: 10px 10px 10px 10px;
     cursor: pointer;
 }
