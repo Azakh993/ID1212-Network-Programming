@@ -1,6 +1,18 @@
-from flask import request, render_template, make_response, jsonify
+from flask import request, render_template, make_response, jsonify, session
 
+from controllers.controller_util import validate_course_code, validate_user_login
 from services.reservations_service import generate_user_reservation_entries, remove_reservation
+
+
+@validate_course_code
+@validate_user_login
+def user_reservations(course_code):
+    if request.method == "GET":
+        return show_reservations_page(course_code, session.get("user_id"))
+
+    if request.method == "DELETE":
+        reservation_id = request.get_json().get("reservation_id")
+        return remove_user_reservation(reservation_id)
 
 
 def show_reservations_page(course_code, user_id):

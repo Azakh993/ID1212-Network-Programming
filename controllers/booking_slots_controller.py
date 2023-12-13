@@ -1,15 +1,17 @@
-from flask import request, render_template, make_response, jsonify
+from flask import request, render_template, make_response, jsonify, session
 
-from controllers.controller_util import check_privileges
+from controllers.controller_util import check_privileges, validate_course_code, validate_user_login
 from services.auth_service import get_user_privileges, retrieve_user_by_username
 from services.booking_list_service import get_booking_list
 from services.reservations_service import generate_available_slots, generate_json_ready_available_slots, reserve_slot, \
     generate_json_ready_reservation, remove_slot_reservation, get_user_reservations_for_booking_list
 
 
-def show_slots_page(course_code, user_id, booking_id):
-    user_privileges = get_user_privileges(course_code, user_id)
-    booking_list = get_booking_list(booking_id)
+@validate_course_code
+@validate_user_login
+def show_booking_slots(course_code, booking_list_id):
+    user_privileges = get_user_privileges(course_code, session.get("user_id"))
+    booking_list = get_booking_list(booking_list_id)
     available_slots = generate_available_slots(booking_list)
 
     json_request = request.headers.get('Accept') == 'application/json'
@@ -24,6 +26,16 @@ def show_slots_page(course_code, user_id, booking_id):
         return make_response(jsonify(response_data), 200)
 
     return render_slots_page(course_code, booking_list, user_privileges, available_slots)
+
+
+@validate_course_code
+@validate_user_login
+def manage_booking_slots(course_code, booking_list_id, sequence_id):
+    if request.method == "POST":
+        return book_slot(course_code, session.get("user_id"), booking_list_id, sequence_id)
+
+    if request.method == "DELETE":
+        return remove_reservation(course_code, session.get("user_id"), booking_list_id, sequence_id)
 
 
 def render_slots_page(course_code, booking_list, user_privileges, available_slots):

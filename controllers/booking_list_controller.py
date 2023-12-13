@@ -1,10 +1,36 @@
-from flask import render_template, request, jsonify, make_response
+from flask import render_template, request, jsonify, make_response, session
 from sqlalchemy.exc import IntegrityError
 
-from controllers.controller_util import check_privileges
+from controllers.controller_util import check_privileges, validate_course_code, validate_user_login
 from services.auth_service import get_user_privileges
 from services.booking_list_service import get_booking_lists, add_booking_list, is_invalid_booking_list, \
     generate_json_ready_booking_lists, remove_booking_list, generate_json_ready_booking_list
+
+
+@validate_course_code
+@validate_user_login
+def manage_booking_lists(course_code):
+    if request.method == "GET":
+        return show_lists_page(course_code, session.get("user_id"))
+
+    if request.method == "POST":
+        return add_new_list(course_code, session.get("user_id"))
+
+
+@validate_course_code
+@validate_user_login
+def delete_booking_list(course_code, booking_list_id):
+    check_privileges(course_code, session.get("user_id"))
+    try:
+        successful_removal = remove_booking_list(course_code, booking_list_id)
+
+        if successful_removal:
+            return make_response(jsonify({}), 204)
+        else:
+            return send_error_response(400)
+
+    except IntegrityError:
+        return send_error_response(422)
 
 
 def show_lists_page(course_code, user_id):
@@ -37,21 +63,6 @@ def add_new_list(course_code, user_id):
         return make_response(jsonify(response_data), 201)
     else:
         return send_error_response(400)
-
-
-def delete_list(course_code, user_id, booking_list_id):
-    check_privileges(course_code, user_id)
-
-    try:
-        successful_removal = remove_booking_list(course_code, booking_list_id)
-
-        if successful_removal:
-            return make_response(jsonify({}), 204)
-        else:
-            return send_error_response(400)
-
-    except IntegrityError as exception:
-        return send_error_response(422)
 
 
 def send_success_response(course_code, status_code):
