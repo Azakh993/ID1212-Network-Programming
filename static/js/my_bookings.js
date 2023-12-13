@@ -1,14 +1,24 @@
 document.addEventListener("DOMContentLoaded", () => {
-    setupEventListeners();
+    const socket = setupWebSocketListeners();
+    setupEventListeners(socket);
 });
 
-function setupEventListeners() {
-    document.getElementById("cancelReservationBtn").addEventListener("click", cancelSelectedReservation);
+function setupWebSocketListeners() {
+    const socket = io.connect('http://' + window.location.hostname + ':' + location.port);
+
+    socket.on('personal_bookings_changed', function (data) {
+        fetchLatestReservationsListData(course_code);
+    });
+    return socket;
+}
+
+function setupEventListeners(socket) {
+    document.getElementById("cancelReservationBtn").addEventListener("click", () => cancelSelectedReservation(socket));
     document.getElementById("backBtn").addEventListener("click", backToBookingList);
 
 }
 
-function cancelSelectedReservation() {
+function cancelSelectedReservation(socket) {
     const selectedReservation = document.querySelector("input[name='selectedReservation']:checked");
 
     if (!selectedReservation) {
@@ -28,6 +38,8 @@ function cancelSelectedReservation() {
     fetch(`/courses/${courseCode}/my-bookings`, requestOptions)
         .then(handleResponse)
         .then(() => {
+            socket.emit('booking_lists_changed')
+            socket.emit('booking_slots_changed')
             alert("Reservation removed successfully.");
         })
         .catch(handleError);

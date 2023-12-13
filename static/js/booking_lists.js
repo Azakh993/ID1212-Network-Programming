@@ -1,12 +1,22 @@
 document.addEventListener("DOMContentLoaded", () => {
-    setupEventListeners();
+    const socket = setupWebSocketListeners();
+    setupEventListeners(socket);
 });
 
-function setupEventListeners() {
+function setupWebSocketListeners() {
+    const socket = io.connect('http://' + window.location.hostname + ':' + location.port);
+
+    socket.on('update_booking_list', function (data) {
+        fetchLatestBookingListData(course_code);
+    });
+    return socket;
+}
+
+function setupEventListeners(socket) {
     if (admin === "True") {
         document.getElementById("addBookingListBtn").addEventListener("click", toggleNewBookingRow);
-        document.getElementById("newBookingRowSubmitBtn").addEventListener("click", submitNewBooking);
-        document.getElementById("removeBookingListBtn").addEventListener("click", removeBookingList);
+        document.getElementById("newBookingRowSubmitBtn").addEventListener("click", () => submitNewBooking(socket));
+        document.getElementById("removeBookingListBtn").addEventListener("click", () => removeBookingList(socket));
     }
     document.getElementById("selectBookingBtn").addEventListener("click", selectBooking);
     document.getElementById("showMyBookingsBtn").addEventListener("click", showMyBookings);
@@ -17,7 +27,7 @@ function toggleNewBookingRow() {
     newBookingRow.style.display = newBookingRow.style.display === "none" ? "table-row" : "none";
 }
 
-function submitNewBooking() {
+function submitNewBooking(socket) {
     const courseCode = course_code;
     const bookingData = getBookingFormData();
 
@@ -34,6 +44,9 @@ function submitNewBooking() {
 
     fetch(`/courses/${courseCode}/booking-lists`, requestOptions)
         .then(handleResponse)
+        .then(() => {
+            socket.emit('booking_lists_changed')
+        })
         .catch(handleError);
 }
 
@@ -69,7 +82,7 @@ function showMyBookings() {
     window.location.href = `/courses/${courseCode}/my-bookings`;
 }
 
-function removeBookingList() {
+function removeBookingList(socket) {
     const courseCode = course_code;
     const selectedBooking = document.querySelector('input[name="selectedBooking"]:checked');
     const selectedBookingID = selectedBooking.value;
@@ -86,12 +99,15 @@ function removeBookingList() {
 
     fetch(`/courses/${courseCode}/booking-lists/${selectedBookingID}`, requestOptions)
         .then(handleResponse)
+        .then(() => {
+            socket.emit('booking_lists_changed')
+        })
         .catch(handleError);
 }
 
 function handleResponse(response) {
     const courseCode = course_code;
-    switch(response.status) {
+    switch (response.status) {
         case 200:
             return response.json()
         case 201:

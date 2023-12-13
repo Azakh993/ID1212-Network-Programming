@@ -1,24 +1,35 @@
 document.addEventListener("DOMContentLoaded", () => {
-    setupEventListeners();
+    const socket = setupWebSocketListeners();
+    setupEventListeners(socket);
 });
 
-function setupEventListeners() {
+function setupWebSocketListeners() {
+    const socket = io.connect('http://' + window.location.hostname + ':' + location.port);
+
+    socket.on('update_booking_slots', function (data) {
+        fetchLatestSlotsListData(course_code);
+    });
+
+    return socket;
+}
+
+function setupEventListeners(socket) {
     if (admin === 'True') {
         document.getElementById("bookForStudentBtn").addEventListener("click", () => {
             const bookForStudent = true
-            bookSelectedSlot(bookForStudent)
+            bookSelectedSlot(socket, bookForStudent)
         });
-        document.getElementById("removeBookingBtn").addEventListener("click", removeBooking);
+        document.getElementById("removeBookingBtn").addEventListener("click", () => removeBooking(socket));
     }
     document.getElementById("bookBtn").addEventListener("click", () => {
         const bookForStudent = false
-        bookSelectedSlot(bookForStudent)
+        bookSelectedSlot(socket, bookForStudent)
     });
     document.getElementById("backBtn").addEventListener("click", backToBookingList);
 
 }
 
-function bookSelectedSlot(bookForStudent) {
+function bookSelectedSlot(socket, bookForStudent) {
     const courseCode = course_code
     const selectedBookingListID = booking_list_id;
     const selectedSlotSequenceID = getSelectedSlotSequenceID()
@@ -47,10 +58,10 @@ function bookSelectedSlot(bookForStudent) {
 
     const URI = `/courses/${courseCode}/booking-lists/${selectedBookingListID}/bookable-slots/${selectedSlotSequenceID}`
 
-    sendRequest(URI, requestOptions)
+    sendRequest(socket, URI, requestOptions)
 }
 
-function removeBooking() {
+function removeBooking(socket) {
     const courseCode = course_code
     const selectedBookingListID = booking_list_id;
     const selectedSlotSequenceID = getSelectedSlotSequenceID()
@@ -67,7 +78,7 @@ function removeBooking() {
 
     const URI = `/courses/${courseCode}/booking-lists/${selectedBookingListID}/bookable-slots/${selectedSlotSequenceID}`
 
-    sendRequest(URI, requestOptions)
+    sendRequest(socket, URI, requestOptions)
 }
 
 function getSelectedSlotSequenceID() {
@@ -97,9 +108,13 @@ function setRequestOptions(method, requestBody) {
     };
 }
 
-function sendRequest(URI, requestOptions) {
+function sendRequest(socket, URI, requestOptions) {
     fetch(URI, requestOptions)
         .then(handleResponse)
+        .then(() => {
+            socket.emit('booking_slots_changed')
+            socket.emit('booking_lists_changed')
+        })
         .catch(handleError);
 }
 
