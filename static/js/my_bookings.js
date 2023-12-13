@@ -40,7 +40,7 @@ function backToBookingList() {
 
 function handleResponse(response) {
     const courseCode = course_code;
-    switch(response.status) {
+    switch (response.status) {
         case 200:
             return response.json()
         case 201:
