@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Users</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/add_users.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>Add Users</h1>
+
+    <div id="instructions">
+        <p>Instructions go here...</p>
+    </div>
+
+    <div class="form-container">
+        <label for="usernames">Enter Comma-Separated Usernames:</label>
+        <textarea id="usernames" name="usernames" rows="4" required></textarea>
+
+        <label for="password">Enter Password for All Users:</label>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <label for="elevated-privileges">Elevated Privileges:</label>
+        <select id="elevated-privileges" name="elevated-privileges">
+            <option value="false" selected>False</option>
+            <option value="true">True</option>
+        </select><br><br>
+
+
+        <button class="button" id="addUsersBtn">Add Users</button>
+        <button class="button" id="backBtn">Go Back</button>
+    </div>
+</div>
+
+<script>
+    const course_code = "{{ course_code }}";
+</script>
+<script src="{{ url_for('static', filename='js/add_users.js') }}"></script>
+</body>
+</html>
