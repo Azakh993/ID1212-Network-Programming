@@ -1,4 +1,5 @@
 from flask import render_template, session, request
+from werkzeug.security import generate_password_hash
 
 from services import auth_service as auth
 from util import utility as util
@@ -20,20 +21,18 @@ def add_users(course_code):
         return render_template("add_users.html", course_code=course_code)
     elif request.method == "POST":
         json_data = request.get_json()
-        return add_and_enroll_users(course_code, json_data)
+        return add_and_enroll_users(json_data, course_code=course_code)
 
 
-@util.validate_privileges
-def add_and_enroll_users(course_code, json_data):
+def add_and_enroll_users(json_data, course_code):
     user_addition_dto = UserAdditionDTO(json_data)
     responses = auth.insert_new_users_and_enrollments(course_code, user_addition_dto)
     return util.send_response(util.HTTP_207_MULTI_STATUS, responses)
 
 
-@util.validate_course_code
-def logout():
+def logout(course_code):
     session.clear()
-    return util.send_response(util.HTTP_204_NO_CONTENT)
+    return render_template("login.html", course_code=course_code)
 
 
 def handle_login_request(course_code):
@@ -49,5 +48,5 @@ def handle_login_request(course_code):
 class UserAdditionDTO:
     def __init__(self, json_data):
         self.usernames = json_data.get("usernames").split(",")
-        self.password = json_data.get("password")
-        self.elevated_privileges = json_data.get("elevated_privileges")
+        self.hashed_password = generate_password_hash(json_data.get("password"))
+        self.elevated_privileges = json_data.get("elevated_privileges") == 'true'
