@@ -22,12 +22,12 @@ def get_booking_lists(course_code=None, booking_list_id=None):
     return []
 
 
-def erase_booking_list(course_code, booking_id):
+def erase_booking_list(course_code, booking_list_id):
     try:
-        blr.delete_booking_list(course_code, booking_id)
+        blr.delete_booking_list(course_code, booking_list_id)
     except IntegrityError:
         return util.HTTP_422_UNPROCESSABLE_ENTITY, {"error": "Booking list is in use"}
-    return util.HTTP_204_NO_CONTENT, None
+    return util.HTTP_410_GONE, {'bookingListId': booking_list_id}
 
 
 def add_booking_list(course_code, booking_list_dto):
@@ -54,9 +54,9 @@ def add_booking_list(course_code, booking_list_dto):
 
 
 def generate_processed_booking_list(booking_list_id):
-    booking_list = [blr.retrieve_booking_list(booking_list_id)]
+    booking_list = blr.retrieve_booking_list(booking_list_id)
     if booking_list is not None:
-        return processed_booking_lists(booking_list)[0]
+        return processed_booking_lists([booking_list])[0]
     return None
 
 
