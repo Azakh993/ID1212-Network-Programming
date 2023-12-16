@@ -19,6 +19,9 @@ class AvailableSlotDTO:
 def generate_available_slots(booking_list_id):
     booking_list = blr.retrieve_booking_list(booking_list_id)
 
+    if booking_list is None:
+        return None
+
     available_slots = [AvailableSlotDTO(
         booking_list_id=booking_list.id,
         start_time=process_datetime(booking_list.time, booking_list.interval, i),
@@ -36,21 +39,21 @@ def generate_available_slots(booking_list_id):
 def book_slot(course_code, user_id, booking_list_id, slot_id, username):
     requested_slot = get_requested_slot(booking_list_id, slot_id)
     if not slot_is_available(requested_slot):
-        return util.send_response(util.HTTP_422_UNPROCESSABLE_ENTITY, {"error: ": "Slot is already booked"})
+        return util.HTTP_422_UNPROCESSABLE_ENTITY, {"error: ": "Slot is already booked"}
 
     user_id = get_user_id_for_booking(course_code, user_id, username)
     if user_id is None:
-        return util.send_response(util.HTTP_404_NOT_FOUND, {"error: ": "User not found for booking"})
+        return util.HTTP_404_NOT_FOUND, {"error: ": "User not found for booking"}
 
     if user_has_existing_reservations(user_id, booking_list_id):
-        return util.send_response(util.HTTP_403_FORBIDDEN, {"error: ": "User has existing reservations"})
+        return util.HTTP_403_FORBIDDEN, {"error: ": "User has existing reservations"}
 
     reserved_slot = reserve_slot(user_id, booking_list_id, slot_id)
     if reserved_slot is not None:
-        return util.send_response(util.HTTP_201_CREATED, serialized_reservation(reserved_slot))
+        return util.HTTP_201_CREATED, serialized_reservation(reserved_slot)
 
     else:
-        return util.send_response(util.HTTP_400_BAD_REQUEST, {"error: ": "Reservation could not be added"})
+        return util.HTTP_400_BAD_REQUEST, {"error: ": "Reservation could not be added"}
 
 
 def get_requested_slot(booking_list_id, slot_id):
@@ -72,6 +75,9 @@ def get_user_id_for_booking(course_code, user_id, username):
 
 def serialized_available_slots(booking_list_id):
     available_slots = generate_available_slots(booking_list_id)
+    if available_slots is None:
+        return None
+
     json_available_slots = [{
         "list_id": available_slot.list_id,
         "sequence_id": available_slot.sequence_id,
