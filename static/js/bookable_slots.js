@@ -1,3 +1,5 @@
+// noinspection JSUnresolvedReference
+
 document.addEventListener("DOMContentLoaded", () => {
     const socket = setupWebSocketListeners();
     setupEventListeners(socket);
@@ -54,10 +56,8 @@ function bookSelectedSlot(socket, bookForStudent) {
         body = JSON.stringify({})
     }
 
-    const requestOptions = setRequestOptions(method, body)
-
     const URI = `/courses/${courseCode}/booking-lists/${selectedBookingListID}/bookable-slots/${selectedSlotSequenceID}`
-
+    const requestOptions = setRequestOptions(method, body)
     sendRequest(socket, URI, requestOptions)
 }
 
@@ -75,9 +75,7 @@ function removeBooking(socket) {
     const method = "DELETE"
     const body = JSON.stringify({})
     const requestOptions = setRequestOptions(method, body)
-
     const URI = `/courses/${courseCode}/booking-lists/${selectedBookingListID}/bookable-slots/${selectedSlotSequenceID}`
-
     sendRequest(socket, URI, requestOptions)
 }
 
@@ -110,11 +108,7 @@ function setRequestOptions(method, requestBody) {
 
 function sendRequest(socket, URI, requestOptions) {
     fetch(URI, requestOptions)
-        .then(handleResponse)
-        .then(() => {
-            socket.emit('booking_slots_changed')
-            socket.emit('booking_lists_changed')
-        })
+        .then((response) => handleResponse(response, socket))
         .catch(handleError);
 }
 
@@ -123,16 +117,18 @@ function backToBookingList() {
     window.location.href = `/courses/${courseCode}/booking-lists`;
 }
 
-function handleResponse(response) {
+function handleResponse(response, socket) {
     const courseCode = course_code;
     switch (response.status) {
         case 200:
             return response.json();
         case 201:
             alert("Reservation made successfully!");
+            socket.emit('booking_slots_changed');
             return fetchLatestSlotsListData(courseCode)
         case 204:
             alert("Reservation removed successfully!");
+            socket.emit('booking_slots_changed');
             return fetchLatestSlotsListData(courseCode)
         case 400:
             alert("Invalid request.");
