@@ -1,43 +1,43 @@
 <!DOCTYPE html>
 <html lang="sv">
-<head>
-    <title>Booking Page</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/booking_table.css') }}">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
-</head>
-<body>
-<h1>{{ course_code.upper() }}</h1>
-
-<div id="instructions">
-    <p>Instructions go here...</p>
-</div>
-
-<table id="bookingTable">
-    <thead>
-    <tr>
-        <th style="width: 5%;"></th>
-        <th style="width: 20%;">Time</th>
-        <th style="width: 40%;">Description</th>
-        <th style="width: 20%;">Location</th>
-        <th style="width: 25%;">Length</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for reservation in reservations %}
-        <tr>
-            <td><input type="radio" name="selectedReservation" value="{{ reservation.id }}"></td>
-            <td>{{ reservation.start_time }}</td>
-            <td>{{ reservation.description }}</td>
-            <td>{{ reservation.location }}</td>
-            <td>{{ reservation.length }} min</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
-
-<button id="backBtn">Go Back</button>
-<button id="cancelReservationBtn" class="cancelReservationBtn" type="button">Cancel reservation</button>
-<script> const course_code = "{{ course_code }}";</script>
-<script src="{{ url_for('static', filename='js/my_bookings.js') }}"></script>
-</body>
+	<head>
+		<title>Booking Page</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/booking_table.css') }}">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+	</head>
+	<body>
+		<h1>{{ course_code.upper() }}</h1>
+		<div id="instructions">
+			<p>Instructions go here...</p>
+		</div>
+		<table id="bookingTable">
+			<thead>
+				<tr>
+					<th style="width: 5%;"></th>
+					<th style="width: 20%;">Time</th>
+					<th style="width: 40%;">Description</th>
+					<th style="width: 20%;">Location</th>
+					<th style="width: 25%;">Length</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for reservation in reservations %}
+				<tr>
+					<td><label>
+						<input type="radio" name="selectedReservation" value="{{ reservation.id }}">
+						</label>
+					</td>
+					<td>{{ reservation.start_time }}</td>
+					<td>{{ reservation.description }}</td>
+					<td>{{ reservation.location }}</td>
+					<td>{{ reservation.length }} min</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<button id="backBtn">Go Back</button>
+		<button id="cancelReservationBtn" class="cancelReservationBtn" type="button">Cancel reservation</button>
+		<script> const course_code = "{{ course_code }}";</script>
+		<script src="{{ url_for('static', filename='js/my_bookings.js') }}"></script>
+	</body>
 </html>
