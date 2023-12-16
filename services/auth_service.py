@@ -1,3 +1,5 @@
+from werkzeug.security import check_password_hash
+
 from models import User, UserCourseRegistration
 from repositories import registration_repository as rr
 from repositories import user_repository as ur
@@ -6,14 +8,14 @@ from util import utility as util
 
 def authenticate(course_code, username, password):
     user = ur.get_user_by_username(course_code, username)
-    if user is not None and user.password == password:
+    if user is not None and check_password_hash(user.password, password):
         return user
     return None
 
 
 def insert_new_users_and_enrollments(course_code, user_addition_dto):
-    added_users, not_added_users = add_new_users(user_addition_dto.usernames, user_addition_dto.password)
-    enrolled_users, not_enrolled_users = enroll_users(course_code, added_users, user_addition_dto.user_privileges)
+    added_users, not_added_users = add_new_users(user_addition_dto.usernames, user_addition_dto.hashed_password)
+    enrolled_users, not_enrolled_users = enroll_users(course_code, added_users, user_addition_dto.elevated_privileges)
     return generate_responses(added_users, enrolled_users, not_added_users, not_enrolled_users)
 
 
@@ -24,7 +26,6 @@ def add_new_users(usernames, password):
     for user in new_users:
         try:
             ur.insert_users(user)
-            new_users.append(user)
         except Exception as exception:
             print(f'Error: {str(exception)}')
             failed_entries.append(user.username)
