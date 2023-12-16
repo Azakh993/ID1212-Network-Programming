@@ -28,7 +28,8 @@ def show_booking_slots(course_code, booking_list_id):
 def manage_booking_slots(course_code, booking_list_id, sequence_id):
     if request.method == "POST":
         username = request.get_json().get("username")
-        return rs.book_slot(course_code, session.get("user_id"), booking_list_id, sequence_id, username)
+        code, response_data = rs.book_slot(course_code, session.get("user_id"), booking_list_id, sequence_id, username)
+        return util.send_response(code, response_data)
 
     if request.method == "DELETE":
         return remove_reservation(booking_list_id, sequence_id, course_code=course_code)
