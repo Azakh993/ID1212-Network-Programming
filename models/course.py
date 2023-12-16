@@ -10,5 +10,5 @@ class Course(Base):
     id = Column(VARCHAR, primary_key=True)
     name = Column(VARCHAR, nullable=False)
 
-    registrations = relationship('UserCourseRegistration', back_populates='course')
-    booking_lists = relationship('BookingList', back_populates='course')
+    registrations = relationship('UserCourseRegistration', back_populates='courses')
+    booking_lists = relationship('BookingList', back_populates='courses')
