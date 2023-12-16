@@ -1,4 +1,4 @@
-// noinspection JSUnresolvedReference
+// noinspection JSUnresolvedReference,JSUnusedLocalSymbols
 
 document.addEventListener("DOMContentLoaded", () => {
     const socket = setupWebSocketListeners();
@@ -149,6 +149,13 @@ function updateSlotsListUI(jsonData) {
 
     const existingRows = tableBody.querySelectorAll("tr");
     existingRows.forEach(row => tableBody.removeChild(row));
+
+    if(jsonData.available_slots === null || jsonData.available_slots.length === 0) {
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `<td style="text-align: center" colspan="4">No slots available</td>`;
+        tableBody.appendChild(newRow);
+        return;
+    }
 
     jsonData.available_slots.forEach(slot => {
         const newRow = createSlotRow(slot);
