@@ -1,13 +1,20 @@
-// noinspection JSUnresolvedReference
+// noinspection JSUnresolvedReference,JSUnusedLocalSymbols
 
 document.addEventListener("DOMContentLoaded", () => {
     const socket = setupWebSocketListeners();
     setupEventListeners(socket);
+
+    const refreshTime = 10 * 60 * 1000;
+    setTimeout(() => {
+        location.reload();
+    }, refreshTime);
 });
 
 function setupWebSocketListeners() {
     const socket = io.connect('http://' + window.location.hostname + ':' + location.port);
 
+    socket.on('new_booking_list_added', addBookingListRow);
+    socket.on('existing_booking_list_removed', removeBookingListRow);
     socket.on('update_booking_list', function (data) {
         fetchLatestBookingListData(course_code);
     });
@@ -23,6 +30,7 @@ function setupEventListeners(socket) {
     }
     document.getElementById("selectBookingBtn").addEventListener("click", selectBooking);
     document.getElementById("showMyBookingsBtn").addEventListener("click", showMyBookings);
+    document.getElementById("logoutBtn").addEventListener("click", logOut);
 }
 
 function toggleNewBookingRow() {
@@ -108,23 +116,65 @@ function goToAddUsersPage() {
     window.location.href = `/courses/${courseCode}/add-users`;
 }
 
-function handleResponse(response, socket) {
+function logOut() {
     const courseCode = course_code;
+    window.location.href = `/courses/${courseCode}/logout`;
+}
+
+async function handleResponse(response, socket) {
     switch (response.status) {
         case 200:
             return response.json()
         case 201:
-            socket.emit('booking_lists_changed');
-            return fetchLatestBookingListData(courseCode)
-        case 204:
-            socket.emit('booking_lists_changed');
-            return fetchLatestBookingListData(courseCode)
+            const newBookingListJson = await response.json();
+            socket.emit('new_booking_list_added', newBookingListJson);
+            return addBookingListRow(newBookingListJson);
+        case 410:
+            const removedBookingListIDJson = await response.json();
+            socket.emit('existing_booking_list_removed', removedBookingListIDJson);
+            return removeBookingListRow(removedBookingListIDJson);
         case 422:
             alert("There are booked slots in the list. Please remove them first.")
             return
         default:
             throw new Error("Request failed: " + response.status);
     }
+}
+
+function addBookingListRow(newBookingListJson) {
+    const tableBody = document.querySelector("#bookingTable tbody");
+    const newRow = createBookingRow(newBookingListJson.newBookingList);
+    tableBody.appendChild(newRow);
+}
+
+function removeBookingListRow(removedBookingListIDJson) {
+    const tableBody = document.querySelector("#bookingTable tbody");
+    const rowToRemove = tableBody.querySelector(`input[value="${removedBookingListIDJson.bookingListId}"]`).parentElement.parentElement;
+    tableBody.removeChild(rowToRemove);
+}
+
+function createBookingRow(booking_list) {
+    const newRow = document.createElement("tr");
+
+    newRow.innerHTML = `
+        <td><input type="radio" name="selectedBooking" value="${booking_list.id}"></td>
+        <td>${booking_list.time}</td>
+        <td>${booking_list.description}</td>
+        <td>${booking_list.location}</td>
+        <td>${booking_list.interval} min</td>
+        <td style="text-align: center;">${booking_list.available_slots}</td>
+    `;
+    return newRow;
+}
+
+function fetchLatestBookingListData(courseCode) {
+    fetch(`/courses/${courseCode}/booking-lists`, {
+        method: "GET",
+        headers: {"Accept": "application/json"}
+    })
+        .then(handleResponse)
+        .then(updateBookingListUI)
+        .catch(handleError);
 }
 
 function updateBookingListUI(jsonData) {
@@ -137,31 +187,6 @@ function updateBookingListUI(jsonData) {
         const newRow = createBookingRow(booking);
         tableBody.appendChild(newRow);
     });
-}
-
-function createBookingRow(booking) {
-    const newRow = document.createElement("tr");
-
-    newRow.innerHTML = `
-        <td><input type="radio" name="selectedBooking" value="${booking.id}"></td>
-        <td>${booking.time}</td>
-        <td>${booking.description}</td>
-        <td>${booking.location}</td>
-        <td>${booking.interval} min</td>
-        <td style="text-align: center;">${booking.available_slots}</td>
-    `;
-
-    return newRow;
-}
-
-function fetchLatestBookingListData(courseCode) {
-    fetch(`/courses/${courseCode}/booking-lists`, {
-        method: "GET",
-        headers: {"Accept": "application/json"}
-    })
-        .then(handleResponse)
-        .then(updateBookingListUI)
-        .catch(handleError);
 }
 
 function handleError(error) {
