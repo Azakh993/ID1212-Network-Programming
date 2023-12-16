@@ -9,7 +9,6 @@ body {
 .container {
     max-width: 1000px;
     margin: 60px auto;
-    padding: 60px;
 }
 
 h1 {
@@ -29,40 +28,13 @@ h1 {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-
-#myReservationsTable {
-    width: 100%;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 10px;
-}
-
-
-#myReservationsTable th:nth-child(1),
-#myReservationsTable td:nth-child(1) {
-    width: 5%;
-}
-
-#bookingTable th:nth-child(2),
-#bookingTable td:nth-child(2) {
-    width: 20%;
-}
-
-#myReservationsTable th,
-#myReservationsTable td {
-    padding: 10px;
-    text-align: left;
-}
-
 button {
     width: 150px;
     background-color: #007BFF;
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 7px 7px 7px 7px;
-    margin: 10px 10px 10px 10px;
+    padding: 7px;
+    margin: 10px;
     cursor: pointer;
 }

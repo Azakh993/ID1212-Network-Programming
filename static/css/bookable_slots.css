@@ -1,33 +1,4 @@
-body {
-    background-color: #f7f7f7;
-    font-family: Arial, sans-serif;
-    max-width: 1000px;
-    margin: 60px auto;
-    padding: 60px;
-}
-
-.container {
-    max-width: 1000px;
-    margin: 60px auto;
-    padding: 60px;
-}
-
-h1 {
-    background-color: #007BFF;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    border-radius: 5px;
-}
-
-#details, #instructions {
-    background-color: #fff;
-    padding: 20px;
-    margin: 20px 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
+@import url('common.css');
 
 #slotsTable, #detailsTable {
     width: 100%;
@@ -52,15 +23,4 @@ h1 {
 #slotsTable td {
     padding: 10px;
     text-align: left;
-}
-
-button {
-    width: 150px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 7px 7px 7px 7px;
-    margin: 10px 10px 10px 10px;
-    cursor: pointer;
 }
