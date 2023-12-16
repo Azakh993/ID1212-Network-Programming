@@ -1,26 +1,53 @@
-from flask import render_template, session, jsonify, make_response, request
+from flask import render_template, session, request
 
-from controllers.controller_util import validate_course_code
-from services.auth_service import authenticate_user
+from services import auth_service as auth
+from util import utility as util
 
 
-@validate_course_code
+@util.validate_course_code
 def login(course_code):
     if request.method == "GET":
         return render_template("login.html", course_code=course_code)
+    elif request.method == "POST":
+        return handle_login_request(course_code)
 
-    if request.method == "POST":
+
+@util.validate_course_code
+@util.validate_user_login
+@util.validate_privileges
+def add_users(course_code):
+    if request.method == "GET":
+        return render_template("add_users.html", course_code=course_code)
+    elif request.method == "POST":
         json_data = request.get_json()
-        username = json_data.get("username")
-        password = json_data.get('password')
-        return authenticate(course_code, username, password)
+        return add_and_enroll_users(course_code, json_data)
 
 
-def authenticate(course_code, username, password):
-    user = authenticate_user(course_code, username, password)
-    if user is None:
-        error_message = {"error": "Unauthorized!"}
-        return make_response(jsonify(error_message), 401)
+@util.validate_privileges
+def add_and_enroll_users(course_code, json_data):
+    user_addition_dto = UserAdditionDTO(json_data)
+    responses = auth.insert_new_users_and_enrollments(course_code, user_addition_dto)
+    return util.send_response(util.HTTP_207_MULTI_STATUS, responses)
 
-    session['user_id'] = user.id
-    return make_response('', 204)
+
+@util.validate_course_code
+def logout():
+    session.clear()
+    return util.send_response(util.HTTP_204_NO_CONTENT)
+
+
+def handle_login_request(course_code):
+    json_data = request.get_json()
+    user = auth.authenticate(course_code, json_data.get("username"), json_data.get('password'))
+
+    if user:
+        session['user_id'] = user.id
+        return util.send_response(util.HTTP_204_NO_CONTENT)
+    return util.send_response(util.HTTP_401_UNAUTHORIZED, {"error": "Unauthorized!"})
+
+
+class UserAdditionDTO:
+    def __init__(self, json_data):
+        self.usernames = json_data.get("usernames").split(",")
+        self.password = json_data.get("password")
+        self.elevated_privileges = json_data.get("elevated_privileges")
