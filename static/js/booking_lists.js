@@ -1,3 +1,5 @@
+// noinspection JSUnresolvedReference
+
 document.addEventListener("DOMContentLoaded", () => {
     const socket = setupWebSocketListeners();
     setupEventListeners(socket);
@@ -17,6 +19,7 @@ function setupEventListeners(socket) {
         document.getElementById("addBookingListBtn").addEventListener("click", toggleNewBookingRow);
         document.getElementById("newBookingRowSubmitBtn").addEventListener("click", () => submitNewBooking(socket));
         document.getElementById("removeBookingListBtn").addEventListener("click", () => removeBookingList(socket));
+        document.getElementById("addUsersBtn").addEventListener("click", goToAddUsersPage);
     }
     document.getElementById("selectBookingBtn").addEventListener("click", selectBooking);
     document.getElementById("showMyBookingsBtn").addEventListener("click", showMyBookings);
@@ -28,7 +31,6 @@ function toggleNewBookingRow() {
 }
 
 function submitNewBooking(socket) {
-    const courseCode = course_code;
     const bookingData = getBookingFormData();
 
     if (!isFormDataValid(bookingData)) {
@@ -36,18 +38,14 @@ function submitNewBooking(socket) {
         return;
     }
 
+    const courseCode = course_code;
+    const URI = `/courses/${courseCode}/booking-lists`
     const requestOptions = {
         method: "POST",
         body: JSON.stringify(bookingData),
         headers: {"Content-Type": "application/json"}
     };
-
-    fetch(`/courses/${courseCode}/booking-lists`, requestOptions)
-        .then(handleResponse)
-        .then(() => {
-            socket.emit('booking_lists_changed')
-        })
-        .catch(handleError);
+    sendRequest(socket, URI, requestOptions)
 }
 
 function getBookingFormData() {
@@ -73,7 +71,6 @@ function selectBooking() {
         alert("No booking selected.");
         return;
     }
-
     window.location.href = `/courses/${courseCode}/booking-lists/${selectedBookingListID}/bookable-slots`;
 }
 
@@ -83,7 +80,6 @@ function showMyBookings() {
 }
 
 function removeBookingList(socket) {
-    const courseCode = course_code;
     const selectedBooking = document.querySelector('input[name="selectedBooking"]:checked');
     const selectedBookingID = selectedBooking.value;
 
@@ -92,27 +88,36 @@ function removeBookingList(socket) {
         return;
     }
 
+    const courseCode = course_code;
+    const URI = `/courses/${courseCode}/booking-lists/${selectedBookingID}`
     const requestOptions = {
         method: "DELETE",
         headers: {"Content-Type": "application/json"}
     };
+    sendRequest(socket, URI, requestOptions)
+}
 
-    fetch(`/courses/${courseCode}/booking-lists/${selectedBookingID}`, requestOptions)
-        .then(handleResponse)
-        .then(() => {
-            socket.emit('booking_lists_changed')
-        })
+function sendRequest(socket, URI, requestOptions) {
+    fetch(URI, requestOptions)
+        .then((response) => handleResponse(response, socket))
         .catch(handleError);
 }
 
-function handleResponse(response) {
+function goToAddUsersPage() {
+    const courseCode = course_code;
+    window.location.href = `/courses/${courseCode}/add-users`;
+}
+
+function handleResponse(response, socket) {
     const courseCode = course_code;
     switch (response.status) {
         case 200:
             return response.json()
         case 201:
+            socket.emit('booking_lists_changed');
             return fetchLatestBookingListData(courseCode)
         case 204:
+            socket.emit('booking_lists_changed');
             return fetchLatestBookingListData(courseCode)
         case 422:
             alert("There are booked slots in the list. Please remove them first.")
