@@ -11,5 +11,5 @@ class UserCourseRegistration(Base):
     course_id = Column(VARCHAR, ForeignKey('courses.id'), primary_key=True)
     admin = Column(BOOLEAN, nullable=False)
 
-    user = relationship('User', back_populates='registrations')
-    course = relationship('Course', back_populates='registrations')
+    users = relationship('User', back_populates='registrations')
+    courses = relationship('Course', back_populates='registrations')
