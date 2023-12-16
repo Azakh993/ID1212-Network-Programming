@@ -1,6 +1,6 @@
 from models.registration import UserCourseRegistration
 from repositories import session
-from repositories.repository_util import get_first_from_database
+from repositories.repository_util import get_first_from_database, add_to_database
 
 
 def retrieve_user_privileges(course_code, user_id):
@@ -9,3 +9,7 @@ def retrieve_user_privileges(course_code, user_id):
                                                         UserCourseRegistration.user_id == user_id)))
     user_privileges = enrollment_entry.admin
     return user_privileges
+
+
+def insert_enrollment_entry(enrolled_entry):
+    add_to_database(enrolled_entry)
