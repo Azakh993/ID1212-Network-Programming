@@ -1,7 +1,7 @@
 from models.registration import UserCourseRegistration
 from models.user import User
 from repositories import session
-from repositories.repository_util import get_first_from_database
+from repositories.repository_util import get_first_from_database, add_to_database
 
 
 def get_user_by_username(course_code, username):
@@ -13,3 +13,7 @@ def get_user_by_username(course_code, username):
 
 def get_user_by_user_id(user_id):
     return get_first_from_database(session.query(User).filter_by(id=user_id))
+
+
+def insert_users(user_to_add):
+    add_to_database(user_to_add)
