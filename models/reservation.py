@@ -12,5 +12,5 @@ class Reservation(Base):
     user_id = Column(INTEGER, ForeignKey('users.id'), nullable=False)
     sequence_id = Column(INTEGER, nullable=False)
 
-    user = relationship('User', back_populates='reservations')
-    booking_list = relationship('BookingList', back_populates='reservations')
+    users = relationship('User', back_populates='reservations')
+    booking_lists = relationship('BookingList', back_populates='reservations')
