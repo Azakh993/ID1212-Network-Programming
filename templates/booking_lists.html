@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="sv">
 <head>
     <title>Booking Page</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/booking_lists.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/booking_table.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
 </head>
 <body>
@@ -28,7 +28,7 @@
         <td>
             <button id="newBookingRowSubmitBtn" style="width: 100%;">+</button>
         </td>
-        <td><input type="text" id="inputTime" placeholder="Time" style="width: 100%;"></td>
+        <td><input type="text" id="inputTime" placeholder="YYYY-MM-DD HH:MM" style="width: 100%;"></td>
         <td><input type="text" id="inputDescription" placeholder="Description" style="width: 100%;"></td>
         <td><input type="text" id="inputLocation" placeholder="Location" style="width: 100%;"></td>
         <td><input type="text" id="inputLength" placeholder="Minutes" style="width: 80%;"></td>
@@ -48,12 +48,21 @@
     </tbody>
 </table>
 
-<button id="selectBookingBtn">Select Booking List</button>
-<button id="showMyBookingsBtn">Show My Bookings</button>
-{% if user_privileges %}
-    <button id="addBookingListBtn">Add Booking List</button>
-    <button id="removeBookingListBtn">Remove Booking List</button>
-{% endif %}
+<div>
+    <button id="selectBookingBtn">Select Booking List</button>
+    <button id="showMyBookingsBtn">Show My Bookings</button>
+    {% if user_privileges %}
+        <button id="addBookingListBtn">Add Booking List</button>
+        <button id="removeBookingListBtn">Remove Booking List</button>
+    {% endif %}
+</div>
+<div>
+    {% if user_privileges %}
+        <button id="addUsersBtn">Add Users</button>
+    {% endif %}
+</div>
+
+
 <script> const course_code = "{{ course_code }}";
 const admin = "{{ user_privileges }}"; </script>
 <script src="{{ url_for('static', filename='js/booking_lists.js') }}"></script>
