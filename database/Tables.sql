@@ -2,7 +2,7 @@ CREATE TABLE USERS
 (
     ID       SERIAL PRIMARY KEY,
     USERNAME VARCHAR(32) UNIQUE NOT NULL,
-    PASSWORD VARCHAR(32)        NOT NULL
+    PASSWORD VARCHAR            NOT NULL
 );
 
 CREATE TABLE COURSES
@@ -39,29 +39,3 @@ CREATE TABLE RESERVATIONS
     USER_ID     INTEGER NOT NULL REFERENCES USERS (ID),
     SEQUENCE_ID INTEGER NOT NULL
 );
-
-INSERT INTO USERS (USERNAME, PASSWORD)
-VALUES ('aaak@kth.se', 'asd'),
-       ('ebeshir@kth.se', '123'),
-       ('test@kth.se', '123');
-
-INSERT INTO COURSES (ID, NAME)
-VALUES ('ID1212', 'Network Programming'),
-       ('ID1206', 'Operating Systems');
-
-INSERT INTO USER_COURSE_REGISTRATIONS (USER_ID, COURSE_ID, ADMIN)
-VALUES (1, 'ID1212', true),
-       (1, 'ID1206', false),
-       (2, 'ID1212', false),
-       (2, 'ID1206', true),
-       (3, 'ID1212', false),
-       (3, 'ID1206', false);
-
-INSERT INTO BOOKING_LISTS (COURSE_ID, USER_ID, DESCRIPTION, LOCATION, TIME, INTERVAL, MAX_SLOTS)
-VALUES ('ID1212', 1, 'Lab presentations', 'Zoom', '2023-12-10 14:30:00', 20, 6),
-       ('ID1212', 2, 'Lab help', 'Sal A', '2023-12-10 14:30:00', 30, 4);
-
-
-INSERT INTO RESERVATIONS (LIST_ID, USER_ID, SEQUENCE_ID)
-VALUES (1, 1, 1),
-       (2, 2, 2);
