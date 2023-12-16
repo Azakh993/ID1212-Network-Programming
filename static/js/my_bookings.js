@@ -1,4 +1,4 @@
-// noinspection JSUnresolvedReference
+// noinspection JSUnresolvedReference,JSUnusedLocalSymbols
 
 document.addEventListener("DOMContentLoaded", () => {
     const socket = setupWebSocketListeners();
@@ -64,7 +64,7 @@ function handleResponse(response, socket) {
 }
 
 function updateReservationsListUI(jsonData) {
-    const tableBody = document.querySelector("#myReservationsTable tbody");
+    const tableBody = document.querySelector("#bookingTable tbody");
 
     const existingRows = tableBody.querySelectorAll("tr");
     existingRows.forEach(row => tableBody.removeChild(row));
