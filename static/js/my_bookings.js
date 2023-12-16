@@ -1,3 +1,5 @@
+// noinspection JSUnresolvedReference
+
 document.addEventListener("DOMContentLoaded", () => {
     const socket = setupWebSocketListeners();
     setupEventListeners(socket);
@@ -6,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function setupWebSocketListeners() {
     const socket = io.connect('http://' + window.location.hostname + ':' + location.port);
 
-    socket.on('personal_bookings_changed', function (data) {
+    socket.on('update_personal_bookings', function (data) {
         fetchLatestReservationsListData(course_code);
     });
     return socket;
@@ -36,12 +38,7 @@ function cancelSelectedReservation(socket) {
     };
 
     fetch(`/courses/${courseCode}/my-bookings`, requestOptions)
-        .then(handleResponse)
-        .then(() => {
-            socket.emit('booking_lists_changed')
-            socket.emit('booking_slots_changed')
-            alert("Reservation removed successfully.");
-        })
+        .then((response) => handleResponse(response, socket))
         .catch(handleError);
 }
 
@@ -50,7 +47,7 @@ function backToBookingList() {
     window.location.href = `/courses/${courseCode}/booking-lists`;
 }
 
-function handleResponse(response) {
+function handleResponse(response, socket) {
     const courseCode = course_code;
     switch (response.status) {
         case 200:
@@ -58,6 +55,8 @@ function handleResponse(response) {
         case 201:
             return fetchLatestReservationsListData(courseCode)
         case 204:
+            alert("Reservation removed successfully.");
+            socket.emit('personal_bookings_changed');
             return fetchLatestReservationsListData(courseCode)
         default:
             throw new Error("Request failed: " + response.status)
@@ -86,7 +85,6 @@ function createReservationRow(reservation) {
             <td>${reservation.location}</td>
             <td>${reservation.length} min</td>
     `;
-
 
     return newRow;
 }
