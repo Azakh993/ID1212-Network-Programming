@@ -31,15 +31,11 @@ function backToBookingList() {
 }
 
 function handleResponse(response) {
-    const courseCode = course_code;
-    console.log("Response: ", response);
     switch (response.status) {
         case 200:
             return response.json()
-        case 201:
-            return fetchLatestReservationsListData(courseCode)
-        case 204:
-            return fetchLatestReservationsListData(courseCode)
+        case 207:
+            return response.json()
         default:
             throw new Error("Request failed: " + response.status)
     }
