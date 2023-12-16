@@ -11,5 +11,6 @@ class User(Base):
     username = Column(VARCHAR, unique=True, nullable=False)
     password = Column(VARCHAR, unique=False, nullable=False)
 
-    registrations = relationship('UserCourseRegistration', back_populates='user')
-    reservations = relationship('Reservation', back_populates='user')
+    registrations = relationship('UserCourseRegistration', back_populates='users')
+    reservations = relationship('Reservation', back_populates='users')
+    booking_lists = relationship('BookingList', back_populates='users')
