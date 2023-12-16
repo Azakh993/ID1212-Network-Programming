@@ -7,19 +7,24 @@ from controllers import booking_list_controller as bl_ctrl
 from controllers import booking_slots_controller as bs_ctrl
 from controllers import error_page_controller as ep_ctrl
 from controllers import reservations_controller as r_ctrl
-from controllers import websocket_controller as s_ctrl
+from controllers import websocket_controller as ws_ctrl
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
 socketio = SocketIO(app)
 
-socketio.on_event('booking_lists_changed', s_ctrl.emit_update_booking_lists)
-socketio.on_event('booking_slots_changed', s_ctrl.emit_update_booking_slots)
-socketio.on_event('personal_bookings_changed', s_ctrl.emit_update_personal_bookings)
+socketio.on_event('new_booking_list_added', ws_ctrl.emit_get_new_booking_list)
+socketio.on_event('existing_booking_list_removed', ws_ctrl.emit_remove_existing_booking_list)
+socketio.on_event('update_booking_list', ws_ctrl.emit_update_booking_lists)
+socketio.on_event('booking_slots_changed', ws_ctrl.emit_update_booking_slots)
+socketio.on_event('personal_bookings_changed', ws_ctrl.emit_update_personal_bookings)
 
 app.add_url_rule("/courses/<course_code>/login",
                  view_func=auth_ctrl.login,
                  methods=["GET", "POST"])
+app.add_url_rule("/courses/<course_code>/logout",
+                 view_func=auth_ctrl.logout,
+                 methods=["GET"])
 app.add_url_rule("/courses/<course_code>/add-users",
                  view_func=auth_ctrl.add_users,
                  methods=["GET", "POST"])
