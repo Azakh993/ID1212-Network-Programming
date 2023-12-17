@@ -1,3 +1,16 @@
+"""
+Booking App
+
+This is a Flask-based booking application with WebSocket functionality.
+It includes various controllers for authentication, managing booking lists,
+booking slots, user reservations, and handling error pages.
+
+Usage:
+- Run the application by executing this script.
+- Access different routes to interact with the booking app.
+
+"""
+
 from flask import Flask
 from flask_socketio import SocketIO
 

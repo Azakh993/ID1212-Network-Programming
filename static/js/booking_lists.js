@@ -1,5 +1,9 @@
 // noinspection JSUnresolvedReference,JSUnusedLocalSymbols
 
+/**
+ * Initializes event listeners, WebSocket connections, and an automatic page refresh timer when the DOM content is fully loaded.
+ * It calls the `setupWebSocketListeners`, `setupEventListeners`, and sets a page refresh timer.
+ */
 document.addEventListener("DOMContentLoaded", () => {
 	const socket = setupWebSocketListeners();
 	setupEventListeners(socket);
@@ -10,6 +14,11 @@ document.addEventListener("DOMContentLoaded", () => {
 	}, refreshTime);
 });
 
+/**
+ * Sets up WebSocket listeners and establishes a WebSocket connection.
+ * It listens for various WebSocket events and triggers related actions.
+ * @returns {WebSocket} The WebSocket instance.
+ */
 function setupWebSocketListeners() {
 	const socket = io.connect('http://' + window.location.hostname + ':' + location.port);
 
@@ -21,6 +30,11 @@ function setupWebSocketListeners() {
 	return socket;
 }
 
+/**
+ * Sets up event listeners for various elements in the HTML document.
+ * It listens for "click" events on buttons and invokes corresponding functions.
+ * @param {WebSocket} socket - The WebSocket instance.
+ */
 function setupEventListeners(socket) {
 	if (admin === "True") {
 		document.getElementById("addBookingListBtn").addEventListener("click", toggleNewBookingRow);
@@ -33,11 +47,20 @@ function setupEventListeners(socket) {
 	document.getElementById("logoutBtn").addEventListener("click", logOut);
 }
 
+/**
+ * Toggles the visibility of the new booking row.
+ * It shows/hides the row for adding a new booking list.
+ */
 function toggleNewBookingRow() {
 	const newBookingRow = document.getElementById("newBookingRow");
 	newBookingRow.style.display = newBookingRow.style.display === "none" ? "table-row" : "none";
 }
 
+/**
+ * Submits a new booking list to the server.
+ * It retrieves form data, validates it, and sends a POST request to create a new booking list.
+ * @param {WebSocket} socket - The WebSocket instance.
+ */
 function submitNewBooking(socket) {
 	const bookingData = getBookingFormData();
 
@@ -58,6 +81,10 @@ function submitNewBooking(socket) {
 	sendRequest(socket, URI, requestOptions)
 }
 
+/**
+ * Retrieves form data for creating a new booking list.
+ * @returns {Object} The booking list data from the form.
+ */
 function getBookingFormData() {
 	return {
 		time: document.getElementById("inputTime").value,
@@ -68,10 +95,18 @@ function getBookingFormData() {
 	};
 }
 
+/**
+ * Validates form data to ensure all fields are filled.
+ * @param {Object} data - The form data to validate.
+ * @returns {boolean} True if all fields are filled; otherwise, false.
+ */
 function isFormDataValid(data) {
 	return Object.values(data).every(value => value);
 }
 
+/**
+ * Redirects the user to the bookable slots page for a selected booking list.
+ */
 function selectBooking() {
 	const courseCode = course_code;
 	const selectedBookingList = document.querySelector("input[name='selectedBooking']:checked");
@@ -84,11 +119,19 @@ function selectBooking() {
 	window.location.href = `/courses/${courseCode}/booking-lists/${selectedBookingListID}/bookable-slots`;
 }
 
+/**
+ * Redirects the user to the "My Bookings" page.
+ */
 function showMyBookings() {
 	const courseCode = course_code;
 	window.location.href = `/courses/${courseCode}/my-bookings`;
 }
 
+/**
+ * Removes a selected booking list.
+ * It sends a DELETE request to remove the selected booking list.
+ * @param {WebSocket} socket - The WebSocket instance.
+ */
 function removeBookingList(socket) {
 	const selectedBooking = document.querySelector('input[name="selectedBooking"]:checked');
 	const selectedBookingID = selectedBooking.value;
@@ -109,22 +152,40 @@ function removeBookingList(socket) {
 	sendRequest(socket, URI, requestOptions)
 }
 
+/**
+ * Sends an HTTP request to the server using Fetch API and handles the response.
+ * @param {WebSocket} socket - The WebSocket instance.
+ * @param {string} URI - The URI for the HTTP request.
+ * @param {Object} requestOptions - The request options object.
+ */
 function sendRequest(socket, URI, requestOptions) {
 	fetch(URI, requestOptions)
 		.then((response) => handleResponse(response, socket))
 		.catch(handleError);
 }
 
+/**
+ * Redirects the user to the "Add Users" page.
+ */
 function goToAddUsersPage() {
 	const courseCode = course_code;
 	window.location.href = `/courses/${courseCode}/add-users`;
 }
 
+/**
+ * Logs the user out and redirects to the logout page.
+ */
 function logOut() {
 	const courseCode = course_code;
 	window.location.href = `/courses/${courseCode}/logout`;
 }
 
+/**
+ * Handles the response from the server based on the HTTP status code.
+ * It processes various response statuses and triggers UI updates.
+ * @param {Response} response - The HTTP response from the server.
+ * @param {WebSocket} socket - The WebSocket instance.
+ */
 async function handleResponse(response, socket) {
 	switch (response.status) {
 		case 200:
@@ -145,12 +206,20 @@ async function handleResponse(response, socket) {
 	}
 }
 
+/**
+ * Adds a new booking list row to the UI.
+ * @param {Object} newBookingListJson - JSON data representing the new booking list.
+ */
 function addBookingListRow(newBookingListJson) {
 	const tableBody = document.querySelector("#bookingTable tbody");
 	const newRow = createBookingRow(newBookingListJson.newBookingList);
 	tableBody.appendChild(newRow);
 }
 
+/**
+ * Removes a booking list row from the UI.
+ * @param {Object} removedBookingListIDJson - JSON data containing the ID of the removed booking list.
+ */
 function removeBookingListRow(removedBookingListIDJson) {
 	console.log(removedBookingListIDJson.bookingListId);
 	const tableBody = document.querySelector("#bookingTable tbody");
@@ -158,6 +227,11 @@ function removeBookingListRow(removedBookingListIDJson) {
 	tableBody.removeChild(rowToRemove);
 }
 
+/**
+ * Creates a new row in the booking list table based on booking list information.
+ * @param {Object} booking_list - The booking list data.
+ * @returns {HTMLElement} The created table row element.
+ */
 function createBookingRow(booking_list) {
 	const newRow = document.createElement("tr");
 
@@ -172,6 +246,11 @@ function createBookingRow(booking_list) {
 	return newRow;
 }
 
+/**
+ * Fetches the latest booking list data for the course.
+ * It sends a GET request to retrieve the booking lists from the server.
+ * @param {string} courseCode - The course code for which to fetch booking list data.
+ */
 function fetchLatestBookingListData(courseCode) {
 	fetch(`/courses/${courseCode}/booking-lists`, {
 			method: "GET",
@@ -184,6 +263,11 @@ function fetchLatestBookingListData(courseCode) {
 		.catch(handleError);
 }
 
+
+/**
+ * Updates the booking list UI with the latest data received from the server.
+ * @param {Object} jsonData - JSON data containing the latest booking list information.
+ */
 function updateBookingListUI(jsonData) {
 	const tableBody = document.querySelector("#bookingTable tbody");
 
@@ -196,6 +280,11 @@ function updateBookingListUI(jsonData) {
 	});
 }
 
+/**
+ * Handles and logs errors that occur during the request or response handling.
+ * Displays an error message to the user via an alert.
+ * @param {Error} error - The error object representing the encountered error.
+ */
 function handleError(error) {
 	console.error("Error:", error);
 	alert("An error occurred, please try again.");

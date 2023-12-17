@@ -1,10 +1,19 @@
 // noinspection JSUnresolvedReference,JSUnusedLocalSymbols
 
+/**
+ * Initializes event listeners and WebSocket connections when the DOM content is fully loaded.
+ * It calls the `setupWebSocketListeners` and `setupEventListeners` functions.
+ */
 document.addEventListener("DOMContentLoaded", () => {
 	const socket = setupWebSocketListeners();
 	setupEventListeners(socket);
 });
 
+/**
+ * Sets up WebSocket listeners and establishes a WebSocket connection.
+ * It listens for the "update_booking_slots" event and triggers a fetch for the latest slot data.
+ * @returns {WebSocket} The WebSocket instance.
+ */
 function setupWebSocketListeners() {
 	const socket = io.connect('http://' + window.location.hostname + ':' + location.port);
 
@@ -15,6 +24,11 @@ function setupWebSocketListeners() {
 	return socket;
 }
 
+/**
+ * Sets up event listeners for various elements in the HTML document.
+ * It listens for the "click" event on buttons and invokes corresponding functions.
+ * @param {WebSocket} socket - The WebSocket instance.
+ */
 function setupEventListeners(socket) {
 	if (admin === 'True') {
 		document.getElementById("bookForStudentBtn").addEventListener("click", () => {
@@ -31,6 +45,12 @@ function setupEventListeners(socket) {
 
 }
 
+/**
+ * Books a selected slot for a student.
+ * It sends a POST request to reserve a slot.
+ * @param {WebSocket} socket - The WebSocket instance.
+ * @param {boolean} bookForStudent - Indicates whether the booking is for a student.
+ */
 function bookSelectedSlot(socket, bookForStudent) {
 	const courseCode = course_code
 	const selectedBookingListID = booking_list_id;
@@ -63,6 +83,11 @@ function bookSelectedSlot(socket, bookForStudent) {
 	sendRequest(socket, URI, requestOptions)
 }
 
+/**
+ * Removes a booking from a selected slot.
+ * It sends a DELETE request to cancel a reservation.
+ * @param {WebSocket} socket - The WebSocket instance.
+ */
 function removeBooking(socket) {
 	const courseCode = course_code
 	const selectedBookingListID = booking_list_id;
@@ -81,6 +106,10 @@ function removeBooking(socket) {
 	sendRequest(socket, URI, requestOptions)
 }
 
+/**
+ * Retrieves the selected slot sequence ID based on user input.
+ * @returns {string} The selected slot sequence ID.
+ */
 function getSelectedSlotSequenceID() {
 	const selectedSlot = document.querySelector("input[name='selectedSlot']:checked");
 
@@ -92,6 +121,11 @@ function getSelectedSlotSequenceID() {
 	return selectedSlot.value;
 }
 
+/**
+ * Verifies the availability of a selected slot based on its data attribute.
+ * @param {string} selectedSlotSequenceID - The selected slot sequence ID.
+ * @returns {boolean} True if the slot is available; otherwise, false.
+ */
 function verifySlotAvailability(selectedSlotSequenceID) {
 	const slotAvailability = document.querySelector(
 		`input[name='selectedSlot'][value='${selectedSlotSequenceID}']`
@@ -100,6 +134,12 @@ function verifySlotAvailability(selectedSlotSequenceID) {
 	return slotAvailability !== "Booked";
 }
 
+/**
+ * Sets request options for HTTP requests.
+ * @param {string} method - The HTTP request method (e.g., "POST", "DELETE").
+ * @param {Object} requestBody - The request body to be sent as JSON.
+ * @returns {Object} The request options object.
+ */
 function setRequestOptions(method, requestBody) {
 	return {
 		method: method,
@@ -110,17 +150,32 @@ function setRequestOptions(method, requestBody) {
 	};
 }
 
+/**
+ * Sends an HTTP request to the server using Fetch API and handles the response.
+ * @param {WebSocket} socket - The WebSocket instance.
+ * @param {string} URI - The URI for the HTTP request.
+ * @param {Object} requestOptions - The request options object.
+ */
 function sendRequest(socket, URI, requestOptions) {
 	fetch(URI, requestOptions)
 		.then((response) => handleResponse(response, socket))
 		.catch(handleError);
 }
 
+/**
+ * Redirects the user to the booking list page.
+ */
 function backToBookingList() {
 	const courseCode = course_code;
 	window.location.href = `/courses/${courseCode}/booking-lists`;
 }
 
+/**
+ * Handles the response from the server based on the HTTP status code.
+ * It processes various response statuses and triggers UI updates.
+ * @param {Response} response - The HTTP response from the server.
+ * @param {WebSocket} socket - The WebSocket instance.
+ */
 function handleResponse(response, socket) {
 	const courseCode = course_code;
 	switch (response.status) {
@@ -148,6 +203,10 @@ function handleResponse(response, socket) {
 	}
 }
 
+/**
+ * Updates the UI with the latest slot data received from the server.
+ * @param {Object} jsonData - JSON data containing the latest slot information.
+ */
 function updateSlotsListUI(jsonData) {
 	const tableBody = document.querySelector("#slotsTable tbody");
 
@@ -167,6 +226,11 @@ function updateSlotsListUI(jsonData) {
 	});
 }
 
+/**
+ * Creates a new row in the slots table based on slot information.
+ * @param {Object} slot - The slot data.
+ * @returns {HTMLElement} The created table row element.
+ */
 function createSlotRow(slot) {
 	const newRow = document.createElement("tr");
 
@@ -184,6 +248,11 @@ function createSlotRow(slot) {
 	return newRow;
 }
 
+/**
+ * Fetches the latest slot data for the booking list.
+ * It sends a GET request to retrieve the slot information from the server.
+ * @param {string} courseCode - The course code for which to fetch slot data.
+ */
 function fetchLatestSlotsListData(courseCode) {
 	fetch(`/courses/${courseCode}/booking-lists/${booking_list_id}/bookable-slots`, {
 			method: "GET",
@@ -196,6 +265,11 @@ function fetchLatestSlotsListData(courseCode) {
 		.catch(handleError);
 }
 
+/**
+ * Handles and logs errors that occur during the request or response handling.
+ * Displays an error message to the user via an alert.
+ * @param {Error} error - The error object representing the encountered error.
+ */
 function handleError(error) {
 	console.error("Error:", error);
 	alert("An error occurred, please try again.");
