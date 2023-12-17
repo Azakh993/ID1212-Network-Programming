@@ -10,7 +10,7 @@ def login(course_code):
     if request.method == "GET":
         return render_template("login.html", course_code=course_code)
     elif request.method == "POST":
-        return handle_login_request(course_code)
+        return _handle_login_request(course_code)
 
 
 @util.validate_course_code
@@ -21,10 +21,10 @@ def add_users(course_code):
         return render_template("add_users.html", course_code=course_code)
     elif request.method == "POST":
         json_data = request.get_json()
-        return add_and_enroll_users(json_data, course_code=course_code)
+        return _add_and_enroll_users(json_data, course_code=course_code)
 
 
-def add_and_enroll_users(json_data, course_code):
+def _add_and_enroll_users(json_data, course_code):
     user_addition_dto = UserAdditionDTO(json_data)
     responses = auth.insert_new_users_and_enrollments(course_code, user_addition_dto)
     return util.send_response(util.HTTP_207_MULTI_STATUS, responses)
@@ -35,7 +35,7 @@ def logout(course_code):
     return render_template("login.html", course_code=course_code)
 
 
-def handle_login_request(course_code):
+def _handle_login_request(course_code):
     json_data = request.get_json()
     user = auth.authenticate(course_code, json_data.get("username"), json_data.get('password'))
 

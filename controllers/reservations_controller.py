@@ -8,13 +8,13 @@ from util import utility as util
 @util.validate_user_login
 def user_reservations(course_code):
     if request.method == "GET":
-        return show_reservations_page(course_code, session.get("user_id"))
+        return _show_reservations_page(course_code, session.get("user_id"))
 
     if request.method == "DELETE":
-        return remove_user_reservation(request.get_json().get("reservation_id"))
+        return _remove_user_reservation(request.get_json().get("reservation_id"))
 
 
-def show_reservations_page(course_code, user_id):
+def _show_reservations_page(course_code, user_id):
     user_reservation_entries = rs.generate_user_reservation_entries(course_code, user_id)
 
     if util.json_request():
@@ -23,5 +23,5 @@ def show_reservations_page(course_code, user_id):
     return render_template("my_bookings.html", reservations=user_reservation_entries, course_code=course_code)
 
 
-def remove_user_reservation(reservation_id):
+def _remove_user_reservation(reservation_id):
     return util.send_response(*rs.remove_reservation(reservation_id))

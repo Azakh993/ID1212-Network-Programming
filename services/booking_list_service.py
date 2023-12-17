@@ -12,12 +12,12 @@ def get_booking_lists(course_code=None, booking_list_id=None):
     if course_code:
         booking_lists = blr.retrieve_booking_lists(course_code)
         if booking_lists is not None:
-            return processed_booking_lists(booking_lists)
+            return _processed_booking_lists(booking_lists)
 
     elif booking_list_id:
         booking_list = blr.retrieve_booking_list(booking_list_id)
         if booking_list is not None:
-            return processed_booking_lists(booking_list)[0]
+            return _processed_booking_lists(booking_list)[0]
 
     return []
 
@@ -31,7 +31,7 @@ def erase_booking_list(course_code, booking_list_id):
 
 
 def add_booking_list(course_code, booking_list_dto):
-    if invalid_booking_list(booking_list_dto):
+    if _invalid_booking_list(booking_list_dto):
         return util.HTTP_400_BAD_REQUEST, {"error": "Invalid booking data"}
 
     new_booking_list = BookingList(
@@ -50,32 +50,32 @@ def add_booking_list(course_code, booking_list_dto):
         print(f'Error: {str(exception)}')
         return util.HTTP_422_UNPROCESSABLE_ENTITY, {"error": "Could not add booking list"}
 
-    return util.HTTP_201_CREATED, {'newBookingList': serialized_booking_list(new_booking_list)}
+    return util.HTTP_201_CREATED, {'newBookingList': _serialized_booking_list(new_booking_list)}
 
 
 def generate_processed_booking_list(booking_list_id):
     booking_list = blr.retrieve_booking_list(booking_list_id)
     if booking_list is not None:
-        return processed_booking_lists([booking_list])[0]
+        return _processed_booking_lists([booking_list])[0]
     return None
 
 
-def processed_booking_lists(booking_lists):
+def _processed_booking_lists(booking_lists):
     booking_lists_without_seconds = []
     for booking_list in booking_lists:
         list_copy = copy.deepcopy(booking_list)
         list_copy.time = booking_list.time
-        list_copy.max_slots = calculate_available_slots(list_copy)
-        booking_lists_without_seconds.append(serialized_booking_list(list_copy))
+        list_copy.max_slots = _calculate_available_slots(list_copy)
+        booking_lists_without_seconds.append(_serialized_booking_list(list_copy))
     return booking_lists_without_seconds
 
 
-def calculate_available_slots(booking_list):
+def _calculate_available_slots(booking_list):
     reservations = rr.retrieve_reservations(booking_list.id)
     return booking_list.max_slots - len(reservations)
 
 
-def serialized_booking_list(booking_list):
+def _serialized_booking_list(booking_list):
     json_booking_list = {
         "id": booking_list.id,
         "description": booking_list.description,
@@ -87,7 +87,7 @@ def serialized_booking_list(booking_list):
     return json_booking_list
 
 
-def invalid_booking_list(booking_list_dto):
+def _invalid_booking_list(booking_list_dto):
     return any(value is None for value in (
         booking_list_dto.description,
         booking_list_dto.location,

@@ -15,12 +15,12 @@ def authenticate(course_code, username, password):
 
 def insert_new_users_and_enrollments(course_code, user_addition_dto):
     usernames = [username for username in user_addition_dto.usernames]
-    added_users, not_added_users = add_new_users(usernames, user_addition_dto.hashed_password)
-    enrolled_users, not_enrolled_users = enroll_users(course_code, usernames, user_addition_dto.elevated_privileges)
-    return generate_responses(added_users, enrolled_users, not_added_users, not_enrolled_users)
+    added_users, not_added_users = _add_new_users(usernames, user_addition_dto.hashed_password)
+    enrolled_users, not_enrolled_users = _enroll_users(course_code, usernames, user_addition_dto.elevated_privileges)
+    return _generate_responses(added_users, enrolled_users, not_added_users, not_enrolled_users)
 
 
-def add_new_users(usernames, password):
+def _add_new_users(usernames, password):
     new_users = []
     failed_entries = []
 
@@ -35,7 +35,7 @@ def add_new_users(usernames, password):
     return (new_users, None) if len(failed_entries) == 0 else (new_users, failed_entries)
 
 
-def enroll_users(course_code, usernames, privileges):
+def _enroll_users(course_code, usernames, privileges):
     new_enrollments = []
     failed_entries = []
 
@@ -52,7 +52,7 @@ def enroll_users(course_code, usernames, privileges):
     return (new_enrollments, None) if len(failed_entries) == 0 else (new_enrollments, failed_entries)
 
 
-def generate_responses(added_users, enrolled_users, failed_user_entries, failed_enroll_entries):
+def _generate_responses(added_users, enrolled_users, failed_user_entries, failed_enroll_entries):
     responses = []
 
     def create_response(status_code, data_key, data_values):
@@ -69,7 +69,3 @@ def generate_responses(added_users, enrolled_users, failed_user_entries, failed_
         create_response(util.HTTP_409_CONFLICT, 'failedEnrollEntries', failed_enroll_entries)
 
     return responses
-
-
-def retrieve_user_by_username(course_code, username):
-    return ur.get_user_by_username_and_course_code(course_code, username)
