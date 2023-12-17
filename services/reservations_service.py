@@ -68,7 +68,7 @@ def get_user_id_for_booking(course_code, user_id, username):
     if username:
         requested_user_is_privileged = util.get_user_privileges(course_code, user_id)
         if requested_user_is_privileged:
-            valid_user = ur.get_user_by_username(course_code, username)
+            valid_user = ur.get_user_by_username_and_course_code(course_code, username)
             return valid_user.id if valid_user else None
     return user_id
 
