@@ -408,7 +408,7 @@ class AvailableSlotDTO:
         The ID of the booking list associated with the slot.
     sequence_id : int
         The sequence ID of the slot.
-    start_time : datetime
+    start_time : str
         The start time of the slot.
     user_id : int or None
         The ID of the user who booked the slot (None if not booked).
@@ -426,7 +426,7 @@ class AvailableSlotDTO:
             The ID of the booking list associated with the slot.
         sequence_id : int
             The sequence ID of the slot.
-        start_time : datetime
+        start_time : str
             The start time of the slot.
 
         """
