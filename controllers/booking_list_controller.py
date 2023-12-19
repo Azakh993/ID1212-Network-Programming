@@ -54,7 +54,7 @@ def remove_booking_list(course_code, booking_list_id):
     ----------
     course_code : str
         The course code associated with the booking list.
-    booking_list_id : str
+    booking_list_id : int
         The ID of the booking list to be removed.
 
     Returns
