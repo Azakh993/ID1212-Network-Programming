@@ -5,7 +5,10 @@ import main.se.kth.id1212.server.model.GameSession;
 import main.se.kth.id1212.server.util.ExceptionLogger;
 import main.se.kth.id1212.server.view.View;
 
-import java.net.ServerSocket;
+import javax.net.ssl.*;
+import java.security.KeyStore;
+import java.io.FileInputStream;
+
 import java.net.Socket;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,7 +28,24 @@ public class Main {
     public static void main(String[] args) {
 
         try {
-            ServerSocket serverSocket = new ServerSocket(PORT);
+            // Load the KeyStore file
+            KeyStore ks = KeyStore.getInstance("JKS");
+            FileInputStream fis = new FileInputStream("keystore.jks");
+            ks.load(fis, "password".toCharArray());
+
+            // Initialize a KeyManagerFactory with the KeyStore
+            KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+            kmf.init(ks, "password".toCharArray());
+
+            // Initialize an SSLContext with the KeyManagerFactory
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(kmf.getKeyManagers(), null, null);
+
+            // Create an SSLServerSocketFactory from the SSLContext
+            SSLServerSocketFactory ssf = sc.getServerSocketFactory();
+
+            // Create an SSLServerSocket from the SSLServerSocketFactory
+            SSLServerSocket serverSocket = (SSLServerSocket) ssf.createServerSocket(PORT);
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
