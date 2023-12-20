@@ -1,5 +1,4 @@
 from sqlalchemy import Column, INTEGER, ForeignKey
-from sqlalchemy.orm import relationship
 
 from controllers import Base
 
@@ -11,6 +10,3 @@ class Reservation(Base):
     list_id = Column(INTEGER, ForeignKey('booking_lists.id'), nullable=False)
     user_id = Column(INTEGER, ForeignKey('users.id'), nullable=False)
     sequence_id = Column(INTEGER, nullable=False)
-
-    users = relationship('User', back_populates='reservations')
-    booking_lists = relationship('BookingList', back_populates='reservations')

@@ -1,5 +1,4 @@
 from sqlalchemy import Column, INTEGER, VARCHAR, TIMESTAMP, ForeignKey
-from sqlalchemy.orm import relationship
 
 from controllers import Base
 
@@ -15,7 +14,3 @@ class BookingList(Base):
     time = Column(TIMESTAMP, nullable=False)
     interval = Column(INTEGER, nullable=False)
     max_slots = Column(INTEGER, nullable=False)
-
-    courses = relationship('Course', back_populates='booking_lists')
-    users = relationship('User', back_populates='booking_lists')
-    reservations = relationship('Reservation', back_populates='booking_lists')
