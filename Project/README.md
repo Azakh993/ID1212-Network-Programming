@@ -1,13 +1,21 @@
-# ID1212
+# Project
 
-Repository for the assignments of the Network Programming (ID1212) course offered by the Royal Institute of Technology (
-KTH).
+## Project Description
 
-## Links to the tasks:
+You will undertake a project that you define yourself. One example of such a project could be developing a queue system similar to [https://queue.csc.kth.se](https://queue.csc.kth.se) (the current system was developed by a student in a similar course). The project will have specific scope requirements, but it will also be graded based on the technologies and techniques you use.
 
-* [Task 1](https://github.com/Azakh993/ID1212/tree/Task_1)
-* [Task 2](https://github.com/Azakh993/ID1212/tree/Task_2)
-* [Task 3](https://github.com/Azakh993/ID1212/tree/Task_3)
-* [Task 4.1](https://github.com/Azakh993/ID1212/tree/Task_4-P1)
-* [Task 4.2](https://github.com/Azakh993/ID1212/tree/Task_4-P2)
-* [Task 4.2E](https://github.com/Azakh993/ID1212/tree/Task_4-P2E)
+### Grading Criteria
+
+The grading for the project may include bonus points for incorporating certain technologies or techniques. Some examples of what might earn bonus points include:
+
+- Implementation of RESTful web services
+- Non-blocking sockets
+- Use of frameworks other than Spring MVC
+- Any other creative and innovative proposals (in cases where the task is sufficiently open-ended)
+
+Please note that using a different programming language or technology other than Java, such as Node.js, is allowed but will not result in bonus points.
+
+## Note
+
+- Detailed project requirements and grading criteria will be provided later in the course.
+- Ensure that your project proposal aligns with the course's guidelines and expectations.
