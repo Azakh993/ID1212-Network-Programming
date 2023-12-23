@@ -1,4 +1,4 @@
-# Course: Networking and Distributed Systems
+# Course: Network Programming 
 
 ## Course Contents
 
