@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="sv">
+	<head>
+		<title>Booking Page</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/booking_table.css') }}">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+	</head>
+	<body>
+		<h1>{{ course_code.upper() }}</h1>
+		<div id="instructions">
+			<p>Instructions go here...</p>
+		</div>
+		<table id="bookingTable">
+			<thead>
+				<tr>
+					<th></th>
+					<th style="width: 15%;">Time</th>
+					<th style="width: 45%;">Description</th>
+					<th style="width: 20%;">Location</th>
+					<th style="width: 10%;">Length</th>
+					<th style="width: 10%;">Slots</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr id="newBookingRow" style="display: none;">
+					<td>
+						<button id="newBookingRowSubmitBtn" style="width: 100%;">+</button>
+					</td>
+					<td><label for="inputTime"></label><input type="text" id="inputTime" placeholder="YYYY-MM-DD HH:MM" style="width: 100%;"></td>
+					<td><label for="inputDescription"></label><input type="text" id="inputDescription" placeholder="Description" style="width: 100%;"></td>
+					<td><label for="inputLocation"></label><input type="text" id="inputLocation" placeholder="Location" style="width: 100%;"></td>
+					<td><label for="inputLength"></label><input type="text" id="inputLength" placeholder="Minutes" style="width: 80%;"></td>
+					<td><label for="inputSlots"></label><input type="text" id="inputSlots" placeholder="# Slots" style="width: 80%;"></td>
+				</tr>
+				{% for booking_list in booking_lists %}
+				<tr>
+					<td><label>
+						<input type="radio" name="selectedBooking" value="{{ booking_list.id }}">
+						</label>
+					</td>
+					<td>{{ booking_list.time }}</td>
+					<td>{{ booking_list.description }}</td>
+					<td>{{ booking_list.location }}</td>
+					<td>{{ booking_list.interval }} min</td>
+					<td style="text-align: center;">{{ booking_list.available_slots }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<div>
+			<button id="selectBookingBtn">Select Booking List</button>
+			<button id="showMyBookingsBtn">Show My Bookings</button>
+			<button id="logoutBtn">Logout</button>
+		</div>
+		<div>
+			{% if user_privileges %}
+			<button id="addBookingListBtn">Add Booking List</button>
+			<button id="removeBookingListBtn">Remove Booking List</button>
+			<button id="addUsersBtn">Add Users</button>
+			{% endif %}
+		</div>
+		<script> const course_code = "{{ course_code }}";
+			const admin = "{{ user_privileges }}";
+		</script>
+		<script src="{{ url_for('static', filename='js/booking_lists.js') }}"></script>
+	</body>
+</html>

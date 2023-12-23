@@ -1,0 +1,28 @@
+@import url('common.css');
+
+.form-container {
+    padding: 0 45px 0 0;
+}
+
+#usernames {
+    width: 100%;
+    height: 60px;
+    padding: 20px;
+    margin: 20px 0;
+    font-size: 14px;
+}
+
+label[for="usernames"] {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+label[for="password"] {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+label[for="elevated-privileges"] {
+    font-size: 18px;
+    font-weight: bold;
+}

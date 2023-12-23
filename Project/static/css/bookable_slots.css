@@ -1,0 +1,26 @@
+@import url('common.css');
+
+#slotsTable, #detailsTable {
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+#slotsTable th:nth-child(1),
+#slotsTable td:nth-child(1) {
+    width: 5%;
+}
+
+#slotsTable th:nth-child(2),
+#slotsTable td:nth-child(2) {
+    width: 20%;
+}
+
+#slotsTable th,
+#slotsTable td {
+    padding: 10px;
+    text-align: left;
+}
