@@ -1,10 +1,25 @@
-# ID1212
-Repository for the assignments of the Network Programming (ID1212) course offered by the Royal Institute of Technology (KTH). 
+# Course: Networking and Distributed Systems
 
-## Links to the tasks:
-* [Task 1](https://github.com/Azakh993/ID1212/tree/Task_1)
-* [Task 2](https://github.com/Azakh993/ID1212/tree/Task_2)
-* [Task 3](https://github.com/Azakh993/ID1212/tree/Task_3)
-* [Task 4.1](https://github.com/Azakh993/ID1212/tree/Task_4-P1)
-* [Task 4.2](https://github.com/Azakh993/ID1212/tree/Task_4-P2)
-* [Task 4.2E](https://github.com/Azakh993/ID1212/tree/Task_4-P2E)
+## Course Contents
+
+This course covers the following topics:
+
+1. Programs that communicate over sockets with TCP and UDP.
+2. Enciphered sockets with SMTP/IMAP/HTTPS.
+3. Introduction to application servers (Tomcat) and frameworks (Run).
+4. Thread handling for the above.
+5. HTTP/2 and websockets.
+
+Java is used as the primary programming language in this course.
+
+## Intended Learning Outcomes
+
+Upon successfully completing this course, students should be able to achieve the following learning outcomes:
+
+1. Develop distributed applications that communicate using different communication paradigms.
+2. Utilize appropriate design and architecture principles for distributed systems.
+
+## Note
+
+- The course aims to equip students with the knowledge and skills necessary to work with networking and distributed systems, with a focus on Java-based applications.
+- Detailed course materials, assessments, and grading criteria will be provided by the course instructor.
