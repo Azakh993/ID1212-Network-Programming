@@ -1,10 +1,14 @@
-# ID1212
-Repository for the assignments of the Network Programming (ID1212) course offered by the Royal Institute of Technology (KTH). 
+# Laboration 5: Spring MVC
 
-## Links to the tasks:
-* [Task 1](https://github.com/Azakh993/ID1212/tree/Task_1)
-* [Task 2](https://github.com/Azakh993/ID1212/tree/Task_2)
-* [Task 3](https://github.com/Azakh993/ID1212/tree/Task_3)
-* [Task 4.1](https://github.com/Azakh993/ID1212/tree/Task_4-P1)
-* [Task 4.2](https://github.com/Azakh993/ID1212/tree/Task_4-P2)
-* [Task 4.2E](https://github.com/Azakh993/ID1212/tree/Task_4-P2E)
+## Task Description
+
+In this lab, the primary task is to create the same quiz application as in Lab 4 but using the Spring framework. Much of the existing code can be reused, but now you should use `DispatcherServlet` as the Front Controller and then forward the requests to your own controller.
+
+### Extra Task
+
+Use JavaMail to send the quiz results to the player after the latest game session.
+
+## Note
+
+- If working in pairs, only one should upload the code to avoid plagiarism.
+- Upload the code before or during the presentation.
